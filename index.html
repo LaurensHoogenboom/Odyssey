@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    
+
+    <link rel="apple-touch-icon" sizes="180x180" href="src/images/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="src/images/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="src/images/favicons/favicon-16x16.png">
+    <link rel="manifest" href="src/images/favicons/site.webmanifest">
+    <link rel="mask-icon" href="src/images/favicons/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="shortcut icon" href="src/images/favicons/favicon.ico">
+    <meta name="apple-mobile-web-app-title" content="Odyssey">
+    <meta name="application-name" content="Odyssey">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="msapplication-config" content="src/images/favicons/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+    <script src="companion.js" data-service-worker="sw.js"></script>
+
+    <title>Bluetooth PWA</title>
+</head>
+
+<body>
+    <input type="button" id="connect" value="Connect">
+    <input type="button" id="disconnect" value="DisConnect">
+
+    <div id="terminal">
+        <div>Device connection...</div>
+        <div class="out">Outcoming message</div>
+        <div class="in">Incoming message</div>
+    </div>
+
+    <form id="send-form">
+        <input type="text" id="input">
+        <input type="submit" value="submit"></input>
+    </form>
+</body>
+
+</html>
