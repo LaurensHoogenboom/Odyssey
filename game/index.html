@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Endless Running Game</title>
 
-        <script src="https://aframe.io/releases/0.9.2/aframe.min.js"></script>
+        <script src="https://aframe.io/releases/0.7.1/aframe.min.js"></script>
         <script src="https://cdn.jsdelivr.net/gh/alvinwan/aframe-low-poly@0.0.2/dist/aframe-low-poly.min.js"></script>
         <script src="/game/assets/ocean.js"></script>
         <script src="/game/assets/ergo.js"></script>
@@ -15,6 +15,20 @@
     <body>
         <a-scene fog="type: linear; color: #a3d0ed; near:5; far:20">
             <a-sky color="#a3d0ed"></a-sky>
+
+            <!-- Mixins -->
+            <a-assets>
+                <a-mixin
+                    id="foliage"
+                    geometry="primitive: cone; segments-height: 1; segments-radial: 4; radius-bottom: 0.3"
+                    material="color:white;flat-shading:true';"
+                ></a-mixin>
+                <a-mixin
+                    id="trunk"
+                    geometry="primitive:box; height:0.5; width: 0.1; depth: 0.1;"
+                    material="color: white;"
+                ></a-mixin>
+            </a-assets>
 
             <!-- Lights -->
             <a-light
@@ -27,7 +41,7 @@
             <a-light intensity="0.8" type="ambient" color="#B4C5EC"></a-light>
 
             <!-- Camera -->
-            <a-camera position="0 1 2.5" lane-controls look-controls>
+            <a-camera position="0 0 1.5" lane-controls>
                 <a-entity
                     id="cursor-mobile"
                     cursor="fuse: true; fuseTimeout: 250"
@@ -174,9 +188,65 @@
             >
                 <a-entity
                     id="tree-container"
-                    position="0 1 -1.5"
+                    position="0 0 -1.5"
                     rotation="-90 0 0"
                 >
+                    <!-- Trees -->
+                    <a-entity
+                        id="template-tree-center"
+                        shadow
+                        scale="0.3 0.3 0.3"
+                        position="0 0.6 0"
+                        class="tree"
+                        data-tree-position-index="1"
+                    >
+                        <a-entity mixin="foliage"></a-entity>
+                        <a-entity mixin="trunk" position="0 -0.5 0"></a-entity>
+                        <a-animation
+                            attribute="position"
+                            ease="linear"
+                            from="0 0.6 -7"
+                            to="0 0.6 1.5"
+                            dur="5000"
+                        ></a-animation>
+                    </a-entity>
+                    <a-entity
+                        id="template-tree-left"
+                        shadow
+                        scale="0.3 0.3 0.3"
+                        position="-0.5 0.6 0"
+                        class="tree"
+                        data-tree-position-index="0"
+                    >
+                        <a-entity mixin="foliage"></a-entity>
+                        <a-entity mixin="trunk" position="0 -0.5 0"></a-entity>
+                        <a-animation
+                            attribute="position"
+                            ease="linear"
+                            from="-0.5 0.6 -7"
+                            to="-0.5 0.6 1.5"
+                            dur="5000"
+                        ></a-animation>
+                    </a-entity>
+                    <a-entity
+                        id="template-tree-right"
+                        shadow
+                        scale="0.3 0.3 0.3"
+                        position="0.5 0.6 0"
+                        class="tree"
+                        data-tree-position-index="2"
+                    >
+                        <a-entity mixin="foliage"></a-entity>
+                        <a-entity mixin="trunk" position="0 -0.5 0"></a-entity>
+                        <a-animation
+                            attribute="position"
+                            ease="linear"
+                            from="0.5 0.6 -7"
+                            to="0.5 0.6 1.5"
+                            dur="5000"
+                        ></a-animation>
+                    </a-entity>
+
                     <!-- Player -->
                     <a-entity id="player" player>
                         <a-sphere radius="0.05">
