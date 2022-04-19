@@ -54,7 +54,7 @@ function setupTrees() {
 
 var treeTimer
 
-function addTreesRandomlyLoop({ intervalLength = 500 } = {}) {
+function addTreesRandomlyLoop({ intervalLength = 700 } = {}) {
     treeTimer = setInterval(addTreesRandomly, intervalLength)
 }
 
@@ -105,7 +105,7 @@ function addTreesRandomly({
 
 //collision
 
-const POSITION_Z_OUT_OF_SIGHT = 1
+const POSITION_Z_OUT_OF_SIGHT = 1.9
 const POSITION_Z_LINE_START = 0.6
 const POSITION_Z_LINE_END = 0.7
 
@@ -131,7 +131,7 @@ const setupCollision = () => {
                     gameOver()
                 }
 
-                if (position.z > POSITION_Z_LINE_END) {
+                if (position.z > POSITION_Z_LINE_END && !countedTrees.has(tree_id)) {
                     addScoreForTree(tree_id)
                     updateScoreDisplay()
                 }
@@ -152,10 +152,12 @@ function setupScore() {
     countedTrees = new Set()
     scoreDisplay = document.getElementById('score')
     gameOverScoreDisplay = document.getElementById('game-score')
+    scoreDisplay.setAttribute('visible', false)
 }
 
 function tearDownScore() {
-    scoreDisplay.setAttribute('value', '')
+    scoreDisplay.setAttribute('value', 0)
+    scoreDisplay.setAttribute('visible', false)
     gameOverScoreDisplay.setAttribute('value', score)
 }
 
@@ -166,6 +168,7 @@ function addScoreForTree(tree_id) {
 }
 
 function updateScoreDisplay() {
+    scoreDisplay.setAttribute('visible', true);
     scoreDisplay.setAttribute('value', score)
 }
 
