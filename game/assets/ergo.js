@@ -38,7 +38,7 @@ var templateTreeLeft
 var templateTreeCenter
 var templateTreeRight
 
-var numberOfTrees
+var numberOfTrees = 0
 
 function setupTrees() {
     templateTreeLeft = document.getElementById('template-tree-left')
@@ -52,14 +52,14 @@ function setupTrees() {
     removeTree(templateTreeRight)
 }
 
-var treeTimer;
+var treeTimer
 
 function addTreesRandomlyLoop({ intervalLength = 500 } = {}) {
     treeTimer = setInterval(addTreesRandomly, intervalLength)
 }
 
 function tearDownTrees() {
-    clearInterval(treeTimer);
+    clearInterval(treeTimer)
 }
 
 function removeTree(tree) {
@@ -128,48 +128,138 @@ const setupCollision = () => {
                     position.z < POSITION_Z_LINE_END &&
                     tree_position_index == player_position_index
                 ) {
-                    gameOver();
+                    gameOver()
+                }
+
+                if (position.z > POSITION_Z_LINE_END) {
+                    addScoreForTree(tree_id)
+                    updateScoreDisplay()
                 }
             })
         },
     })
 }
 
+//score
+
+let score
+let countedTrees
+let gameOverScoreDisplay
+let scoreDisplay
+
+function setupScore() {
+    score = 0
+    countedTrees = new Set()
+    scoreDisplay = document.getElementById('score')
+    gameOverScoreDisplay = document.getElementById('game-score')
+}
+
+function tearDownScore() {
+    scoreDisplay.setAttribute('value', '')
+    gameOverScoreDisplay.setAttribute('value', score)
+}
+
+function addScoreForTree(tree_id) {
+    if (countedTrees.has(tree_id)) return
+    score += 1
+    countedTrees.add(tree_id)
+}
+
+function updateScoreDisplay() {
+    scoreDisplay.setAttribute('value', score)
+}
+
+// menu
+
+let menuStart
+let menuGameOver
+let menuContainer
+let startButton
+let restartButton
+
+function hideEntity(el) {
+    el.setAttribute('visible', false);
+}
+
+function showEntity(el) {
+    el.setAttribute('visible', true);
+}
+
+function setupAllMenus() {
+    menuStart = document.getElementById('start-menu');
+    menuGameOver = document.getElementById('game-over');
+    menuContainer = document.getElementById('menu-container');
+    startButton = document.getElementById('start-button');
+    restartButton = document.getElementById('restart-button');
+
+    startButton.addEventListener('click', startGame);
+    restartButton.addEventListener('click', startGame);
+
+    showStartMenu();
+}
+
+function hideAllMenus() {
+    hideEntity(menuContainer);
+    startButton.classList.remove('clickable');
+    restartButton.classList.remove('clickable');
+}
+
+function showGameOverMenu() {
+    showEntity(menuContainer);
+    hideEntity(menuStart);
+    showEntity(menuGameOver);
+    startButton.classList.remove('clickable');
+    restartButton.classList.add('clickable');
+}
+
+function showStartMenu() {
+    showEntity(menuContainer);
+    hideEntity(menuGameOver);
+    showEntity(menuStart);
+    startButton.classList.add('clickable');
+    restartButton.classList.remove('clickable');
+}
+
 //game
 
-let isGameRunning = false;
+let isGameRunning = false
 
-setupControls();
-setupCollision();
+setupControls()
+setupCollision()
 
 window.onload = () => {
-    setupTrees();
-    startGame();
+    setupAllMenus()
+    setupScore()
+    setupTrees()
 }
 
 function startGame() {
-    if (isGameRunning) return;
-    isGameRunning = true;
+    if (isGameRunning) return
+    isGameRunning = true
 
-    addTreesRandomlyLoop();
+    setupScore()
+    updateScoreDisplay()
+    addTreesRandomlyLoop()
+    hideAllMenus()
 }
 
 function gameOver() {
-    isGameRunning = false;
-    alert('Game over');
+    isGameRunning = false
 
-    tearDownTrees();
+    tearDownTrees()
+    tearDownScore()
+    showGameOverMenu()
 }
 
 //utilities
 
 const shuffle = (a) => {
-    let j, x, i;
+    let j, x, i
     for (i = a.length - 1; i > 0; i--) {
-        j = Math.floor(Math.random() * (i + 1));
-        x = a[i];
-        a[i] = a[j];
-        a[j] = x;
+        j = Math.floor(Math.random() * (i + 1))
+        x = a[i]
+        a[i] = a[j]
+        a[j] = x
     }
-    return a;
+    return a
 }

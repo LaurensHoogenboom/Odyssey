@@ -6,8 +6,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Endless Running Game</title>
 
-        <script src="https://aframe.io/releases/0.7.1/aframe.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/gh/alvinwan/aframe-low-poly@0.0.2/dist/aframe-low-poly.min.js"></script>
+        <script src="https://aframe.io/releases/0.8.0/aframe.min.js"></script>
+        <script src="/game/assets/low-poly.js"></script>
         <script src="/game/assets/ocean.js"></script>
         <script src="/game/assets/ergo.js"></script>
     </head>
@@ -28,6 +28,22 @@
                     geometry="primitive:box; height:0.5; width: 0.1; depth: 0.1;"
                     material="color: white;"
                 ></a-mixin>
+                <a-mixin
+                    id="text"
+                    text="font: https://cdn.aframe.io/fonts/Exo2Bold.fnt; anchor:center;align:center;"
+                ></a-mixin>
+                <a-mixin
+                    id="title"
+                    text="font: https://cdn.aframe.io/fonts/Exo2Bold.fnt; height: 40; width: 40; opacity: 0.75; anchor: center; align: center"
+                ></a-mixin>
+                <a-mixin
+                    id="heading"
+                    text="font: https://cdn.aframe.io/fonts/Exo2Bold.fnt; height: 10; width: 10; opacity: 0.75; anchor: center; align: center"
+                ></a-mixin>
+                <a-mixin
+                    id="copy"
+                    text="font: https://cdn.aframe.io/fonts/Exo2Bold.fnt; height: 5; width: 5; opacity: 0.75; anchor: center; align: center"
+                ></a-mixin>
             </a-assets>
 
             <!-- Lights -->
@@ -35,13 +51,13 @@
                 type="directional"
                 castShadow="true"
                 intensity="0.4"
-                color="#D0EAF9;"
+                color="#D0EAF9"
                 position="5 3 1"
             ></a-light>
             <a-light intensity="0.8" type="ambient" color="#B4C5EC"></a-light>
 
             <!-- Camera -->
-            <a-camera position="0 0 1.5" lane-controls>
+            <a-camera position="0 1.5 1.5" lane-controls>
                 <a-entity
                     id="cursor-mobile"
                     cursor="fuse: true; fuseTimeout: 250"
@@ -186,11 +202,7 @@
                 emissive="#005DED"
                 emissive-intensity="0.1"
             >
-                <a-entity
-                    id="tree-container"
-                    position="0 0 -1.5"
-                    rotation="-90 0 0"
-                >
+                <a-entity id="tree-container" position="0 0 -1.5" rotation="-90 0 0">
                     <!-- Trees -->
                     <a-entity
                         id="template-tree-center"
@@ -245,6 +257,74 @@
                             to="0.5 0.6 1.5"
                             dur="5000"
                         ></a-animation>
+                    </a-entity>
+
+                    <!-- Score -->
+
+                    <a-text
+                        id="score"
+                        value=""
+                        mixin="text"
+                        height="40"
+                        width="40"
+                        position="0 1.2 -3"
+                        opacity="0.75"
+                    ></a-text>
+
+                    <!-- Menus -->
+                    <a-entity id="menu-container">
+                        <a-entity id="start-menu" position="0 1.1 -3">
+                            <a-entity id="start-copy" position="0 1 0">
+                                <a-text
+                                    value="Turn left and right to move your player, and avoid the trees!"
+                                    mixin="copy"
+                                ></a-text>
+                                <a-text
+                                    value="Start"
+                                    position="0 0.75 0"
+                                    mixin="heading"
+                                ></a-text>
+                                <a-box
+                                    id="start-button"
+                                    position="0 0.65 -0.05"
+                                    width="1.5"
+                                    height="0.6"
+                                    depth="0.1"
+                                ></a-box>
+                            </a-entity>
+                            <a-text value="ERGO" mixin="title"></a-text>
+                        </a-entity>
+
+                        <a-entity id="game-over" position="0 1.1 -3">
+                            <a-text
+                                value="?"
+                                mixin="heading"
+                                id="game-score"
+                                position="0 1.7 0"
+                            ></a-text>
+                            <a-text
+                                value="Score"
+                                mixin="copy"
+                                position="0 1.2 0"
+                            ></a-text>
+
+                            <a-entity id="game-over-copy">
+                                <a-text
+                                    mixin="heading"
+                                    position="0 0.6 0"
+                                    value="Restart"
+                                ></a-text>
+                                <a-box
+                                    id="restart-button"
+                                    position="0 0.6 -0.5"
+                                    width="2"
+                                    height="0.6"
+                                    depth="0.1"
+                                ></a-box>
+                            </a-entity>
+
+                            <a-text value="Game Over" mixin="title"></a-text>
+                        </a-entity>
                     </a-entity>
 
                     <!-- Player -->
