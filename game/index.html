@@ -7,12 +7,55 @@
         <title>Endless Running Game</title>
 
         <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
-        <script src="/game/assets/low-poly.js"></script>
-        <script src="/game/assets/ocean.js"></script>
-        <script src="/game/assets/ergo.js"></script>
+        <script src="/game/js/low-poly.js"></script>
+        <script src="/game/js/ocean.js"></script>
+        <script src="/game/js/ergo.js"></script>
+        <script src="/game/js/bluetooth.js"></script>
+
+        <link rel="stylesheet" href="/game/css/style.css" />
     </head>
 
     <body>
+        <!-- Bluetooth -->
+
+        <div class="ui-container hidden depth-border" id="bluetooth-menu">
+            <div class="content">
+                <h1>De-moodify</h1>
+
+                <section id="connection-section">
+                    <h2 id="connect-instruction">Klik hieronder om met te verbinden met de wearable.</h2>
+                    <label id="connect" class="button depth-border">Verbinden</label>
+                    <label id="disconnect" class="button depth-border hidden">Verbinding verbreken</label>
+
+                    <div class="bluetooth-interface hidden">
+                        <div id="terminal">
+                            <div>Device connection...</div>
+                            <div class="out">Outcoming message</div>
+                            <div class="in">Incoming message</div>
+                        </div>
+                    
+                        <form id="send-form">
+                            <input type="text" id="input">
+                            <input type="submit" value="submit"></input>
+                        </form>
+                    </div>
+                </section>
+
+                <section id="enter-game-section" class="hidden">
+                    <h2 id="connect-instruction">Wearable is verbonden, klik op start om te beginnen.</h2>
+                    <label id="enter-game" class="button depth-border">Start</label>
+                </section>
+            </div>
+            
+            <p>
+                <i>
+                    Zorg dat de bluetooth is ingeschakeld en de wearable aan staat.
+                </i>
+            </p>
+        </div>
+
+        <!-- A-Frame -->
+
         <a-scene fog="type: linear; color: #a3d0ed; near:5; far:20">
             <a-sky color="#a3d0ed"></a-sky>
 
@@ -57,7 +100,7 @@
             <a-light intensity="0.8" type="ambient" color="#B4C5EC"></a-light>
 
             <!-- Camera -->
-            <a-camera position="0 1.5 2" lane-controls>
+            <a-camera id="player-camera" position="0 1.5 2" lane-controls look-controls="enabled: false">
                 <a-entity
                     id="cursor-mobile"
                     cursor="fuse: true; fuseTimeout: 250"
@@ -284,4 +327,3 @@
         </a-scene>
     </body>
 </html>
-

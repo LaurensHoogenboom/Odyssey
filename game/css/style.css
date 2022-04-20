@@ -1,0 +1,76 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+h1, h2, p, label {
+    font-family: exo-2;
+    padding-bottom: 10px;
+}
+
+h1 {
+    font-size: 70px;
+    padding-bottom: 20px;
+}
+
+h2 {
+    font-size: 40px;
+}
+
+p, label {
+    font-size: 30px;
+}
+
+label.button {
+    display: inline-block;
+    margin-top: 50px;
+    background-color: rgb(255,255,255);
+    padding: 8px 20px 10px 20px;
+    border-radius: 10px;
+    transition: border-color 0.2s;
+    cursor: pointer;
+}
+
+label.button:hover {
+    border-color: #a3d0ed;
+}
+
+label.button.hidden {
+    display: none;
+}
+
+.hidden {
+    display: none;
+}
+
+.ui-container {
+    position: absolute;
+    height: calc(100vh - 50px);
+    width: calc(100vw - 50px);
+    margin: 25px;
+    background-color: rgba(255,255,255,0.8);
+    border-radius: 20px;
+    z-index: 1;
+    padding: 50px;
+    display: grid;
+    grid-template-rows: 1fr 50px;
+    text-align: center;
+    align-items: center;
+    box-shadow: 0px 10px 20px rgb(0,0,0,0.16);
+}
+
+.ui-container.hidden {
+    display: none;
+}
+
+.depth-border {
+    border-bottom: 4px solid rgb(220,220,220);
+    border-left: 2px solid rgb(220,220,220);
+    border-right: 2px solid rgb(220,220,220);
+}
+
+@font-face {
+    font-family: exo-2;
+    src: url(/game/font/exo-2.woff);
+}
