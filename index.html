@@ -6,7 +6,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Endless Running Game</title>
 
-        <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+        <!-- Aframe version 1.0.4 -->
+        <script src="/src/js/aframe.js"></script>
+        <!-- Low Poly Version 0.0.2 -->
         <script src="/src/js/low-poly.js"></script>
         <script src="/src/js/ocean.js"></script>
         <script src="/src/js/ergo.js"></script>
@@ -15,7 +17,9 @@
         <script>
             if ('serviceWorker' in navigator) {
                 window.addEventListener('load', function () {
-                    navigator.serviceWorker.register('/service-worker.js')
+                    navigator.serviceWorker.register('/service-worker.js', {
+                        scope: './',
+                    })
                 })
             }
         </script>
@@ -91,19 +95,19 @@
                 ></a-mixin>
                 <a-mixin
                     id="text"
-                    text="font: https://cdn.aframe.io/fonts/Exo2Bold.fnt; anchor:center;align:center;"
+                    text="font: src/font/Exo2Bold.fnt; anchor:center;align:center;"
                 ></a-mixin>
                 <a-mixin
                     id="title"
-                    text="font: https://cdn.aframe.io/fonts/Exo2Bold.fnt; height: 40; width: 40; opacity: 0.75; anchor: center; align: center"
+                    text="font: src/font/Exo2Bold.fnt; height: 40; width: 40; opacity: 0.75; anchor: center; align: center"
                 ></a-mixin>
                 <a-mixin
                     id="heading"
-                    text="font: https://cdn.aframe.io/fonts/Exo2Bold.fnt; height: 10; width: 10; opacity: 0.75; anchor: center; align: center"
+                    text="font: src/font/Exo2Bold.fnt; height: 10; width: 10; opacity: 0.75; anchor: center; align: center"
                 ></a-mixin>
                 <a-mixin
                     id="copy"
-                    text="font: https://cdn.aframe.io/fonts/Exo2Bold.fnt; height: 5; width: 5; opacity: 0.75; anchor: center; align: center"
+                    text="font: src/font/Exo2Bold.fnt; height: 5; width: 5; opacity: 0.75; anchor: center; align: center"
                 ></a-mixin>
             </a-assets>
 
