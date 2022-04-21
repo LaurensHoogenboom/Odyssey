@@ -58,8 +58,10 @@ label.button {
     cursor: pointer;
 }
 
-label.button:hover {
-    border-color: #a3d0ed;
+@media (hover: hover) {
+    label.button:hover {
+        border-color: #a3d0ed;
+    }
 }
 
 label.button.hidden {
