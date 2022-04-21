@@ -4,8 +4,17 @@
     box-sizing: border-box;
 }
 
-h1, h2, p, label {
+h1,
+h2,
+p,
+label {
     font-family: exo-2;
+}
+
+h1:not(:last-child),
+h2:not(:last-child),
+p:not(:last-child),
+label:not(:last-child) {
     padding-bottom: 10px;
 }
 
@@ -18,25 +27,23 @@ h2 {
     font-size: 40px;
 }
 
-p, label {
+p,
+label {
     font-size: 30px;
 }
 
-@media only screen and (max-width: 768px) {
-    h1, h2, p, label {
-        padding-bottom: 10px;
-    }
-    
+@media (max-width: 768px), (max-height: 768px) {
     h1 {
         font-size: 40px;
-        padding-bottom: 20px;
+        padding-bottom: 10px;
     }
-    
+
     h2 {
-        font-size: 30px;
+        font-size: 25px;
     }
-    
-    p, label {
+
+    p,
+    label {
         font-size: 20px;
     }
 }
@@ -44,7 +51,7 @@ p, label {
 label.button {
     display: inline-block;
     margin-top: 50px;
-    background-color: rgb(255,255,255);
+    background-color: rgb(255, 255, 255);
     padding: 8px 20px 10px 20px;
     border-radius: 10px;
     transition: border-color 0.2s;
@@ -59,6 +66,12 @@ label.button.hidden {
     display: none;
 }
 
+@media screen and (max-width: 768px), screen and (max-height: 768px) {
+    label.button {
+        margin-top: 20px;
+    }
+}
+
 .hidden {
     display: none;
 }
@@ -68,25 +81,45 @@ label.button.hidden {
     height: calc(100vh - 50px);
     width: calc(100vw - 50px);
     margin: 25px;
-    background-color: rgba(255,255,255,0.8);
+    background-color: rgba(255, 255, 255, 0.8);
     border-radius: 20px;
     z-index: 1;
     padding: 50px;
     display: grid;
     grid-template-rows: 1fr 50px;
+    grid-gap: 30px;
     text-align: center;
     align-items: center;
-    box-shadow: 0px 10px 20px rgb(0,0,0,0.16);
+    align-content: center;
+    box-shadow: 0px 10px 20px rgb(0, 0, 0, 0.16);
 }
 
 .ui-container.hidden {
     display: none;
 }
 
+@media screen and (max-width: 768px), screen and (max-height: 768px) {
+    .ui-container {
+        grid-template-rows: 1fr 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .ui-container {
+        top: 50%;
+        transform: translateY(-50%);
+        padding: 50px 25px;
+        grid-template-rows: max-content max-content;
+        height: auto;
+        max-height: calc(100vh - 50px);
+        grid-gap: 50px;
+    }
+}
+
 .depth-border {
-    border-bottom: 4px solid rgb(220,220,220);
-    border-left: 2px solid rgb(220,220,220);
-    border-right: 2px solid rgb(220,220,220);
+    border-bottom: 4px solid rgb(220, 220, 220);
+    border-left: 2px solid rgb(220, 220, 220);
+    border-right: 2px solid rgb(220, 220, 220);
 }
 
 @font-face {
