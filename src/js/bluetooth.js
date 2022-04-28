@@ -15,6 +15,9 @@ class BluetoothController {
         // Receive method
         this.handleReceivedData = handleReceivedData
 
+        // Set UI
+        this.connectButton.innerText = "Verbinden"
+
         // Init eventlisteners
         this.bindEventListeners()
     }
@@ -24,6 +27,8 @@ class BluetoothController {
 
         // Connect to device on button click
         this.connectButton.addEventListener('click', () => {
+            this.connectButton.innerText = "Verbinden..."
+
             this.connect().then(() => {
                 this.send('CONNECTED?')
             })

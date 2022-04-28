@@ -249,14 +249,10 @@ function showStartMenu() {
 }
 
 const showBluetoothMenu = () => {
-    const bluetooth = new BluetoothController(handleReceivedBluetoothData)
-
     showHTML(bluetoothMenu)
     hideHTML(arButton)
     hideHTML(vrButton)
     disableLookControls()
-
-    bluetoothMenu.classList.remove('hidden')
 
     if (isConnectedToDevice) {
         hideHTML(connectionSection)
@@ -288,6 +284,7 @@ const disableLookControls = () => {
 //game
 
 let isGameRunning = false
+let bluetooth = undefined;
 
 setupControls()
 setupCollision()
@@ -296,6 +293,8 @@ window.onload = () => {
     setupAllMenus()
     setupScore()
     setupTrees()
+    btNotificationMessageHandlers.push(handleConnectionConfirmation);
+    bluetooth = new BluetoothController(handleReceivedBluetoothData);
 }
 
 const enterGame = () => {
@@ -324,15 +323,44 @@ function gameOver() {
 //bluetooth
 
 let isConnectedToDevice = false
+let btDataMessageHandlers = [];
+let btNotificationMessageHandlers = [];
 
 const handleReceivedBluetoothData = (data) => {
-    console.log(data)
+    const messageType = data.includes(":") ? "data" : "notification";
 
-    if (data == 'CONNECTED!') {
-        isConnectedToDevice = true
+    if (messageType == "data") {
+        for (i = 0; i < btDataMessageHandlers.length; i++) {
+            btDataMessageHandlers[i](data);
+        }
+    }
+    
+    if (messageType == "notification") {
+        for (i = 0; i < btNotificationMessageHandlers.length; i++) {
+            btNotificationMessageHandlers[i](data);
+        }
+    }   
+}
 
-        showBluetoothMenu()
-        console.log('Connected! Ready to start.')
+const removeBtMessageHandler = (handler) => {
+    const dataHandlerIndex = btDataMessageHandlers.indexOf(handler);
+    const notifcationHandlerIndex = btNotificationMessageHandlers.indexOf(handler);
+
+    if (dataHandlerIndex > -1) {
+        btDataMessageHandlers.splice(dataHandlerIndex, 1);
+    }
+
+    if (notifcationHandlerIndex < -1) {
+        btNotificationMessageHandlers.splice(notifcationHandlerIndex, 1);
+    }
+}
+
+const handleConnectionConfirmation = (data) => {
+    if (data == "CONNECTED!") {
+        console.log('Connected! Ready to start.');
+        isConnectedToDevice = true;
+        showBluetoothMenu();
+        removeBtMessageHandler(handleConnectionConfirmation);
     }
 }
 
