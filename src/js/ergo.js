@@ -94,7 +94,10 @@ function addTreesRandomly({
     var numberOfTreesAdded = 0
 
     trees.forEach((tree) => {
-        if (Math.random() < tree.propability && numberOfTreesAdded < maxNumberTrees) {
+        if (
+            Math.random() < tree.propability &&
+            numberOfTreesAdded < maxNumberTrees
+        ) {
             addTreeTo(tree.position_index)
             numberOfTreesAdded += 1
         }
@@ -114,7 +117,9 @@ const setupCollision = () => {
         tick: () => {
             document.querySelectorAll('.tree').forEach((tree) => {
                 position = tree.getAttribute('position')
-                tree_position_index = tree.getAttribute('data-tree-position-index')
+                tree_position_index = tree.getAttribute(
+                    'data-tree-position-index'
+                )
                 tree_id = tree.getAttribute('id')
 
                 if (position.z > POSITION_Z_OUT_OF_SIGHT) {
@@ -131,7 +136,10 @@ const setupCollision = () => {
                     gameOver()
                 }
 
-                if (position.z > POSITION_Z_LINE_END && !countedTrees.has(tree_id)) {
+                if (
+                    position.z > POSITION_Z_LINE_END &&
+                    !countedTrees.has(tree_id)
+                ) {
                     addScoreForTree(tree_id)
                     updateScoreDisplay()
                 }
@@ -179,10 +187,13 @@ let menuGameOver
 let menuContainer
 let startButton
 let restartButton
-let bluetoothMenu
 let arButton
 let vrButton
+
+let bluetoothMenu
 let connectionSection
+let stressbalConfigurationSection
+let stressbalProgressFill
 let enterGameSection
 let enterGameButton
 
@@ -203,23 +214,32 @@ function showHTML(el) {
 }
 
 function setupAllMenus() {
+    // Get HTML elements
     menuStart = document.getElementById('start-menu')
     menuGameOver = document.getElementById('game-over')
     menuContainer = document.getElementById('menu-container')
     startButton = document.getElementById('start-button')
     restartButton = document.getElementById('restart-button')
-    bluetoothMenu = document.getElementById('bluetooth-menu')
     arButton = document.querySelector('.a-enter-ar-button')
     vrButton = document.querySelector('.a-enter-vr-button')
+
+    bluetoothMenu = document.getElementById('bluetooth-menu')
     connectionSection = document.getElementById('connection-section')
+    stressbalConfigurationSection = document.getElementById(
+        'stressball-configuration-section'
+    )
+    stressbalProgressFill = document.querySelector('#stressbal-progress .filling')
     enterGameSection = document.getElementById('enter-game-section')
     enterGameButton = document.getElementById('enter-game')
+
     playerCamera = document.getElementById('player-camera')
 
+    // Set eventlisteners
     enterGameButton.addEventListener('click', enterGame)
     startButton.addEventListener('click', startGame)
     restartButton.addEventListener('click', startGame)
 
+    // Open initial menu's
     hideAllMenus()
     showBluetoothMenu()
 }
@@ -254,22 +274,33 @@ const showBluetoothMenu = () => {
     hideHTML(vrButton)
     disableLookControls()
 
-    if (isConnectedToDevice) {
-        hideHTML(connectionSection)
-        showHTML(enterGameSection)
-        enterGameButton.style.pointerEvents = 'all'
-    } else {
-        hideHTML(enterGameSection)
+    if (!isConnectedToDevice) {
+        hideAllBluetoothMenuSections()
         showHTML(connectionSection)
-        enterGameButton.style.pointerEvents = 'none'
+    } else if (!isStressballReady) {
+        hideAllBluetoothMenuSections()
+        showHTML(stressbalConfigurationSection)
+        configureStressBal()
+    } else if (!isBreathSensorReady) {
+        hideAllBluetoothMenuSections()
+        // breath sensor section
+    } else {
+        hideAllBluetoothMenuSections()
+        showHTML(enterGameSection)
     }
+}
+
+const hideAllBluetoothMenuSections = () => {
+    hideHTML(connectionSection)
+    hideHTML(stressbalConfigurationSection)
+    //hide breath sensor section
+    hideHTML(enterGameSection)
 }
 
 const hideBluetoothMenu = () => {
     showHTML(arButton)
     showHTML(vrButton)
     hideHTML(bluetoothMenu)
-    enterGameButton.style.pointerEvents = 'none'
     enableLookControls()
 }
 
@@ -281,10 +312,57 @@ const disableLookControls = () => {
     playerCamera.setAttribute('look-controls', 'enabled: false')
 }
 
+// sensor configuration
+
+let isStressballReady = false
+let isBreathSensorReady = false
+let sensorConfigurationStarted = false
+let stressBallMaxPressure = 0
+let breathMinPressure = 0
+let breathMaxPressure = 0
+
+const configureStressBal = () => {
+    let progress = 0;
+    btDataMessageHandlers.push(changeStressBalMaxPressure)
+
+    const configurationInterval = setInterval(() => {
+        bluetooth.send('ANGER?')
+
+        if (sensorConfigurationStarted) {
+            progress +=20;
+            stressbalProgressFill.style.width = `${progress}%`;
+        }
+        
+        if (progress == 100) {
+            setTimeout(() => {
+                removeBtMessageHandler(changeStressBalMaxPressure);
+                isStressballReady = true;
+                sensorConfigurationStarted = false;
+                showBluetoothMenu();
+                console.log(stressBallMaxPressure);
+                clearInterval(configurationInterval);
+            }, 500)
+        }
+    }, 1000)
+}
+
+const changeStressBalMaxPressure = (data) => {
+    const label = getLabelFromBtMessage(data)
+    const value = getDataFromBtMessage(data)
+
+    if (label == 'ANGER' && value > stressBallMaxPressure) {
+        stressBallMaxPressure = value
+    }
+
+    if (value > 900) {
+        sensorConfigurationStarted = true
+    }
+}
+
 //game
 
 let isGameRunning = false
-let bluetooth = undefined;
+let bluetooth = undefined
 
 setupControls()
 setupCollision()
@@ -293,8 +371,8 @@ window.onload = () => {
     setupAllMenus()
     setupScore()
     setupTrees()
-    btNotificationMessageHandlers.push(handleConnectionConfirmation);
-    bluetooth = new BluetoothController(handleReceivedBluetoothData);
+    btNotificationMessageHandlers.push(handleConnectionConfirmation)
+    bluetooth = new BluetoothController(handleReceivedBluetoothData)
 }
 
 const enterGame = () => {
@@ -323,44 +401,47 @@ function gameOver() {
 //bluetooth
 
 let isConnectedToDevice = false
-let btDataMessageHandlers = [];
-let btNotificationMessageHandlers = [];
+let btDataMessageHandlers = []
+let btNotificationMessageHandlers = []
 
 const handleReceivedBluetoothData = (data) => {
-    const messageType = data.includes(":") ? "data" : "notification";
+    const messageType = data.includes(':') ? 'data' : 'notification'
 
-    if (messageType == "data") {
+    if (messageType == 'data') {
         for (i = 0; i < btDataMessageHandlers.length; i++) {
-            btDataMessageHandlers[i](data);
+            btDataMessageHandlers[i](data)
         }
     }
-    
-    if (messageType == "notification") {
+
+    if (messageType == 'notification') {
         for (i = 0; i < btNotificationMessageHandlers.length; i++) {
-            btNotificationMessageHandlers[i](data);
+            btNotificationMessageHandlers[i](data)
         }
-    }   
+    }
 }
 
 const removeBtMessageHandler = (handler) => {
-    const dataHandlerIndex = btDataMessageHandlers.indexOf(handler);
-    const notifcationHandlerIndex = btNotificationMessageHandlers.indexOf(handler);
+    const dataHandlerIndex = btDataMessageHandlers.indexOf(handler)
+    const notifcationHandlerIndex =
+        btNotificationMessageHandlers.indexOf(handler)
 
     if (dataHandlerIndex > -1) {
-        btDataMessageHandlers.splice(dataHandlerIndex, 1);
+        btDataMessageHandlers.splice(dataHandlerIndex, 1)
     }
 
     if (notifcationHandlerIndex < -1) {
-        btNotificationMessageHandlers.splice(notifcationHandlerIndex, 1);
+        btNotificationMessageHandlers.splice(notifcationHandlerIndex, 1)
     }
 }
 
 const handleConnectionConfirmation = (data) => {
-    if (data == "CONNECTED!") {
-        console.log('Connected! Ready to start.');
-        isConnectedToDevice = true;
-        showBluetoothMenu();
-        removeBtMessageHandler(handleConnectionConfirmation);
+    console.log(data);
+
+    if (data == 'CONNECTED!') {
+        console.log('Connected! Ready to start.')
+        isConnectedToDevice = true
+        showBluetoothMenu()
+        removeBtMessageHandler(handleConnectionConfirmation)
     }
 }
 
@@ -375,4 +456,14 @@ const shuffle = (a) => {
         a[j] = x
     }
     return a
+}
+
+const getLabelFromBtMessage = (data) => {
+    const messageArray = data.split(': ')
+    return messageArray[0]
+}
+
+const getDataFromBtMessage = (data) => {
+    const messageArray = data.split(': ')
+    return messageArray[1]
 }

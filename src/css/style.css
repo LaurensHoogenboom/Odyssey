@@ -4,6 +4,12 @@
     box-sizing: border-box;
 }
 
+.hidden {
+    display: none;
+}
+
+/*text*/
+
 h1,
 h2,
 p,
@@ -48,6 +54,8 @@ label {
     }
 }
 
+/*input*/
+
 label.button {
     display: inline-block;
     margin-top: 50px;
@@ -74,9 +82,7 @@ label.button.hidden {
     }
 }
 
-.hidden {
-    display: none;
-}
+/*ui container*/
 
 .ui-container {
     position: absolute;
@@ -118,11 +124,34 @@ label.button.hidden {
     }
 }
 
+/*ui parts*/
+
 .depth-border {
     border-bottom: 4px solid rgb(220, 220, 220);
     border-left: 2px solid rgb(220, 220, 220);
     border-right: 2px solid rgb(220, 220, 220);
 }
+
+.progress-bar {
+    height: 50px;
+    width: 50%;
+    min-width: 250px;
+    max-width: 500px;
+    border-radius: 10px;
+    background-color: white;
+    margin: 0 auto;
+    margin-top: 50px;
+    overflow: hidden;
+}
+
+.progress-bar .filling {
+    height: 100%;
+    background-color: #a3d0ed;
+    width: 0;
+    transition: width 0.2s;
+}
+
+/*fonts*/
 
 @font-face {
     font-family: exo-2;
