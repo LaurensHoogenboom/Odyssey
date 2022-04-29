@@ -10,9 +10,11 @@
         <script src="/src/js/aframe.js"></script>
         <!-- Low Poly Version 0.0.2 -->
         <script src="/src/js/low-poly.js"></script>
-        <script src="/src/js/ocean.js"></script>
-        <script src="/src/js/ergo.js"></script>
-        <script src="/src/js/bluetooth.js"></script>
+        <script src="/src/js/components/ocean.js"></script>
+        <script src="/src/js/hardware/bluetooth.js"></script>
+        <script src="/src/js/ui.js"></script>
+        <script src="/src/js/hardware/sensorConfiguration.js"></script>
+        <script src="/src/js/game.js"></script>
 
         <!-- <script>
             if ('serviceWorker' in navigator) {
@@ -40,14 +42,14 @@
     </head>
 
     <body>
-        <!-- Bluetooth -->
+        <!-- Wearable configuration -->
 
         <div class="ui-container hidden depth-border" id="bluetooth-menu">
             <div class="content">
                 <h1>De-moodify</h1>
 
                 <section id="connection-section">
-                    <h2 id="connect-instruction">Klik hieronder om met te verbinden met de wearable.</h2>
+                    <h2>Klik hieronder om met te verbinden met de wearable.</h2>
                     <label id="connect" class="button depth-border">Verbinden</label>
                     <label id="disconnect" class="button depth-border hidden">Verbinding verbreken</label>
 
@@ -65,16 +67,26 @@
                     </div>
                 </section>
 
-                <section id="enter-game-section" class="hidden">
-                    <h2 id="connect-instruction">Wearable is verbonden, klik op start om te beginnen.</h2>
-                    <label id="enter-game" class="button depth-border">Start</label>
-                </section>
-
                 <section id="stressball-configuration-section" class="hidden">
                     <h2>Knijp zo hard mogelijk in de stressbal.</h2>
                     <div class="progress-bar depth-border" id="stressbal-progress">
                         <div class="filling"></div>
                     </div>
+                </section>
+
+                <section id="breath-configuration-section" class="hidden">
+                    <h2 id="breath-configuration-instruction">
+                        Doe de riem om je buik, en adem zo ver mogelijk in. Hou je adem vast tot de balk vol
+                        is.
+                    </h2>
+                    <div class="progress-bar depth-border" id="breath-progress">
+                        <div class="filling"></div>
+                    </div>
+                </section>
+
+                <section id="enter-game-section" class="hidden">
+                    <h2>Alles is klaar!</h2>
+                    <label id="enter-game" class="button depth-border">Start</label>
                 </section>
             </div>
 
@@ -100,10 +112,7 @@
                     geometry="primitive:box; height:0.5; width: 0.1; depth: 0.1;"
                     material="color: white;"
                 ></a-mixin>
-                <a-mixin
-                    id="text"
-                    text="font: src/font/Exo2Bold.fnt; anchor:center;align:center;"
-                ></a-mixin>
+                <a-mixin id="text" text="font: src/font/Exo2Bold.fnt; anchor:center;align:center;"></a-mixin>
                 <a-mixin
                     id="title"
                     text="font: src/font/Exo2Bold.fnt; height: 40; width: 40; opacity: 0.75; anchor: center; align: center"

@@ -1,3 +1,14 @@
+/*
+    Bluetooth controller for HM-10 and similar BLE devices
+    ======================================================
+
+    Based on this tutorial: 
+    https://loginov-rocks.medium.com/how-to-make-a-web-app-for-your-own-bluetooth-low-energy-device-arduino-2af8d16fdbe8
+    
+    The code is rewritten to fit the project.
+*/ 
+
+
 class BluetoothController {
     constructor(handleReceivedData) {
         // Html elements

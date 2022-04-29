@@ -76,7 +76,7 @@ label.button.hidden {
     display: none;
 }
 
-@media screen and (max-width: 768px), screen and (max-height: 768px) {
+@media (max-height: 480px) {
     label.button {
         margin-top: 20px;
     }
@@ -149,6 +149,12 @@ label.button.hidden {
     background-color: #a3d0ed;
     width: 0;
     transition: width 0.2s;
+}
+
+@media (max-height: 480px) {
+    .progress-bar {
+        margin-top: 20px;
+    }
 }
 
 /*fonts*/
