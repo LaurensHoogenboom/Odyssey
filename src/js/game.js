@@ -58,12 +58,10 @@ let intervalLength = 2000
 function addTreesRandomlyLoop() {
     playTime += intervalLength
 
-    console.log(intervalLength)
-
     setTimeout(() => {
         addTreesRandomly()
 
-        if (intervalLength > 400) {
+        if (intervalLength > 500) {
             intervalLength = 0.98 * intervalLength
         }
 
@@ -75,15 +73,38 @@ function removeTree(tree) {
     tree.parentNode.removeChild(tree)
 }
 
-function addTree(el) {
+function addTree(el, position_index) {
     numberOfTrees += 1
-    el.id = `tree-${numberOfTrees}`
+
+    if (playTime > 5000) {
+        let volumes = [0.3, 0.6, 0.9]
+
+        shuffle(volumes);
+
+        let obstacleTypes = [
+            "experience",
+            "feedback",
+            "imagination",
+            "mirror"
+        ]
+    
+        let obstacleType = obstacleTypes[Math.floor(Math.random()*obstacleTypes.length)]
+    
+        el.id = `tree-${numberOfTrees}`
+        el.setAttribute('sound', {
+            "src": `#${obstacleType}-thought`, 
+            "autoplay": true,
+            "loop": true,
+            "volume": volumes[position_index]
+        })
+    }
+
     treeContainer.appendChild(el)
 }
 
 function addTreeTo(position_index) {
     let template = templates[position_index]
-    addTree(template.cloneNode(true))
+    addTree(template.cloneNode(true), position_index)
 }
 
 function addTreesRandomly({
@@ -92,7 +113,7 @@ function addTreesRandomly({
     propTreeRight = 0.5,
     maxNumberTrees = 2,
 } = {}) {
-    var trees = [
+    let trees = [
         { propability: propTreeLeft, position_index: 0 },
         { propability: propTreeCenter, position_index: 1 },
         { propability: propTreeRight, position_index: 2 },
@@ -113,6 +134,14 @@ function addTreesRandomly({
     })
 
     return numberOfTreesAdded
+}
+
+const muteAllTrees = () => {
+    const treeList = document.querySelectorAll('.tree');
+
+    treeList.forEach(tree => {
+        fadeAudioOut(tree, 0, 0.5);
+    })
 }
 
 //collision
@@ -190,7 +219,7 @@ const enterGame = () => {
     hideBluetoothMenu()
     showStartMenu()
     ocean.components.sound.playSound()
-    fadeAudioIn(ocean, 0.6, 10);
+    fadeAudioIn(ocean, 0.03, 10);
 }
 
 function startGame() {
@@ -208,6 +237,7 @@ function gameOver() {
     playTime = 0
     intervalLength = 2000
 
+    muteAllTrees()
     tearDownScore()
     showGameOverMenu()
 }
@@ -263,15 +293,15 @@ const fadeAudioIn = (element, max, length) => {
     }, 16);
 }
 
-const fadeAudioOut = () => {
+const fadeAudioOut = (element, min, length) => {
     //16 for 60 fps
-    step = max / (length * (1000 / 16));
+    step = (1 - min) / (length * (1000 / 16));
     currentVolume = element.components.sound.data.volume;
 
     fadeInterval = setInterval(() => {
-        if (currentVolume < max) {  
+        if (currentVolume > min) {  
             element.setAttribute('sound', 'volume', currentVolume - step)
-            currentVolume +- step;
+            currentVolume -= step;
         } else {
             clearInterval(fadeInterval);
         }

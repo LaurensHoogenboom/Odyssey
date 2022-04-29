@@ -34,6 +34,11 @@
         ></a-mixin>
 
         <audio id="sea" src="/src/sound/sea.wav" preload="true"></audio>
+
+        <audio id="experience-thought" src="/src/sound/factors/negative/experience.m4a" preload="true"></audio>
+        <audio id="feedback-thought" src="/src/sound/factors/negative/feedback.m4a" preload="true"></audio>
+        <audio id="imagination-thought" src="/src/sound/factors/negative/imagination.m4a" preload="true"></audio>
+        <audio id="mirror-thought" src="/src/sound/factors/negative/mirror.m4a" preload="true"></audio>
     </a-assets>
 
     <!-- Lights -->
