@@ -8,10 +8,12 @@ const PRECAHCE_URLS = [
     '/src/font/exo-2.woff',
     '/src/font/Exo2Bold.fnt',
     '/src/font/Exo2Bold.png',
-    '/src/js/bluetooth.js',
-    '/src/js/ergo.js',
+    '/src/js/hardware/bluetooth.js',
+    '/src/js/hardware/sensorConfiguration.js',
+    '/src/js/game.js',
+    '/src/js/ui.js',
     '/src/js/low-poly.js',
-    '/src/js/ocean.js',
+    '/src/js/components/ocean.js',
     '/src/js/aframe.js',
 ]
 
