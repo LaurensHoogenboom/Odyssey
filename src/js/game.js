@@ -52,14 +52,23 @@ function setupTrees() {
     removeTree(templateTreeRight)
 }
 
-var treeTimer
+let treeTimer
+let intervalLength = 2000
 
-function addTreesRandomlyLoop({ intervalLength = 700 } = {}) {
-    treeTimer = setInterval(addTreesRandomly, intervalLength)
-}
+function addTreesRandomlyLoop() {
+    playTime += intervalLength
 
-function tearDownTrees() {
-    clearInterval(treeTimer)
+    console.log(intervalLength)
+
+    setTimeout(() => {
+        addTreesRandomly()
+
+        if (intervalLength > 400) {
+            intervalLength = 0.98 * intervalLength
+        }
+
+        if (isGameRunning) addTreesRandomlyLoop()
+    }, intervalLength)
 }
 
 function removeTree(tree) {
@@ -153,6 +162,7 @@ const setupCollision = () => {
 let isGameRunning = false
 let bluetooth
 let playerSphere
+let playTime = 0
 
 setupControls()
 setupCollision()
@@ -184,8 +194,9 @@ function startGame() {
 
 function gameOver() {
     isGameRunning = false
+    playTime = 0
+    intervalLength = 2000
 
-    tearDownTrees()
     tearDownScore()
     showGameOverMenu()
 }
