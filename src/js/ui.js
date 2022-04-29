@@ -180,6 +180,13 @@ const changeBreathSectionInstruction = (mode) => {
     }
 }
 
+const skipBluetoothSetup = () => {
+    isStressballReady = true;
+    isConnectedToDevice = true;
+    isBreathSensorReady = true;
+    showBluetoothMenu();
+}
+
 // Look controls
 
 const enableLookControls = () => {

@@ -233,6 +233,7 @@
             <!-- Player -->
             <a-entity id="player" player>
                 <a-sphere
+                    id="player-sphere"
                     radius="0.05"
                     animation__radius="property: radius; from: 0.05; to: 0.055; loop: true; dir: alternate; dur: 1500;"
                     animation__position="property: position; from: 0 0.5 0.6; to: 0 0.525 0.6; loop: true; dir: alternate; dur: 15000; easing: easeInOutQuad;"
@@ -244,4 +245,4 @@
     </lp-cone>
 </a-scene>
 
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/src/php/header.php"; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/src/php/footer.php"; ?>

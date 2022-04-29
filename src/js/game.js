@@ -108,9 +108,9 @@ function addTreesRandomly({
 
 //collision
 
-const POSITION_Z_OUT_OF_SIGHT = 1.9
-const POSITION_Z_LINE_START = 0.6
-const POSITION_Z_LINE_END = 0.7
+let POSITION_Z_OUT_OF_SIGHT = 1.9
+let POSITION_Z_LINE_START = 0.6
+let POSITION_Z_LINE_END = 0.7
 
 const setupCollision = () => {
     AFRAME.registerComponent('player', {
@@ -137,7 +137,7 @@ const setupCollision = () => {
                 }
 
                 if (
-                    position.z > POSITION_Z_LINE_END &&
+                    position.z > Math.abs(POSITION_Z_LINE_END) &&
                     !countedTrees.has(tree_id)
                 ) {
                     addScoreForTree(tree_id)
@@ -151,7 +151,8 @@ const setupCollision = () => {
 //game
 
 let isGameRunning = false
-let bluetooth = undefined
+let bluetooth
+let playerSphere
 
 setupControls()
 setupCollision()
@@ -160,8 +161,10 @@ window.onload = () => {
     setupAllMenus()
     setupScore()
     setupTrees()
+    bindToggleVRModeEventSettings()
     btNotificationMessageHandlers.push(handleConnectionConfirmation)
     bluetooth = new BluetoothController(handleReceivedBluetoothData)
+    playerSphere = document.getElementById('player-sphere')
 }
 
 const enterGame = () => {
@@ -185,6 +188,40 @@ function gameOver() {
     tearDownTrees()
     tearDownScore()
     showGameOverMenu()
+}
+
+const bindToggleVRModeEventSettings = () => {
+    document.querySelector('a-scene').addEventListener('enter-vr', function () {
+        playerSphere.setAttribute('animation__position', {
+            property: 'position',
+            from: { x: 0, y: 0.5, z: -0.5 },
+            to: { x: 0, y: 0.525, z: -0.5 },
+            loop: true,
+            dir: 'alternate',
+            dur: 15000,
+            easing: 'easeInOutQuad',
+        })
+
+        POSITION_Z_OUT_OF_SIGHT = 1.9
+        POSITION_Z_LINE_START = -0.6
+        POSITION_Z_LINE_END = -0.5
+    })
+
+    document.querySelector('a-scene').addEventListener('exit-vr', function () {
+        playerSphere.setAttribute('animation__position', {
+            property: 'position',
+            from: { x: 0, y: 0.5, z: 0.6 },
+            to: { x: 0, y: 0.525, z: 0.6 },
+            loop: true,
+            dir: 'alternate',
+            dur: 15000,
+            easing: 'easeInOutQuad',
+        })
+
+        POSITION_Z_OUT_OF_SIGHT = 1.9
+        POSITION_Z_LINE_START = 0.6
+        POSITION_Z_LINE_END = 0.7
+    })
 }
 
 //bluetooth
@@ -256,5 +293,3 @@ const shuffle = (a) => {
     }
     return a
 }
-
-
