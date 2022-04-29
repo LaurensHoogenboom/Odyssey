@@ -10,6 +10,12 @@
         "options": {
           "printWidth": 110
         }
+      },
+      {
+        "files": ["**/*.php"],
+        "options": {
+          "printWidth": 110
+        }
       }
     ]
   }
