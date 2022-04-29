@@ -157,6 +157,14 @@ const setupCollision = () => {
     })
 }
 
+//ocean
+
+let ocean
+
+const setupOcean = () => {
+    ocean = document.getElementById('ocean')
+}
+
 //game
 
 let isGameRunning = false
@@ -171,6 +179,7 @@ window.onload = () => {
     setupAllMenus()
     setupScore()
     setupTrees()
+    setupOcean()
     bindToggleVRModeEventSettings()
     btNotificationMessageHandlers.push(handleConnectionConfirmation)
     bluetooth = new BluetoothController(handleReceivedBluetoothData)
@@ -180,6 +189,8 @@ window.onload = () => {
 const enterGame = () => {
     hideBluetoothMenu()
     showStartMenu()
+    ocean.components.sound.playSound()
+    fadeAudioIn(ocean, 0.6, 10);
 }
 
 function startGame() {
@@ -233,6 +244,38 @@ const bindToggleVRModeEventSettings = () => {
         POSITION_Z_LINE_START = 0.6
         POSITION_Z_LINE_END = 0.7
     })
+}
+
+//audio
+
+const fadeAudioIn = (element, max, length) => {
+    //16 for 60 fps
+    step = max / (length * (1000 / 16));
+    currentVolume = element.components.sound.data.volume;
+
+    fadeInterval = setInterval(() => {
+        if (currentVolume < max) {  
+            element.setAttribute('sound', 'volume', currentVolume + step)
+            currentVolume += step;
+        } else {
+            clearInterval(fadeInterval);
+        }
+    }, 16);
+}
+
+const fadeAudioOut = () => {
+    //16 for 60 fps
+    step = max / (length * (1000 / 16));
+    currentVolume = element.components.sound.data.volume;
+
+    fadeInterval = setInterval(() => {
+        if (currentVolume < max) {  
+            element.setAttribute('sound', 'volume', currentVolume - step)
+            currentVolume +- step;
+        } else {
+            clearInterval(fadeInterval);
+        }
+    }, 16);
 }
 
 //bluetooth

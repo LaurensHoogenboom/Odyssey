@@ -32,10 +32,19 @@
             id="copy"
             text="font: src/font/Exo2Bold.fnt; height: 5; width: 5; opacity: 0.75; anchor: center; align: center"
         ></a-mixin>
+
+        <audio id="sea" src="/src/sound/sea.wav" preload="true"></audio>
     </a-assets>
 
     <!-- Lights -->
-    <a-light type="directional" castShadow="true" intensity="0.4" color="#D0EAF9" position="5 3 1"></a-light>
+    <a-entity
+        light="
+          type: directional;
+          castShadow: true;
+          intensity: 0.4;
+          color: #D0EAF9;"
+        position="5 3 1"
+    ></a-entity>
     <a-light intensity="0.8" type="ambient" color="#B4C5EC"></a-light>
 
     <!-- Camera -->
@@ -113,6 +122,7 @@
         density="50"
     ></a-ocean>
     <a-ocean
+        id="ocean"
         depth="50"
         width="50"
         opacity="0.5"
@@ -121,6 +131,7 @@
         speed="1.5"
         speed-variance="1"
         density="50"
+        sound="src: #sea; on: click; positional: false; loop: true; volume:0;"
     ></a-ocean>
 
     <!-- Platform -->
