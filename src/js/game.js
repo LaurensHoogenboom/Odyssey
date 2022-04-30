@@ -228,7 +228,11 @@ let runningTime = 0
 setupControls()
 setupCollision()
 
-window.onload = () => {
+// window.onload = () => {
+    
+// }
+
+const init = () => {
     setupAllMenus()
     setupScore()
     setupTrees()

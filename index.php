@@ -13,7 +13,7 @@
     <a-sky id="sky-normal" color="#a3d0ed"> </a-sky>
 
     <!-- Mixins -->
-    <a-assets>
+    <a-assets id="assets">
         <a-mixin
             id="foliage"
             geometry="primitive: cone; segments-height: 1; segments-radial: 4; radius-bottom: 0.3"
@@ -308,5 +308,11 @@
         </a-entity>
     </lp-cone>
 </a-scene>
+
+<script>
+    document.querySelector('a-scene').addEventListener('loaded', function () {
+        init()
+    })
+</script>
 
 <?php include $_SERVER['DOCUMENT_ROOT'] . "/src/php/footer.php"; ?>
