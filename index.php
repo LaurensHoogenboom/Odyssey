@@ -38,40 +38,40 @@
             text="font: src/font/Exo2Bold.fnt; height: 5; width: 5; opacity: 0.75; anchor: center; align: center"
         ></a-mixin>
 
-        <audio id="sea" src="/src/sound/sea.wav" preload="true"></audio>
+        <audio id="sea" src="/src/sound/sea.wav" preload="auto"></audio>
 
         <audio
             id="experience-thought"
             src="/src/sound/factors/negative/experience.m4a"
-            preload="true"
+            preload="auto"
         ></audio>
-        <audio id="feedback-thought" src="/src/sound/factors/negative/feedback.m4a" preload="true"></audio>
+        <audio id="feedback-thought" src="/src/sound/factors/negative/feedback.m4a" preload="auto"></audio>
         <audio
             id="imagination-thought"
             src="/src/sound/factors/negative/imagination.m4a"
             preload="true"
         ></audio>
-        <audio id="mirror-thought" src="/src/sound/factors/negative/mirror.m4a" preload="true"></audio>
+        <audio id="mirror-thought" src="/src/sound/factors/negative/mirror.m4a" preload="auto"></audio>
 
         <audio
             id="experience-thought-reverb"
             src="/src/sound/factors/negative/experience-reverb.wav"
-            preload="true"
+            preload="auto"
         ></audio>
         <audio
             id="feedback-thought-reverb"
             src="/src/sound/factors/negative/feedback-reverb.wav"
-            preload="true"
+            preload="auto"
         ></audio>
         <audio
             id="imagination-thought-reverb"
             src="/src/sound/factors/negative/imagination-reverb.wav"
-            preload="true"
+            preload="auto"
         ></audio>
         <audio
             id="mirror-thought-reverb"
             src="/src/sound/factors/negative/mirror-reverb.wav"
-            preload="true"
+            preload="auto"
         ></audio>
     </a-assets>
 
