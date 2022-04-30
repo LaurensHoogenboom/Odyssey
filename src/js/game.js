@@ -23,22 +23,30 @@ function movePlayerTo(position_index) {
 function setupControls() {
     AFRAME.registerComponent('lane-controls', {
         tick: function (time, timeDelta) {
-            var rotation = this.el.object3D.rotation
+            if (currentChapter == chapters.running) {
+                var rotation = this.el.object3D.rotation
 
-            if (rotation.y > 0.1) movePlayerTo(0)
-            else if (rotation.y < -0.1) movePlayerTo(2)
-            else movePlayerTo(1)
+                if (rotation.y > 0.1) movePlayerTo(0)
+                else if (rotation.y < -0.1) movePlayerTo(2)
+                else movePlayerTo(1)
+            } else {
+                movePlayerTo(1)
+            }
         },
     })
 }
 
 //trees
 
-var templateTreeLeft
-var templateTreeCenter
-var templateTreeRight
+const obstacleTypes = ['experience', 'feedback', 'imagination', 'mirror']
+let obstacleTypesLeft = ['experience', 'feedback', 'imagination', 'mirror']
+let templateTreeLeft
+let templateTreeCenter
+let templateTreeRight
 
-var numberOfTrees = 0
+let numberOfTrees = 0
+
+let RUNNING_BEFORE_REAL_OBSTACLES = 5000
 
 function setupTrees() {
     templateTreeLeft = document.getElementById('template-tree-left')
@@ -56,7 +64,7 @@ let treeTimer
 let intervalLength = 2000
 
 function addTreesRandomlyLoop() {
-    playTime += intervalLength
+    runningTime += intervalLength
 
     setTimeout(() => {
         addTreesRandomly()
@@ -65,7 +73,8 @@ function addTreesRandomlyLoop() {
             intervalLength = 0.98 * intervalLength
         }
 
-        if (isGameRunning) addTreesRandomlyLoop()
+        if (isGameRunning && currentChapter == chapters.running)
+            addTreesRandomlyLoop()
     }, intervalLength)
 }
 
@@ -76,26 +85,22 @@ function removeTree(tree) {
 function addTree(el, position_index) {
     numberOfTrees += 1
 
-    if (playTime > 5000) {
+    if (runningTime > RUNNING_BEFORE_REAL_OBSTACLES) {
         let volumes = [0.3, 0.6, 0.9]
+        let obstacleType =
+            obstacleTypesLeft[
+                Math.floor(Math.random() * obstacleTypesLeft.length)
+            ]
 
-        shuffle(volumes);
+        shuffle(volumes)
 
-        let obstacleTypes = [
-            "experience",
-            "feedback",
-            "imagination",
-            "mirror"
-        ]
-    
-        let obstacleType = obstacleTypes[Math.floor(Math.random()*obstacleTypes.length)]
-    
         el.id = `tree-${numberOfTrees}`
+        el.setAttribute('data-obstacle-type', obstacleType)
         el.setAttribute('sound', {
-            "src": `#${obstacleType}-thought`, 
-            "autoplay": true,
-            "loop": true,
-            "volume": volumes[position_index]
+            src: `#${obstacleType}-thought`,
+            autoplay: true,
+            loop: true,
+            volume: volumes[position_index],
         })
     }
 
@@ -137,10 +142,10 @@ function addTreesRandomly({
 }
 
 const muteAllTrees = () => {
-    const treeList = document.querySelectorAll('.tree');
+    const treeList = document.querySelectorAll('.tree')
 
-    treeList.forEach(tree => {
-        fadeAudioOut(tree, 0, 0.5);
+    treeList.forEach((tree) => {
+        fadeAudioOut(tree, 0, 0.5)
     })
 }
 
@@ -164,14 +169,18 @@ const setupCollision = () => {
                     removeTree(tree)
                 }
 
-                if (!isGameRunning) return
+                if (!isGameRunning || currentChapter != chapters.running) return
 
                 if (
                     POSITION_Z_LINE_START < position.z &&
                     position.z < POSITION_Z_LINE_END &&
                     tree_position_index == player_position_index
                 ) {
-                    gameOver()
+                    if (tree.hasAttribute('data-obstacle-type')) {
+                        startConfrontation(tree)
+                    } else {
+                        shakePathAndSea()
+                    }
                 }
 
                 if (
@@ -197,9 +206,15 @@ const setupOcean = () => {
 //game
 
 let isGameRunning = false
+const chapters = Object.freeze({
+    running: 'running',
+    confrontation: 'confrontation',
+    tranquilize: 'tranquilize',
+})
+let currentChapter = chapters.running
 let bluetooth
 let playerSphere
-let playTime = 0
+let runningTime = 0
 
 setupControls()
 setupCollision()
@@ -219,7 +234,7 @@ const enterGame = () => {
     hideBluetoothMenu()
     showStartMenu()
     ocean.components.sound.playSound()
-    fadeAudioIn(ocean, 0.03, 10);
+    fadeAudioIn(ocean, 0.03, 10)
 }
 
 function startGame() {
@@ -230,11 +245,12 @@ function startGame() {
     updateScoreDisplay()
     addTreesRandomlyLoop()
     hideAllMenus()
+    obstacleTypesLeft = obstacleTypes;
 }
 
 function gameOver() {
     isGameRunning = false
-    playTime = 0
+    runningTime = 0
     intervalLength = 2000
 
     muteAllTrees()
@@ -257,6 +273,8 @@ const bindToggleVRModeEventSettings = () => {
         POSITION_Z_OUT_OF_SIGHT = 1.9
         POSITION_Z_LINE_START = -0.6
         POSITION_Z_LINE_END = -0.5
+
+        TREE_CONFRONTATION_Z_INDEX = -2
     })
 
     document.querySelector('a-scene').addEventListener('exit-vr', function () {
@@ -273,6 +291,8 @@ const bindToggleVRModeEventSettings = () => {
         POSITION_Z_OUT_OF_SIGHT = 1.9
         POSITION_Z_LINE_START = 0.6
         POSITION_Z_LINE_END = 0.7
+
+        TREE_CONFRONTATION_Z_INDEX = 0
     })
 }
 
@@ -280,32 +300,32 @@ const bindToggleVRModeEventSettings = () => {
 
 const fadeAudioIn = (element, max, length) => {
     //16 for 60 fps
-    step = max / (length * (1000 / 16));
-    currentVolume = element.components.sound.data.volume;
+    step = max / (length * (1000 / 16))
+    currentVolume = element.components.sound.data.volume
 
     fadeInterval = setInterval(() => {
-        if (currentVolume < max) {  
+        if (currentVolume < max) {
             element.setAttribute('sound', 'volume', currentVolume + step)
-            currentVolume += step;
+            currentVolume += step
         } else {
-            clearInterval(fadeInterval);
+            clearInterval(fadeInterval)
         }
-    }, 16);
+    }, 16)
 }
 
 const fadeAudioOut = (element, min, length) => {
     //16 for 60 fps
-    step = (1 - min) / (length * (1000 / 16));
-    currentVolume = element.components.sound.data.volume;
+    step = (1 - min) / (length * (1000 / 16))
+    currentVolume = element.components.sound.data.volume
 
     fadeInterval = setInterval(() => {
-        if (currentVolume > min) {  
+        if (currentVolume > min) {
             element.setAttribute('sound', 'volume', currentVolume - step)
-            currentVolume -= step;
+            currentVolume -= step
         } else {
-            clearInterval(fadeInterval);
+            clearInterval(fadeInterval)
         }
-    }, 16);
+    }, 16)
 }
 
 //bluetooth
@@ -345,8 +365,6 @@ const removeBtMessageHandler = (handler) => {
 }
 
 const handleConnectionConfirmation = (data) => {
-    console.log(data)
-
     if (data == 'CONNECTED!') {
         console.log('Connected! Ready to start.')
         isConnectedToDevice = true

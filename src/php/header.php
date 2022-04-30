@@ -14,6 +14,7 @@
         <script src="/src/js/hardware/bluetooth.js"></script>
         <script src="/src/js/ui.js"></script>
         <script src="/src/js/hardware/sensorConfiguration.js"></script>
+        <script src="/src/js/modules/confrontation.js"></script>
         <script src="/src/js/game.js"></script>
 
         <!-- <script>

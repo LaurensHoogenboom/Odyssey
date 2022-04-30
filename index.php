@@ -39,6 +39,11 @@
         <audio id="feedback-thought" src="/src/sound/factors/negative/feedback.m4a" preload="true"></audio>
         <audio id="imagination-thought" src="/src/sound/factors/negative/imagination.m4a" preload="true"></audio>
         <audio id="mirror-thought" src="/src/sound/factors/negative/mirror.m4a" preload="true"></audio>
+
+        <audio id="experience-thought-reverb" src="/src/sound/factors/negative/experience-reverb.wav" preload="true"></audio>
+        <audio id="feedback-thought-reverb" src="/src/sound/factors/negative/feedback-reverb.wav" preload="true"></audio>
+        <audio id="imagination-thought-reverb" src="/src/sound/factors/negative/imagination-reverb.wav" preload="true"></audio>
+        <audio id="mirror-thought-reverb" src="/src/sound/factors/negative/mirror-reverb.wav" preload="true"></audio>
     </a-assets>
 
     <!-- Lights -->
