@@ -6,11 +6,19 @@
 
 // Obstacle
 let obstacle
-let obstacleType
+let confrontationObstacleType
 let TREE_CONFRONTATION_Z_INDEX = -1
 let centeredObstaclePosition
 let grownObstaclePosition
 let grownObstacleSize
+
+// Environment
+let oceanWrapper
+let oceans
+let skyNormal
+let skyStorm
+let scene
+let ambientLight
 
 // Confrontation Fases
 const fases = Object.freeze({ angry: 'angry', afraid: 'afraid' })
@@ -22,11 +30,11 @@ let lastBreathTime
 
 /*
     TODO:
-    2. adjust environment
-    3. adjust volume
-    4. add hearthbeath
-    4. add tree pulse animation
-    5. add shake animation
+    2. adjust environment: wilder water: geluid en visueel, gedimt licht, donkere lucht
+    3. adjust volume: als ie ingedrukt wordt
+    4. add hearthbeath: toenemen als boom kleiner wordt
+    4. add tree pulse animation: als ie hetzelfde blijft of niet wordt ingedrukt
+    5. add shake animation: bij klappen obstakel en bij obstakel zonder type: geluid
 */
 
 const startConfrontation = (obstacleToConfrontWith) => {
@@ -36,11 +44,14 @@ const startConfrontation = (obstacleToConfrontWith) => {
 
     //Setup obstacle
     obstacle = obstacleToConfrontWith
-    obstacleType = obstacle.getAttribute('data-obstacle-type')
+    confrontationObstacleType = obstacle.getAttribute('data-obstacle-type')
 
     //Setup obstacle position
     setupObstaclePosition()
     focusObstacle()
+
+    //Change Environment
+    changeEvenvironmentTheme(currentFase)
 
     setTimeout(() => {
         handleAnger()
@@ -59,8 +70,6 @@ const setupObstaclePosition = () => {
 
 const focusObstacle = () => {
     //Change position
-
-    console.log('fire')
 
     obstacle.setAttribute('animation__centerTree', {
         property: 'position',
@@ -90,7 +99,7 @@ const focusObstacle = () => {
     })
 
     obstacle.setAttribute('sound', {
-        src: `#${obstacleType}-thought-reverb`,
+        src: `#${confrontationObstacleType}-thought-reverb`,
         autoplay: true,
         loop: true,
         volume: 0,
@@ -99,7 +108,28 @@ const focusObstacle = () => {
     fadeAudioIn(obstacle, 8, 2)
 }
 
-const changeEvenvironmentTheme = () => {}
+const changeEvenvironmentTheme = (type) => {
+    oceanWrapper = document.getElementById('ocean-wrapper')
+    oceans = document.getElementsByClassName('ocean')
+    skyNormal = document.getElementById('sky-normal')
+    skyStorm = document.getElementById('sky-storm')
+    scene = document.getElementById('scene')
+    ambientLight = document.getElementById('ambient-light')
+
+    if (type == fases.angry) {
+        //Fog and light
+        scene.emit('angry')
+        ambientLight.emit('angry')
+
+        //geluid wind en wilde golven
+    }
+
+    if (type == 'normal') {
+        //Fog and light
+        scene.emit('normal')
+        ambientLight.emit('normal')
+    }
+}
 
 const shakePathAndSea = () => {}
 
@@ -186,6 +216,7 @@ const changeTreeSizeOnStress = (data) => {
 
 const quitAnger = () => {
     fadeAudioOut(obstacle, 0.0, 0.25)
+    changeEvenvironmentTheme('normal')
 
     setTimeout(() => {
         removeTree(obstacle)
@@ -194,17 +225,16 @@ const quitAnger = () => {
     //Future: switch to afraid and after that to running when anythig left
     //currentFase = fases.afraid
 
-    const index = obstacleTypesLeft.indexOf(obstacleType)
+    const index = obstacleTypesLeft.indexOf(confrontationObstacleType)
     obstacleTypesLeft.splice(index, 1)
 
     if (obstacleTypesLeft.length > 0) {
         currentChapter = chapters.running
-        runningTime = 5000
+        runningTime = 0
+        intervalLength = 2000
         addTreesRandomlyLoop()
     } else {
-        isGameRunning = false
-        muteAllTrees()
-        tearDownScore()
+        gameOver()
         showStartMenu()
     }
 

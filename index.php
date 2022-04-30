@@ -4,8 +4,13 @@
 
 <!-- A-Frame -->
 
-<a-scene fog="type: linear; color: #a3d0ed; near:5; far:20">
-    <a-sky color="#a3d0ed"></a-sky>
+<a-scene
+    id="scene"
+    fog="type: linear; color: #a3d0ed; near:5; far:20"
+    animation__angry="start-events: angry; easing: linear; property: fog.color; to: #1b3045; dur: 2300"
+    animation__normal="start-events: normal; easing: linear; property: fog.color; to: #a3d0ed; dur: 2300"
+>
+    <a-sky id="sky-normal" color="#a3d0ed"> </a-sky>
 
     <!-- Mixins -->
     <a-assets>
@@ -35,15 +40,39 @@
 
         <audio id="sea" src="/src/sound/sea.wav" preload="true"></audio>
 
-        <audio id="experience-thought" src="/src/sound/factors/negative/experience.m4a" preload="true"></audio>
+        <audio
+            id="experience-thought"
+            src="/src/sound/factors/negative/experience.m4a"
+            preload="true"
+        ></audio>
         <audio id="feedback-thought" src="/src/sound/factors/negative/feedback.m4a" preload="true"></audio>
-        <audio id="imagination-thought" src="/src/sound/factors/negative/imagination.m4a" preload="true"></audio>
+        <audio
+            id="imagination-thought"
+            src="/src/sound/factors/negative/imagination.m4a"
+            preload="true"
+        ></audio>
         <audio id="mirror-thought" src="/src/sound/factors/negative/mirror.m4a" preload="true"></audio>
 
-        <audio id="experience-thought-reverb" src="/src/sound/factors/negative/experience-reverb.wav" preload="true"></audio>
-        <audio id="feedback-thought-reverb" src="/src/sound/factors/negative/feedback-reverb.wav" preload="true"></audio>
-        <audio id="imagination-thought-reverb" src="/src/sound/factors/negative/imagination-reverb.wav" preload="true"></audio>
-        <audio id="mirror-thought-reverb" src="/src/sound/factors/negative/mirror-reverb.wav" preload="true"></audio>
+        <audio
+            id="experience-thought-reverb"
+            src="/src/sound/factors/negative/experience-reverb.wav"
+            preload="true"
+        ></audio>
+        <audio
+            id="feedback-thought-reverb"
+            src="/src/sound/factors/negative/feedback-reverb.wav"
+            preload="true"
+        ></audio>
+        <audio
+            id="imagination-thought-reverb"
+            src="/src/sound/factors/negative/imagination-reverb.wav"
+            preload="true"
+        ></audio>
+        <audio
+            id="mirror-thought-reverb"
+            src="/src/sound/factors/negative/mirror-reverb.wav"
+            preload="true"
+        ></audio>
     </a-assets>
 
     <!-- Lights -->
@@ -55,7 +84,14 @@
           color: #D0EAF9;"
         position="5 3 1"
     ></a-entity>
-    <a-light intensity="0.8" type="ambient" color="#B4C5EC"></a-light>
+    <a-light
+        intensity="0.8"
+        type="ambient"
+        color="#B4C5EC"
+        id="ambient-light"
+        animation__angry="start-events: angry; easing: linear; property: color; to: #1b3045; dur: 2300"
+        animation__normal="start-events: normal; easing: linear; property: color; to: #a3d0ed; dur: 2300"
+    ></a-light>
 
     <!-- Camera -->
     <a-camera id="player-camera" position="0 1.5 2" lane-controls look-controls="enabled: false">
@@ -68,7 +104,7 @@
             scale="0.5 0.5 0.5"
             raycaster="far: 50; interval: 1000; objects: .clickable"
         ></a-entity>
-        <a-animation
+        <!-- <a-animation
             begin="fusing"
             easing="ease-in"
             attribute="scale"
@@ -76,73 +112,80 @@
             from="1 1 1"
             to="0.2 0.2 0.2"
             dur="250"
-        ></a-animation>
+        ></a-animation> -->
     </a-camera>
 
-    <!-- Icebergs -->
-    <lp-cone
-        class="iceberg"
-        amplitude-variance="0.25"
-        segments-radial="5"
-        segments-height="3"
-        height="1"
-        radius-top="0.15"
-        radius-bottom="0.5"
-        position="3 -0.1 -1.5"
-        animation__rotation="property: rotation; from: -5 0 0; to: 5 0 0; loop: true; dir: alternate; dur: 1500;"
-        animation__position="property: position; from: 3 -0.2 -1.5; to: 4 -0.2 -2.5; loop: true; dir: alternate; dur: 12000; easing: linear;"
-    >
-    </lp-cone>
-    <lp-cone
-        class="iceberg"
-        amplitude="0.12"
-        segments-radial="7"
-        segments-height="3"
-        height="0.5"
-        radius-top="0.25"
-        radius-bottom="0.35"
-        position="-3 -0.1 -0.5"
-        animation__rotation="property: rotation; from: 0 0 -5; to: 5 0 0; loop: true; dir: alternate; dur: 1500;"
-        animation__position="property: position; from: -4 -0.2 -0.5; to: -2 -0.2 -0.5; loop: true; dir: alternate; dur: 15000; easing: linear;"
-    >
-    </lp-cone>
-    <lp-cone
-        class="iceberg"
-        amplitude="0.1"
-        segments-radial="6"
-        segments-height="2"
-        height="0.5"
-        radius-top="0.25"
-        radius-bottom="0.25"
-        position="-5 -0.2 -3.5"
-        animation__rotation="property: rotation; from: 5 0 -5; to: 5 0 0; loop: true; dir: alternate; dur: 800;"
-        animation__position="property: position; from: -3 -0.2 -3.5; to: -5 -0.2 -5.5; loop: true; dir: alternate; dur: 15000; easing: linear;"
-    >
-    </lp-cone>
-
     <!-- Ocean -->
-    <a-ocean
-        depth="50"
-        width="50"
-        amplitude="0"
-        amplitude-variance="0.1"
-        speed="1.5"
-        speed-variance="1"
-        opacity="1"
-        density="50"
-    ></a-ocean>
-    <a-ocean
-        id="ocean"
-        depth="50"
-        width="50"
-        opacity="0.5"
-        amplitude="0"
-        amplitude-variance="0.15"
-        speed="1.5"
-        speed-variance="1"
-        density="50"
-        sound="src: #sea; on: click; positional: false; loop: true; volume:0;"
-    ></a-ocean>
+
+    <a-entity id="ocean-wrapper">
+        <!-- Icebergs -->
+        <lp-cone
+            class="iceberg"
+            amplitude-variance="0.25"
+            segments-radial="5"
+            segments-height="3"
+            height="1"
+            radius-top="0.15"
+            radius-bottom="0.5"
+            position="3 -0.1 -1.5"
+            animation__rotation="property: rotation; from: -5 0 0; to: 5 0 0; loop: true; dir: alternate; dur: 1500;"
+            animation__position="property: position; from: 3 -0.2 -1.5; to: 4 -0.2 -2.5; loop: true; dir: alternate; dur: 12000; easing: linear;"
+        >
+        </lp-cone>
+        <lp-cone
+            class="iceberg"
+            amplitude="0.12"
+            segments-radial="7"
+            segments-height="3"
+            height="0.5"
+            radius-top="0.25"
+            radius-bottom="0.35"
+            position="-3 -0.1 -0.5"
+            animation__rotation="property: rotation; from: 0 0 -5; to: 5 0 0; loop: true; dir: alternate; dur: 1500;"
+            animation__position="property: position; from: -4 -0.2 -0.5; to: -2 -0.2 -0.5; loop: true; dir: alternate; dur: 15000; easing: linear;"
+        >
+        </lp-cone>
+        <lp-cone
+            class="iceberg"
+            amplitude="0.1"
+            segments-radial="6"
+            segments-height="2"
+            height="0.5"
+            radius-top="0.25"
+            radius-bottom="0.25"
+            position="-5 -0.2 -3.5"
+            animation__rotation="property: rotation; from: 5 0 -5; to: 5 0 0; loop: true; dir: alternate; dur: 800;"
+            animation__position="property: position; from: -3 -0.2 -3.5; to: -5 -0.2 -5.5; loop: true; dir: alternate; dur: 15000; easing: linear;"
+        >
+        </lp-cone>
+
+        <!-- Water -->
+
+        <a-ocean
+            class="ocean"
+            depth="50"
+            width="50"
+            amplitude="0"
+            amplitude-variance="0.1"
+            speed="1.5"
+            speed-variance="1"
+            opacity="1"
+            density="50"
+        ></a-ocean>
+        <a-ocean
+            id="ocean"
+            class="ocean"
+            depth="50"
+            width="50"
+            opacity="0.5"
+            amplitude="0"
+            amplitude-variance="0.15"
+            speed="1.5"
+            speed-variance="1"
+            density="50"
+            sound="src: #sea; on: click; positional: false; loop: true; volume:0;"
+        ></a-ocean>
+    </a-entity>
 
     <!-- Platform -->
     <lp-cone

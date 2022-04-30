@@ -1,8 +1,8 @@
+//#region Controls
+
 const POSITION_X_LEFT = -0.5
 const POSITION_X_CENTER = 0
 const POSITION_X_RIGHT = 0.5
-
-//controls
 
 //0 = left, 1 = center, 2 = right
 let player_position_index = 1
@@ -36,7 +36,9 @@ function setupControls() {
     })
 }
 
-//trees
+//#endregion
+
+//#region Trees
 
 const obstacleTypes = ['experience', 'feedback', 'imagination', 'mirror']
 let obstacleTypesLeft = ['experience', 'feedback', 'imagination', 'mirror']
@@ -149,7 +151,9 @@ const muteAllTrees = () => {
     })
 }
 
-//collision
+//#endregion
+
+//#region Collision
 
 let POSITION_Z_OUT_OF_SIGHT = 1.9
 let POSITION_Z_LINE_START = 0.6
@@ -195,7 +199,9 @@ const setupCollision = () => {
     })
 }
 
-//ocean
+//#endregion
+
+//#region Ocean
 
 let ocean
 
@@ -203,7 +209,9 @@ const setupOcean = () => {
     ocean = document.getElementById('ocean')
 }
 
-//game
+//#endregion
+
+//#region Game
 
 let isGameRunning = false
 const chapters = Object.freeze({
@@ -211,6 +219,7 @@ const chapters = Object.freeze({
     confrontation: 'confrontation',
     tranquilize: 'tranquilize',
 })
+
 let currentChapter = chapters.running
 let bluetooth
 let playerSphere
@@ -245,13 +254,15 @@ function startGame() {
     updateScoreDisplay()
     addTreesRandomlyLoop()
     hideAllMenus()
-    obstacleTypesLeft = obstacleTypes;
+    obstacleTypesLeft = obstacleTypes
 }
 
 function gameOver() {
     isGameRunning = false
     runningTime = 0
     intervalLength = 2000
+    currentChapter = chapters.running
+    obstacleTypesLeft = obstacleTypes
 
     muteAllTrees()
     tearDownScore()
@@ -296,7 +307,9 @@ const bindToggleVRModeEventSettings = () => {
     })
 }
 
-//audio
+//#endregion
+
+//#region Audio
 
 const fadeAudioIn = (element, max, length) => {
     //16 for 60 fps
@@ -328,7 +341,9 @@ const fadeAudioOut = (element, min, length) => {
     }, 16)
 }
 
-//bluetooth
+//#endregion
+
+//#region Bluetooth
 
 let isConnectedToDevice = false
 let btDataMessageHandlers = []
@@ -382,6 +397,8 @@ const getDataFromBtMessage = (data) => {
     const messageArray = data.split(': ')
     return messageArray[1]
 }
+
+//#endregion
 
 //utilities
 
