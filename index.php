@@ -121,17 +121,6 @@
     <!-- Ocean -->
 
     <a-entity id="ocean-wrapper">
-        <!-- Sfx -->
-
-        <a-entity
-            id="sea-normal-sound"
-            sound="src: #sea; positional: false; loop: true; volume:0;"
-        ></a-entity>
-        <a-entity
-            id="sea-wild-sound"
-            sound="src: #sea_wild; positional: false; loop: true; volume:0;"
-        ></a-entity>
-
         <!-- Icebergs -->
         <lp-cone
             class="iceberg"
@@ -173,30 +162,71 @@
         >
         </lp-cone>
 
-        <!-- Water -->
+        <!-- Normal -->
 
-        <a-ocean
-            class="ocean"
-            depth="50"
-            width="50"
-            amplitude="0"
-            amplitude-variance="0.1"
-            speed="1.5"
-            speed-variance="1"
-            opacity="1"
-            density="50"
-        ></a-ocean>
-        <a-ocean
-            class="ocean"
-            depth="50"
-            width="50"
-            opacity="0.5"
-            amplitude="0"
-            amplitude-variance="0.15"
-            speed="1.5"
-            speed-variance="1"
-            density="50"
-        ></a-ocean>
+        <a-entity
+            id="ocean-normal"
+            sound="src: #sea; positional: false; loop: true; volume:0;"
+            position="0 0 0"
+            animation__hide="start-events: hide; easing: easeInOutSine; property: position; to: 0 -0.5 0; dur: 5000;"
+            animation__show="start-events: show; easing: easeInOutSine; property: position; to: 0 0 0; dur: 5000;"
+        >
+            <a-ocean
+                class="ocean"
+                depth="50"
+                width="50"
+                amplitude="0"
+                amplitude-variance="0.1"
+                speed="1.5"
+                speed-variance="1"
+                opacity="1"
+                density="50"
+            ></a-ocean>
+            <a-ocean
+                class="ocean"
+                depth="50"
+                width="50"
+                opacity="0.5"
+                amplitude="0"
+                amplitude-variance="0.15"
+                speed="1.5"
+                speed-variance="1"
+                density="50"
+            ></a-ocean>
+        </a-entity>
+
+        <!-- Wild -->
+
+        <a-entity
+            id="ocean-wild"
+            sound="src: #sea_wild; positional: false; loop: true; volume:0;"
+            position="0 -0.5 0"
+            animation__hide="start-events: hide; easing: easeInOutSine; property: position; to: 0 -0.5 0; dur: 5000;"
+            animation__show="start-events: show; easing: easeInOutSine; property: position; to: 0 0 0; dur: 5000;"
+        >
+            <a-ocean
+                class="ocean"
+                depth="50"
+                width="50"
+                amplitude="0"
+                amplitude-variance="0.5"
+                speed="2.5"
+                speed-variance="1.5"
+                opacity="1"
+                density="50"
+            ></a-ocean>
+            <a-ocean
+                class="ocean"
+                depth="50"
+                width="50"
+                opacity="0.5"
+                amplitude="0"
+                amplitude-variance="0.4"
+                speed="2.5"
+                speed-variance="1.5"
+                density="50"
+            ></a-ocean>
+        </a-entity>
     </a-entity>
 
     <!-- Platform -->

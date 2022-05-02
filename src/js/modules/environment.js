@@ -10,25 +10,23 @@ let ambientLight
 
 // Ocean
 let oceanWrapper
-let oceans
-let oceanNormalSound
-let oceanWildSound
+let oceanNormal
+let oceanWild
 
 // Setup
 const setupEnvironment = () => {
     // Ocean
     oceanWrapper = document.getElementById('ocean-wrapper')
-    oceans = document.getElementsByClassName('ocean')
     // Scene
     scene = document.getElementById('scene')
     ambientLight = document.getElementById('ambient-light')
 }
 
 const setupSound = () => {
-    oceanNormalSound = document.getElementById('sea-normal-sound')
-    oceanWildSound = document.getElementById('sea-wild-sound')
-    oceanNormalSound.components.sound.playSound()
-    oceanWildSound.components.sound.playSound()
+    oceanNormal = document.getElementById('ocean-normal')
+    oceanWild = document.getElementById('ocean-wild')
+    oceanNormal.components.sound.playSound()
+    oceanWild.components.sound.playSound()
 }
 
 // Change
@@ -39,8 +37,12 @@ const changeEvenvironmentTheme = (type) => {
         ambientLight.emit('angry')
 
         // Sound
-        fadeAudioOut(oceanNormalSound, 0, 2)
-        fadeAudioIn(oceanWildSound, 0.3, 2)
+        fadeAudioOut(oceanNormal, 0, 5)
+        fadeAudioIn(oceanWild, 1, 5)
+
+        // Water
+        oceanNormal.emit('hide')
+        oceanWild.emit('show')
     }
 
     if (type == 'normal') {
@@ -49,8 +51,12 @@ const changeEvenvironmentTheme = (type) => {
         ambientLight.emit('normal')
 
         // Sound
-        fadeAudioOut(oceanWildSound, 0, 2)
-        fadeAudioIn(oceanNormalSound, 0.3, 2)
+        fadeAudioOut(oceanWild, 0, 5)
+        fadeAudioIn(oceanNormal, 0.3, 5)
+
+        // Water
+        oceanWild.emit('hide')
+        oceanNormal.emit('show')
     }
 }
 

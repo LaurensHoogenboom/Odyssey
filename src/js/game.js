@@ -233,7 +233,7 @@ const enterGame = () => {
     hideBluetoothMenu()
     showStartMenu()
     setupSound()
-    fadeAudioIn(oceanNormalSound, 0.3, 10)
+    fadeAudioIn(oceanNormal, 0.3, 10)
 }
 
 function startGame() {
