@@ -36,23 +36,20 @@ const changeEvenvironmentTheme = (type) => {
         scene.emit('angry')
         ambientLight.emit('angry')
 
-        // Sound
-        fadeAudioOut(oceanNormal, 0, 5)
-        fadeAudioIn(oceanWild, 1, 5)
-
         // Water
         oceanNormal.emit('hide')
         oceanWild.emit('show')
+    }
+
+    if (type == fases.afraid) {
+        //rood groen licht
+        //flikkering
     }
 
     if (type == 'normal') {
         // Fog and light
         scene.emit('normal')
         ambientLight.emit('normal')
-
-        // Sound
-        fadeAudioOut(oceanWild, 0, 5)
-        fadeAudioIn(oceanNormal, 0.3, 5)
 
         // Water
         oceanWild.emit('hide')

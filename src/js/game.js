@@ -147,7 +147,7 @@ const muteAllTrees = () => {
     const treeList = document.querySelectorAll('.tree')
 
     treeList.forEach((tree) => {
-        fadeAudioOut(tree, 0, 0.5)
+        fadeAudioOut(tree, 0, 500)
     })
 }
 
@@ -233,7 +233,7 @@ const enterGame = () => {
     hideBluetoothMenu()
     showStartMenu()
     setupSound()
-    fadeAudioIn(oceanNormal, 0.3, 10)
+    oceanNormal.emit('play');
 }
 
 function startGame() {
@@ -302,31 +302,23 @@ const bindToggleVRModeEventSettings = () => {
 //#region Audio
 
 const fadeAudioIn = (element, max, length) => {
-    //16 for 60 fps
-    step = max / (length * (1000 / 16))
-    currentVolume = element.components.sound.data.volume
-
-    setTimeout(() => {
-        if (currentVolume < max) {
-            element.setAttribute('sound', 'volume', currentVolume + step)
-            currentVolume += step
-            fadeAudioIn(element, max, length)
-        }
-    }, 16)
+    element.setAttribute('animation__fadeSoundIn', {
+        easing: 'linear',
+        property: 'sound.volume',
+        autoplay: true,
+        to: max, 
+        dur: length
+    })
 }
 
 const fadeAudioOut = (element, min, length) => {
-    //16 for 60 fps
-    step = (1 - min) / (length * (1000 / 16))
-    currentVolume = element.components.sound.data.volume
-
-    setTimeout(() => {
-        if (currentVolume > min) {
-            element.setAttribute('sound', 'volume', currentVolume - step)
-            currentVolume -= step
-            fadeAudioOut(element, min, length)
-        }
-    }, 16)
+    element.setAttribute('animation__fadeSoundOut', {
+        easing: 'linear',
+        property: 'sound.volume',
+        autoplay: true,
+        to: min, 
+        dur: length
+    })
 }
 
 //#endregion

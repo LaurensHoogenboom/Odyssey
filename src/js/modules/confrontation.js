@@ -97,7 +97,7 @@ const focusObstacle = () => {
         volume: 0,
     })
 
-    fadeAudioIn(obstacle, 8, 2)
+    fadeAudioIn(obstacle, 8, 2000)
 }
 
 const handleAnger = () => {

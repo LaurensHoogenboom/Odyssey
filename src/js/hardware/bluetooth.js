@@ -8,7 +8,6 @@
     The code is rewritten to fit the project.
 */ 
 
-
 class BluetoothController {
     constructor(handleReceivedData) {
         // Html elements
