@@ -14,6 +14,7 @@
 
     <!-- Mixins -->
     <a-assets id="assets">
+        <!-- Mixins -->
         <a-mixin
             id="foliage"
             geometry="primitive: cone; segments-height: 1; segments-radial: 4; radius-bottom: 0.3"
@@ -38,7 +39,9 @@
             text="font: src/font/Exo2Bold.fnt; height: 5; width: 5; opacity: 0.75; anchor: center; align: center"
         ></a-mixin>
 
+        <!-- Audio -->
         <audio id="sea" src="/src/sound/sea.wav" preload="auto"></audio>
+        <audio id="sea_wild" src="/src/sound/sea_wild.mp3" preload="auto"></audio>
 
         <audio
             id="experience-thought"
@@ -118,6 +121,17 @@
     <!-- Ocean -->
 
     <a-entity id="ocean-wrapper">
+        <!-- Sfx -->
+
+        <a-entity
+            id="sea-normal-sound"
+            sound="src: #sea; positional: false; loop: true; volume:0;"
+        ></a-entity>
+        <a-entity
+            id="sea-wild-sound"
+            sound="src: #sea_wild; positional: false; loop: true; volume:0;"
+        ></a-entity>
+
         <!-- Icebergs -->
         <lp-cone
             class="iceberg"
@@ -173,7 +187,6 @@
             density="50"
         ></a-ocean>
         <a-ocean
-            id="ocean"
             class="ocean"
             depth="50"
             width="50"
@@ -183,7 +196,6 @@
             speed="1.5"
             speed-variance="1"
             density="50"
-            sound="src: #sea; on: click; positional: false; loop: true; volume:0;"
         ></a-ocean>
     </a-entity>
 

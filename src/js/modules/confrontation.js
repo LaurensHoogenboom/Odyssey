@@ -12,14 +12,6 @@ let centeredObstaclePosition
 let grownObstaclePosition
 let grownObstacleSize
 
-// Environment
-let oceanWrapper
-let oceans
-let skyNormal
-let skyStorm
-let scene
-let ambientLight
-
 // Confrontation Fases
 const fases = Object.freeze({ angry: 'angry', afraid: 'afraid' })
 let currentFase = fases.angry
@@ -107,31 +99,6 @@ const focusObstacle = () => {
 
     fadeAudioIn(obstacle, 8, 2)
 }
-
-const changeEvenvironmentTheme = (type) => {
-    oceanWrapper = document.getElementById('ocean-wrapper')
-    oceans = document.getElementsByClassName('ocean')
-    skyNormal = document.getElementById('sky-normal')
-    skyStorm = document.getElementById('sky-storm')
-    scene = document.getElementById('scene')
-    ambientLight = document.getElementById('ambient-light')
-
-    if (type == fases.angry) {
-        //Fog and light
-        scene.emit('angry')
-        ambientLight.emit('angry')
-
-        //geluid wind en wilde golven
-    }
-
-    if (type == 'normal') {
-        //Fog and light
-        scene.emit('normal')
-        ambientLight.emit('normal')
-    }
-}
-
-const shakePathAndSea = () => {}
 
 const handleAnger = () => {
     btDataMessageHandlers.push(changeTreeSizeOnStress)

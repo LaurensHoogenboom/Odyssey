@@ -185,6 +185,9 @@ const skipBluetoothSetup = () => {
     isConnectedToDevice = true;
     isBreathSensorReady = true;
     showBluetoothMenu();
+    breathMaxPressure = 900;
+    breathMinPressure = 0;
+    stressBallMaxPressure = 900;
 }
 
 // Look controls

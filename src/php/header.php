@@ -11,9 +11,11 @@
         <!-- Low Poly Version 0.0.2 -->
         <script src="/src/js/low-poly.js"></script>
         <script src="/src/js/components/ocean.js"></script>
+        <script src="/src/js/components/animation-timeline.js"></script>
         <script src="/src/js/hardware/bluetooth.js"></script>
         <script src="/src/js/ui.js"></script>
         <script src="/src/js/hardware/sensorConfiguration.js"></script>
+        <script src="/src/js/modules/environment.js"></script>
         <script src="/src/js/modules/confrontation.js"></script>
         <script src="/src/js/game.js"></script>
 

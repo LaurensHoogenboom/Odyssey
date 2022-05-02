@@ -88,7 +88,7 @@ function addTree(el, position_index) {
     numberOfTrees += 1
 
     if (runningTime > RUNNING_BEFORE_REAL_OBSTACLES) {
-        let volumes = [0.3, 0.6, 0.9]
+        let volumes = [1.3, 1.6, 1.9]
         let obstacleType =
             obstacleTypesLeft[
                 Math.floor(Math.random() * obstacleTypesLeft.length)
@@ -201,16 +201,6 @@ const setupCollision = () => {
 
 //#endregion
 
-//#region Ocean
-
-let ocean
-
-const setupOcean = () => {
-    ocean = document.getElementById('ocean')
-}
-
-//#endregion
-
 //#region Game
 
 let isGameRunning = false
@@ -228,15 +218,11 @@ let runningTime = 0
 setupControls()
 setupCollision()
 
-// window.onload = () => {
-    
-// }
-
 const init = () => {
     setupAllMenus()
     setupScore()
     setupTrees()
-    setupOcean()
+    setupEnvironment()
     bindToggleVRModeEventSettings()
     btNotificationMessageHandlers.push(handleConnectionConfirmation)
     bluetooth = new BluetoothController(handleReceivedBluetoothData)
@@ -246,8 +232,8 @@ const init = () => {
 const enterGame = () => {
     hideBluetoothMenu()
     showStartMenu()
-    ocean.components.sound.playSound()
-    fadeAudioIn(ocean, 0.03, 10)
+    setupSound()
+    fadeAudioIn(oceanNormalSound, 0.3, 10)
 }
 
 function startGame() {
@@ -320,12 +306,11 @@ const fadeAudioIn = (element, max, length) => {
     step = max / (length * (1000 / 16))
     currentVolume = element.components.sound.data.volume
 
-    fadeInterval = setInterval(() => {
+    setTimeout(() => {
         if (currentVolume < max) {
             element.setAttribute('sound', 'volume', currentVolume + step)
             currentVolume += step
-        } else {
-            clearInterval(fadeInterval)
+            fadeAudioIn(element, max, length)
         }
     }, 16)
 }
@@ -335,12 +320,11 @@ const fadeAudioOut = (element, min, length) => {
     step = (1 - min) / (length * (1000 / 16))
     currentVolume = element.components.sound.data.volume
 
-    fadeInterval = setInterval(() => {
+    setTimeout(() => {
         if (currentVolume > min) {
             element.setAttribute('sound', 'volume', currentVolume - step)
             currentVolume -= step
-        } else {
-            clearInterval(fadeInterval)
+            fadeAudioOut(element, min, length)
         }
     }, 16)
 }
