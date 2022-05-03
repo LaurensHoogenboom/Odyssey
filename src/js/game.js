@@ -233,7 +233,7 @@ const enterGame = () => {
     hideBluetoothMenu()
     showStartMenu()
     setupSound()
-    oceanNormal.emit('play');
+    oceanNormal.emit('play')
 }
 
 function startGame() {
@@ -306,8 +306,8 @@ const fadeAudioIn = (element, max, length) => {
         easing: 'linear',
         property: 'sound.volume',
         autoplay: true,
-        to: max, 
-        dur: length
+        to: max,
+        dur: length,
     })
 }
 
@@ -316,8 +316,8 @@ const fadeAudioOut = (element, min, length) => {
         easing: 'linear',
         property: 'sound.volume',
         autoplay: true,
-        to: min, 
-        dur: length
+        to: min,
+        dur: length,
     })
 }
 
@@ -391,4 +391,17 @@ const shuffle = (a) => {
         a[j] = x
     }
     return a
+}
+
+function makeid(length) {
+    var result = ''
+    var characters =
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    var charactersLength = characters.length
+    for (var i = 0; i < length; i++) {
+        result += characters.charAt(
+            Math.floor(Math.random() * charactersLength)
+        )
+    }
+    return result
 }

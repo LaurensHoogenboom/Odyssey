@@ -2,7 +2,7 @@
 
 <div class="ui-container hidden depth-border" id="bluetooth-menu">
     <div class="content">
-        <h1>De-moodify</h1>
+        <h1>Odyssey</h1>
 
         <section id="connection-section">
             <h2>Klik hieronder om met te verbinden met de wearable.</h2>

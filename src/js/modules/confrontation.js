@@ -5,12 +5,8 @@
 */
 
 // Obstacle
-let obstacle
-let confrontationObstacleType
+let obstacleConfrontationCache = []
 let TREE_CONFRONTATION_Z_INDEX = -1
-let centeredObstaclePosition
-let grownObstaclePosition
-let grownObstacleSize
 
 // Confrontation Fases
 const fases = Object.freeze({ angry: 'angry', afraid: 'afraid' })
@@ -20,88 +16,123 @@ let currentFase = fases.angry
 let lastAngryPressure
 let lastBreathTime
 
+// Default confrontation positions
+let ObstaclePositions
+let OBSTACLE_MAX_SCALE
+let OBSTACLE_MAX_POSITION_Y
+
+//Volumes
+let OBSTACLE_VOLUMES
+
 /*
-    TODO:
-    2. adjust environment: wilder water: geluid en visueel, gedimt licht, donkere lucht
-    3. adjust volume: als ie ingedrukt wordt
-    4. add hearthbeath: toenemen als boom kleiner wordt
-    4. add tree pulse animation: als ie hetzelfde blijft of niet wordt ingedrukt
-    5. add shake animation: bij klappen obstakel en bij obstakel zonder type: geluid
+    ANGRY:
+    1. add hearthbeath: afnemen als boom kleiner wordt
+    2. add tree pulse animation: als ie hetzelfde blijft of niet wordt ingedrukt
+    3. add shake animation + geluid: bij klappen obstakel en bij obstakel zonder type
+
+    AFRAID:
+    2. geluid
+    
+    GENERAL:
+    1. instructions
+    2. make animation fluent
 */
 
-const startConfrontation = (obstacleToConfrontWith) => {
+const setupObstaclePositions = () => {
+    ObstaclePositions = [
+        // FRONT
+        {
+            x: 0,
+            y: 1.8,
+            z: TREE_CONFRONTATION_Z_INDEX,
+        },
+        // LEFT
+        {
+            x: -1.5,
+            y: 1.6,
+            z: TREE_CONFRONTATION_Z_INDEX + 1,
+        },
+        // RIGHT
+        {
+            x: 1.5,
+            y: 1.6,
+            z: TREE_CONFRONTATION_Z_INDEX + 1,
+        },
+    ]
+
+    OBSTACLE_MAX_SCALE = { x: 2, y: 2, z: 2 }
+
+    OBSTACLE_VOLUMES = [12, 8, 8]
+}
+
+const startConfrontation = (obstacleToConfrontWith, fase = fases.angry) => {
     //Setup chapter
     currentChapter = chapters.confrontation
-    currentFase = fases.angry
+    currentFase = fase
 
     //Setup obstacle
-    obstacle = obstacleToConfrontWith
-    confrontationObstacleType = obstacle.getAttribute('data-obstacle-type')
+    obstacleConfrontationCache.push(obstacleToConfrontWith)
+
+    if (currentFase == fases.afraid) {
+        for (i = 1; i < ObstaclePositions.length; i++) {
+            obstacleConfrontationCache[i] =
+                obstacleToConfrontWith.cloneNode(true)
+            addDuplicateObstacle(obstacleConfrontationCache[i])
+        }
+    }
 
     //Setup obstacle position
-    setupObstaclePosition()
-    focusObstacle()
+    setupObstaclePositions()
+    focusObstacles()
 
     //Change Environment
     changeEvenvironmentTheme(currentFase)
 
+    //Start Emotion Handling
     setTimeout(() => {
-        handleAnger()
-    }, 2500)
+        if (currentFase == fases.angry) handleAnger()
+        if (currentFase == fases.afraid) handleFear()
+    }, 2300)
 }
 
-const setupObstaclePosition = () => {
-    centeredObstaclePosition = {
-        x: 0,
-        y: 0.6,
-        z: TREE_CONFRONTATION_Z_INDEX,
-    }
-    grownObstaclePosition = { x: 0, y: 1.8, z: TREE_CONFRONTATION_Z_INDEX }
-    grownObstacleSize = { x: 2, y: 2, z: 2 }
+const addDuplicateObstacle = (obstacle) => {
+    obstacle.id = `obstacle-${makeid(5)}`
+    treeContainer.appendChild(obstacle)
 }
 
-const focusObstacle = () => {
-    //Change position
-
-    obstacle.setAttribute('animation__centerTree', {
-        property: 'position',
-        to: centeredObstaclePosition,
-        dur: 500,
-        easing: 'easeInQuad',
-        autoplay: true,
+const focusObstacles = () => {
+    // Change position
+    obstacleConfrontationCache.forEach((obstacle, index) => {
+        let focusedPosition = ObstaclePositions[index]
+        adjustObstaclePosition(obstacle, focusedPosition, 2300, 0)
     })
 
-    obstacle.setAttribute('animation__growTree', {
-        property: 'scale',
-        to: grownObstacleSize,
-        dur: 2000,
-        easing: 'easeInQuad',
-        autoplay: true,
-        delay: 300,
+    obstacleConfrontationCache.forEach((obstacle) => {
+        let foccusedScale = OBSTACLE_MAX_SCALE
+        adjustObstacleScale(obstacle, foccusedScale, 2300, 0)
     })
 
-    obstacle.setAttribute('animation__keepFloored', {
-        property: 'position',
-        from: centeredObstaclePosition,
-        to: grownObstaclePosition,
-        dur: 2000,
-        easing: 'easeInQuad',
-        autoplay: true,
-        delay: 300,
-    })
+    // Change sound
 
-    obstacle.setAttribute('sound', {
-        src: `#${confrontationObstacleType}-thought-reverb`,
-        autoplay: true,
-        loop: true,
-        volume: 0,
-    })
+    obstacleConfrontationCache.forEach((obstacle, index) => {
+        let confrontationObstacleType =
+            obstacle.getAttribute('data-obstacle-type')
 
-    fadeAudioIn(obstacle, 8, 2000)
+        setTimeout(() => {
+            obstacle.setAttribute('sound', {
+                src: `#${confrontationObstacleType}-thought-reverb`,
+                autoplay: true,
+                loop: true,
+                volume: OBSTACLE_VOLUMES[index],
+            })
+        }, 750)
+    })
 }
+
+//#region Anger
 
 const handleAnger = () => {
-    btDataMessageHandlers.push(changeTreeSizeOnStress)
+    btDataMessageHandlers.push(changeObstacleSizeOnStress)
 
     const configurationInterval = setInterval(() => {
         bluetooth.send('ANGER?')
@@ -111,89 +142,225 @@ const handleAnger = () => {
             currentChapter != chapters.confrontation
         ) {
             clearInterval(configurationInterval)
-            removeBtMessageHandler(changeTreeSizeOnStress)
+            removeBtMessageHandler(changeObstacleSizeOnStress)
         }
-    }, 250)
+    }, 200)
 }
 
-const changeTreeSizeOnStress = (data) => {
+const changeObstacleSizeOnStress = (data) => {
     let label = getLabelFromBtMessage(data)
     let value = getDataFromBtMessage(data)
     let shrinkThreshold = 0.8 * stressBallMaxPressure
     let growThreshold = 0.6 * stressBallMaxPressure
-    let oldGrownPosition = grownObstaclePosition
 
     // Data is not from stressball
     if (label != 'ANGER') return
 
-    // User is pressing
-    if (value > shrinkThreshold) {
-        grownObstacleSize = {
-            x: 0.95 * grownObstacleSize.x,
-            y: 0.95 * grownObstacleSize.y,
-            z: 0.95 * grownObstacleSize.z,
+    obstacleConfrontationCache.forEach((obstacle) => {
+        let oldScale = obstacle.getAttribute('scale')
+        let newScale = oldScale
+        let oldPosition = obstacle.getAttribute('position')
+        let newPosition = oldPosition
+
+        // User is pressing
+        if (value > shrinkThreshold) {
+            newScale = {
+                x: 0.95 * oldScale.x,
+                y: 0.95 * oldScale.y,
+                z: 0.95 * oldScale.z,
+            }
+
+            newPosition.y = 0.95 * oldPosition.y
         }
 
-        grownObstaclePosition = {
-            x: grownObstaclePosition.x,
-            y: 0.95 * grownObstaclePosition.y,
-            z: grownObstaclePosition.z,
-        }
-    }
+        // User is releasing
+        if (value < growThreshold && newScale.z < OBSTACLE_MAX_SCALE.z) {
+            newScale = {
+                x: 1.05 * oldScale.x,
+                y: 1.05 * oldScale.y,
+                z: 1.05 * oldScale.z,
+            }
 
-    // User is releasing
-    if (value < growThreshold && grownObstacleSize.z < 2.0) {
-        grownObstacleSize = {
-            x: 1.05 * grownObstacleSize.x,
-            y: 1.05 * grownObstacleSize.y,
-            z: 1.05 * grownObstacleSize.z,
+            newPosition.y = 1.05 * oldPosition.y
         }
 
-        grownObstaclePosition = {
-            x: grownObstaclePosition.x,
-            y: 1.05 * grownObstaclePosition.y,
-            z: grownObstaclePosition.z,
+        // Apply new scale and position
+        adjustObstaclePosition(obstacle, newPosition, 250, 0)
+        adjustObstacleScale(obstacle, newScale, 250, 0)
+
+        // Anger destroyed
+        if (newScale.z <= 0.5) {
+            quitAnger()
         }
-    }
-
-    // Apply new scale and position
-
-    obstacle.setAttribute('animation__size', {
-        property: 'scale',
-        to: grownObstacleSize,
-        dur: 250,
-        easing: 'linear',
-        autoplay: true,
     })
-
-    obstacle.setAttribute('animation__position', {
-        property: 'position',
-        from: oldGrownPosition,
-        to: grownObstaclePosition,
-        dur: 250,
-        easing: 'linear',
-        autoplay: true,
-    })
-
-    // Anger thought destroyed
-    if (grownObstacleSize.z <= 0.5) {
-        quitAnger()
-    }
 }
 
 const quitAnger = () => {
-    fadeAudioOut(obstacle, 0.0, 0.25)
-    changeEvenvironmentTheme('normal')
+    currentFase = fases.afraid
+    mainObstacle = obstacleConfrontationCache[0]
+    obstacleConfrontationCache = []
+    startConfrontation(mainObstacle, currentFase)
+}
 
-    setTimeout(() => {
-        removeTree(obstacle)
+//#endregion
+
+//#region Afraid
+
+const breathPositions = Object.freeze({ in: 'in', out: 'out' })
+let breathOutThreshold
+let breathInThreshold
+let oldBreathPosition
+let breathStateTime
+let breathStateThreshold
+
+const setupBreath = () => {
+    breathOutThreshold =
+        breathMinPressure == 0
+            ? breathMaxPressure * 0.25
+            : breathMinPressure * 1.25
+    breathInThreshold = 0.75 * breathMaxPressure
+    oldBreathPosition = breathPositions.in
+    breathStateTime = 0
+    breathStateThreshold = 2000
+}
+
+const handleFear = () => {
+    setupBreath()
+    btDataMessageHandlers.push(changeObstacleSizeOnBreath)
+
+    // Set sensor request interval
+    const configurationInterval = setInterval(() => {
+        bluetooth.send('BREATH?')
+
+        if (
+            currentFase != fases.afraid ||
+            currentChapter != chapters.confrontation
+        ) {
+            clearInterval(configurationInterval)
+            removeBtMessageHandler(changeObstacleSizeOnBreath)
+        }
     }, 250)
 
-    //Future: switch to afraid and after that to running when anythig left
-    //currentFase = fases.afraid
+    // Make random obstacle visible
+    const swapObstacles = setInterval(() => {
+        if (currentFase == fases.afraid && currentChapter == chapters.confrontation) {
+            for (i = 0; i < obstacleConfrontationCache.length; i++) {
+                obstacleConfrontationCache[i].setAttribute('visible', false)
+                fadeAudioOut(obstacleConfrontationCache[i], 0, 250)
+            }
+    
+            let obstacleToShow =
+                obstacleConfrontationCache[
+                    Math.floor(Math.random() * obstacleConfrontationCache.length)
+                ]
+    
+            obstacleToShow.setAttribute('visible', true)
+            fadeAudioIn(obstacleToShow, 12, 250);
+        } else {
+            clearInterval(configurationInterval)
+            removeBtMessageHandler(swapObstacles)
+        }
+    }, 1500)
+}
 
-    const index = obstacleTypesLeft.indexOf(confrontationObstacleType)
+const changeObstacleSizeOnBreath = (data) => {
+    let label = getLabelFromBtMessage(data)
+    let value = getDataFromBtMessage(data)
+    let currentBreathPosition = oldBreathPosition
+    let hasUsedBreath = false
+    let shouldQuit = false;
+
+    // Data is not from breathsensor
+    if (label != 'BREATH') return
+
+    if (value > breathInThreshold) {
+        currentBreathPosition = breathPositions.in
+    } else if (value < breathOutThreshold) {
+        currentBreathPosition = breathPositions.out
+    }
+
+    //Update breath length
+    if (currentBreathPosition == oldBreathPosition) {
+        breathStateTime += 250
+
+        if (breathStateTime > 5000) {
+            hasUsedBreath = true
+        }
+    } else {
+        breathStateTime = 0
+        oldBreathPosition = currentBreathPosition
+    }
+
+    // Update size
+    obstacleConfrontationCache.forEach((obstacle) => {
+        let oldScale = obstacle.getAttribute('scale')
+        let newScale = oldScale
+        let oldPosition = obstacle.getAttribute('position')
+        let newPostion = oldPosition
+
+        // User breathing in
+        if (breathStateTime > breathStateThreshold && !hasUsedBreath) {
+            newScale = {
+                x: 0.95 * oldScale.x,
+                y: 0.95 * oldScale.y,
+                z: 0.95 * oldScale.z,
+            }
+
+            newPostion.y = 0.95 * oldPosition.y
+        }
+
+        // User is holding breath too long
+        if (hasUsedBreath) {
+            if (newScale.z < OBSTACLE_MAX_SCALE.z) {
+                newScale = {
+                    x: 1.05 * oldScale.x,
+                    y: 1.05 * oldScale.y,
+                    z: 1.05 * oldScale.z,
+                }
+
+                newPostion.y = 1.05 * oldPosition.y
+            }
+        }
+
+        // Apply new scale and position
+        adjustObstaclePosition(obstacle, newPostion, 250, 0)
+        adjustObstacleScale(obstacle, newScale, 250, 0)
+
+        // Fear destroyed
+        if (newScale.z <= 0.5) {
+            shouldQuit = true
+        }
+    })
+
+    if (shouldQuit) quitFear();
+}
+
+const quitFear = () => {
+    currentFase = fases.angry
+
+    console.log(obstacleConfrontationCache)
+
+    handledObstacleType =
+        obstacleConfrontationCache[0].getAttribute('data-obstacle-type')
+
+    obstacleConfrontationCache.forEach((obstacle) => {
+        fadeAudioOut(obstacle, 0.0, 2300)
+        setTimeout(() => {
+            removeTree(obstacle)
+        }, 2300)
+    })
+
+    obstacleConfrontationCache = []
+    
+    switchToNextChapter(handledObstacleType)
+}
+
+const switchToNextChapter = (handledObstacleType) => {
+    const index = obstacleTypesLeft.indexOf(handledObstacleType)
     obstacleTypesLeft.splice(index, 1)
+    changeEvenvironmentTheme('normal')
+
+    //future: goto transquility
 
     if (obstacleTypesLeft.length > 0) {
         currentChapter = chapters.running
@@ -204,6 +371,38 @@ const quitAnger = () => {
         gameOver()
         showStartMenu()
     }
-
-    setupObstaclePosition()
 }
+
+//#endregion
+
+//#region obstacle modification
+
+const adjustObstacleScale = (obstacle, scale, duration, delay) => {
+    let oldScale = obstacle.getAttribute('scale')
+
+    obstacle.setAttribute(`animation__size`, {
+        property: 'scale',
+        from: { x: oldScale.x, y: oldScale.y, z: oldScale.z },
+        to: { x: scale.x, y: scale.y, z: scale.z },
+        dur: duration,
+        easing: 'linear',
+        autoplay: true,
+        delay: delay,
+    })
+}
+
+const adjustObstaclePosition = (obstacle, position, duration, delay) => {
+    let oldPosition = obstacle.getAttribute('position')
+
+    obstacle.setAttribute(`animation__position`, {
+        property: 'position',
+        from: { x: oldPosition.x, y: oldPosition.y, z: oldPosition.z },
+        to: { x: position.x, y: position.y, z: position.z },
+        dur: duration,
+        easing: 'linear',
+        autoplay: true,
+        delay: delay,
+    })
+}
+
+//#endregion

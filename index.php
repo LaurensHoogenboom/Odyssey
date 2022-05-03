@@ -7,8 +7,13 @@
 <a-scene
     id="scene"
     fog="type: linear; color: #a3d0ed; near:5; far:20"
-    animation__angry="start-events: angry; easing: linear; property: fog.color; to: #1b3045; dur: 2300"
     animation__normal="start-events: normal; easing: linear; property: fog.color; to: #a3d0ed; dur: 2300"
+    animation__normalFogDistance="start-events: normal; easing: linear; property: fog.far; to: 20; dur: 2300"
+
+    animation__angry="start-events: angry; easing: linear; property: fog.color; to: #1b3045; dur: 2300"
+
+    animation__afraidColor="start-events: afraid; easing: linear; property: fog.color; to: #25291C; dur: 2300"
+    animation__afraidFogDistance="start-events: afraid; easing: linear; property: fog.far; to: 7; dur: 2300"
 >
     <a-sky id="sky-normal" color="#a3d0ed"> </a-sky>
 
@@ -93,6 +98,7 @@
         color="#B4C5EC"
         id="ambient-light"
         animation__angry="start-events: angry; easing: linear; property: color; to: #1b3045; dur: 2300"
+        animation__afraid="start-events: afraid; easing: linear; property: color; to: #25291C; dur: 2300"
         animation__normal="start-events: normal; easing: linear; property: color; to: #a3d0ed; dur: 2300"
     ></a-light>
 
@@ -120,118 +126,7 @@
 
     <!-- Ocean -->
 
-    <a-entity id="ocean-wrapper">
-        <!-- Icebergs -->
-        <lp-cone
-            class="iceberg"
-            amplitude-variance="0.25"
-            segments-radial="5"
-            segments-height="3"
-            height="1"
-            radius-top="0.15"
-            radius-bottom="0.5"
-            position="3 -0.1 -1.5"
-            animation__rotation="property: rotation; from: -5 0 0; to: 5 0 0; loop: true; dir: alternate; dur: 1500;"
-            animation__position="property: position; from: 3 -0.2 -1.5; to: 4 -0.2 -2.5; loop: true; dir: alternate; dur: 12000; easing: linear;"
-        >
-        </lp-cone>
-        <lp-cone
-            class="iceberg"
-            amplitude="0.12"
-            segments-radial="7"
-            segments-height="3"
-            height="0.5"
-            radius-top="0.25"
-            radius-bottom="0.35"
-            position="-3 -0.1 -0.5"
-            animation__rotation="property: rotation; from: 0 0 -5; to: 5 0 0; loop: true; dir: alternate; dur: 1500;"
-            animation__position="property: position; from: -4 -0.2 -0.5; to: -2 -0.2 -0.5; loop: true; dir: alternate; dur: 15000; easing: linear;"
-        >
-        </lp-cone>
-        <lp-cone
-            class="iceberg"
-            amplitude="0.1"
-            segments-radial="6"
-            segments-height="2"
-            height="0.5"
-            radius-top="0.25"
-            radius-bottom="0.25"
-            position="-5 -0.2 -3.5"
-            animation__rotation="property: rotation; from: 5 0 -5; to: 5 0 0; loop: true; dir: alternate; dur: 800;"
-            animation__position="property: position; from: -3 -0.2 -3.5; to: -5 -0.2 -5.5; loop: true; dir: alternate; dur: 15000; easing: linear;"
-        >
-        </lp-cone>
-
-        <!-- Normal -->
-
-        <a-entity
-            id="ocean-normal"
-            sound="src: #sea; positional: false; loop: true; volume:0;"
-            position="0 0 0"
-            animation__hide="start-events: hide; easing: easeInOutSine; property: position; to: 0 -0.5 0; dur: 5000;"
-            animation__show="start-events: show; easing: easeInOutSine; property: position; to: 0 0 0; dur: 5000;"
-            animation__mute="start-events: hide; easing: linear; property: sound.volume; to: 0; dur: 5000;"
-            animation__play="start-events: show, play; easing: linear; property: sound.volume; to: 0.3; dur: 5000;"
-        >
-            <a-ocean
-                class="ocean"
-                depth="50"
-                width="50"
-                amplitude="0"
-                amplitude-variance="0.1"
-                speed="1.5"
-                speed-variance="1"
-                opacity="1"
-                density="50"
-            ></a-ocean>
-            <a-ocean
-                class="ocean"
-                depth="50"
-                width="50"
-                opacity="0.5"
-                amplitude="0"
-                amplitude-variance="0.15"
-                speed="1.5"
-                speed-variance="1"
-                density="50"
-            ></a-ocean>
-        </a-entity>
-
-        <!-- Wild -->
-
-        <a-entity
-            id="ocean-wild"
-            sound="src: #sea_wild; positional: false; loop: true; volume:0;"
-            position="0 -0.5 0"
-            animation__hide="start-events: hide; easing: easeInOutSine; property: position; to: 0 -0.5 0; dur: 5000;"
-            animation__show="start-events: show; easing: easeInOutSine; property: position; to: 0 0 0; dur: 5000;"
-            animation__mute="start-events: hide; easing: linear; property: sound.volume; to: 0; dur: 5000;"
-            animation__play="start-events: show; easing: linear; property: sound.volume; to: 0.5; dur: 5000;"
-        >
-            <a-ocean
-                class="ocean"
-                depth="50"
-                width="50"
-                amplitude="0"
-                amplitude-variance="0.5"
-                speed="2.5"
-                speed-variance="1.5"
-                opacity="1"
-                density="50"
-            ></a-ocean>
-            <a-ocean
-                class="ocean"
-                depth="50"
-                width="50"
-                opacity="0.5"
-                amplitude="0"
-                amplitude-variance="0.4"
-                speed="2.5"
-                speed-variance="1.5"
-                density="50"
-            ></a-ocean>
-        </a-entity>
-    </a-entity>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/src/php/scene/ocean.php"; ?>
 
     <!-- Platform -->
     <lp-cone
@@ -303,22 +198,22 @@
 
             <!-- Menus -->
             <a-entity id="menu-container">
-                <a-entity id="start-menu" position="0 1.1 -3">
+                <a-entity id="start-menu" position="0 1.4 -3">
                     <a-entity id="start-copy" position="0 1 0">
                         <a-text
-                            value="Turn left and right to move your player, and avoid the trees!"
+                            value="Draai je hoofd naar links en rechts om de speler te bewegen, en de obstakels te ontwijken!"
                             mixin="copy"
                         ></a-text>
-                        <a-text value="Start" position="0 0.75 0" mixin="heading"></a-text>
+                        <a-text value="Start" position="0 0.9 0" mixin="heading"></a-text>
                         <a-box
                             id="start-button"
-                            position="0 0.65 -0.05"
+                            position="0 0.8 -0.05"
                             width="1.5"
                             height="0.6"
                             depth="0.1"
                         ></a-box>
                     </a-entity>
-                    <a-text value="ERGO" mixin="title"></a-text>
+                    <a-text value="Odyssey" mixin="title"></a-text>
                 </a-entity>
 
                 <a-entity id="game-over" position="0 1.1 -3">

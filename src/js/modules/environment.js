@@ -12,6 +12,7 @@ let ambientLight
 let oceanWrapper
 let oceanNormal
 let oceanWild
+let oceanScary
 
 // Setup
 const setupEnvironment = () => {
@@ -25,8 +26,10 @@ const setupEnvironment = () => {
 const setupSound = () => {
     oceanNormal = document.getElementById('ocean-normal')
     oceanWild = document.getElementById('ocean-wild')
+    oceanScary = document.getElementById('ocean-scary')
     oceanNormal.components.sound.playSound()
     oceanWild.components.sound.playSound()
+    oceanScary.components.sound.playSound()
 }
 
 // Change
@@ -38,12 +41,19 @@ const changeEvenvironmentTheme = (type) => {
 
         // Water
         oceanNormal.emit('hide')
+        oceanScary.emit('hide')
         oceanWild.emit('show')
     }
 
     if (type == fases.afraid) {
-        //rood groen licht
-        //flikkering
+        // Fog and light
+        scene.emit('afraid')
+        ambientLight.emit('afraid')
+
+        // Water
+        oceanNormal.emit('hide')
+        oceanNormal.emit('hide')
+        oceanScary.emit('show')
     }
 
     if (type == 'normal') {
@@ -53,6 +63,7 @@ const changeEvenvironmentTheme = (type) => {
 
         // Water
         oceanWild.emit('hide')
+        oceanScary.emit('hide')
         oceanNormal.emit('show')
     }
 }
