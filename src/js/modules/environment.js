@@ -56,7 +56,7 @@ const changeEvenvironmentTheme = (type, color = undefined) => {
         oceanScary.emit('show')
     }
 
-    if (type == `${relieveFases.sunrise}`) {
+    if (type == chapters.relieve) {
         if (color) {
             scene.setAttribute('animation__sunriseColor', 'to', color)
             ambientLight.setAttribute('animation__sunrise', 'to', color)
@@ -73,12 +73,6 @@ const changeEvenvironmentTheme = (type, color = undefined) => {
         oceanWild.emit('hide')
         oceanScary.emit('hide')
         oceanNormal.emit('show')
-    }
-
-    if (type == `${relieveFases.sunrise}-2`) {
-        // Fog and light
-        scene.emit('sunrise2')
-        ambientLight.emit('sunrise2')
     }
 
     if (type == 'normal') {

@@ -214,7 +214,7 @@ const handleFear = () => {
         breathMinPressure,
         breathMaxPressure,
         2000,
-        3500
+        5000
     )
 
     btDataMessageHandlers.push(changeObstacleSizeOnBreath)
