@@ -15,7 +15,9 @@
         <script src="/src/js/hardware/bluetooth.js"></script>
         <script src="/src/js/ui.js"></script>
         <script src="/src/js/hardware/sensorConfiguration.js"></script>
+        <script src="/src/js/models/breathState.js"></script>
         <script src="/src/js/modules/environment.js"></script>
+        <script src="/src/js/modules/relieve.js"></script>
         <script src="/src/js/modules/confrontation.js"></script>
         <script src="/src/js/game.js"></script>
 

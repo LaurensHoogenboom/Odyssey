@@ -9,13 +9,16 @@
     fog="type: linear; color: #a3d0ed; near:5; far:20"
     animation__normal="start-events: normal; easing: linear; property: fog.color; to: #a3d0ed; dur: 2300"
     animation__normalFogDistance="start-events: normal; easing: linear; property: fog.far; to: 20; dur: 2300"
-
     animation__angry="start-events: angry; easing: linear; property: fog.color; to: #1b3045; dur: 2300"
-
     animation__afraidColor="start-events: afraid; easing: linear; property: fog.color; to: #25291C; dur: 2300"
     animation__afraidFogDistance="start-events: afraid; easing: linear; property: fog.far; to: 7; dur: 2300"
+    animation__sunriseColor="start-events: sunrise; easing: linear; property: fog.color; to: #202D46; dur: 2300"
+    animation__sunriseFog="start-events: sunrise; easing: linear; property: fog.far; to: 20; dur: 2300"
 >
     <a-sky id="sky-normal" color="#a3d0ed"> </a-sky>
+
+    <!-- sun -->
+    <!-- <a-entity geometry="primitive: circle; radius: 3.07" material="color: #ffffff; emissive: #ffffff"></a-entity> -->
 
     <!-- Mixins -->
     <a-assets id="assets">
@@ -99,6 +102,7 @@
         id="ambient-light"
         animation__angry="start-events: angry; easing: linear; property: color; to: #1b3045; dur: 2300"
         animation__afraid="start-events: afraid; easing: linear; property: color; to: #25291C; dur: 2300"
+        animation__sunrise="start-events: sunrise; easing: linear; property: color; to: #202D46; dur: 2300"
         animation__normal="start-events: normal; easing: linear; property: color; to: #a3d0ed; dur: 2300"
     ></a-light>
 
@@ -106,12 +110,15 @@
     <a-camera id="player-camera" position="0 1.5 2" lane-controls look-controls="enabled: false">
         <a-entity
             id="cursor-mobile"
-            cursor="fuse: true; fuseTimeout: 250"
+            cursor="fuse: true; fuseTimeout: 1500"
             position="0 0 -1"
             geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
             material="color: white; shader: flat"
             scale="0.5 0.5 0.5"
             raycaster="far: 50; interval: 1000; objects: .clickable"
+            animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 150; from: 0.1 0.1 0.1; to: 0.5 0.5 0.5"
+            animation__fusing="property: scale; startEvents: fusing; easing: easeInCubic; dur: 1500; from: 0.5 0.5 0.5; to: 0.1 0.1 0.1"
+            animation__mouseleave="property: scale; startEvents: mouseleave; easing: easeInCubic; dur: 500; to: 0.5 0.5 0.5"
         ></a-entity>
         <!-- <a-animation
             begin="fusing"

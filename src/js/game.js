@@ -207,7 +207,7 @@ let isGameRunning = false
 const chapters = Object.freeze({
     running: 'running',
     confrontation: 'confrontation',
-    tranquilize: 'tranquilize',
+    relieve: 'relieve',
 })
 
 let currentChapter = chapters.running
