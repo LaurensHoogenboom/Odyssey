@@ -36,6 +36,7 @@ let OBSTACLE_VOLUMES
     GENERAL:
     1. instructions
     2. make animation fluent
+    3. trillen van stressbal en riem
 */
 
 const setupObstaclePositions = () => {
@@ -206,29 +207,18 @@ const quitAnger = () => {
 
 //#region Afraid
 
-const breathPositions = Object.freeze({ in: 'in', out: 'out' })
-let breathOutThreshold
-let breathInThreshold
-let oldBreathPosition
-let breathStateTime
-let breathStateThreshold
-
-const setupBreath = () => {
-    breathOutThreshold =
-        breathMinPressure == 0
-            ? breathMaxPressure * 0.25
-            : breathMinPressure * 1.25
-    breathInThreshold = 0.75 * breathMaxPressure
-    oldBreathPosition = breathPositions.in
-    breathStateTime = 0
-    breathStateThreshold = 2000
-}
+let fearBreathState
 
 const handleFear = () => {
-    setupBreath()
+    fearBreathState = new BreathState(
+        breathMinPressure,
+        breathMaxPressure,
+        2000,
+        5000
+    )
+
     btDataMessageHandlers.push(changeObstacleSizeOnBreath)
 
-    // Set sensor request interval
     const configurationInterval = setInterval(() => {
         bluetooth.send('BREATH?')
 
@@ -241,7 +231,6 @@ const handleFear = () => {
         }
     }, 250)
 
-    // Make random obstacle visible
     const swapObstacles = setInterval(() => {
         if (currentFase == fases.afraid && currentChapter == chapters.confrontation) {
             for (i = 0; i < obstacleConfrontationCache.length; i++) {
@@ -266,30 +255,13 @@ const handleFear = () => {
 const changeObstacleSizeOnBreath = (data) => {
     let label = getLabelFromBtMessage(data)
     let value = getDataFromBtMessage(data)
-    let currentBreathPosition = oldBreathPosition
-    let hasUsedBreath = false
     let shouldQuit = false;
 
     // Data is not from breathsensor
     if (label != 'BREATH') return
 
-    if (value > breathInThreshold) {
-        currentBreathPosition = breathPositions.in
-    } else if (value < breathOutThreshold) {
-        currentBreathPosition = breathPositions.out
-    }
-
-    //Update breath length
-    if (currentBreathPosition == oldBreathPosition) {
-        breathStateTime += 250
-
-        if (breathStateTime > 5000) {
-            hasUsedBreath = true
-        }
-    } else {
-        breathStateTime = 0
-        oldBreathPosition = currentBreathPosition
-    }
+    // Update breathstate
+    fearBreathState.currentBreathPosition = value
 
     // Update size
     obstacleConfrontationCache.forEach((obstacle) => {
@@ -299,7 +271,7 @@ const changeObstacleSizeOnBreath = (data) => {
         let newPostion = oldPosition
 
         // User breathing in
-        if (breathStateTime > breathStateThreshold && !hasUsedBreath) {
+        if (fearBreathState.breathIsDeep && !fearBreathState.hasUsedBreath) {
             newScale = {
                 x: 0.95 * oldScale.x,
                 y: 0.95 * oldScale.y,
@@ -310,7 +282,7 @@ const changeObstacleSizeOnBreath = (data) => {
         }
 
         // User is holding breath too long
-        if (hasUsedBreath) {
+        if (fearBreathState.hasUsedBreath) {
             if (newScale.z < OBSTACLE_MAX_SCALE.z) {
                 newScale = {
                     x: 1.05 * oldScale.x,
@@ -338,8 +310,6 @@ const changeObstacleSizeOnBreath = (data) => {
 const quitFear = () => {
     currentFase = fases.angry
 
-    console.log(obstacleConfrontationCache)
-
     handledObstacleType =
         obstacleConfrontationCache[0].getAttribute('data-obstacle-type')
 
@@ -360,16 +330,13 @@ const switchToNextChapter = (handledObstacleType) => {
     obstacleTypesLeft.splice(index, 1)
     changeEvenvironmentTheme('normal')
 
-    //future: goto transquility
-
     if (obstacleTypesLeft.length > 0) {
         currentChapter = chapters.running
         runningTime = 0
         intervalLength = 2000
         addTreesRandomlyLoop()
     } else {
-        gameOver()
-        showStartMenu()
+        startRelieve()
     }
 }
 

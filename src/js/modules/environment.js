@@ -33,7 +33,7 @@ const setupSound = () => {
 }
 
 // Change
-const changeEvenvironmentTheme = (type) => {
+const changeEvenvironmentTheme = (type, color = undefined) => {
     if (type == fases.angry) {
         // Fog and light
         scene.emit('angry')
@@ -46,7 +46,7 @@ const changeEvenvironmentTheme = (type) => {
     }
 
     if (type == fases.afraid) {
-        // Fog and light
+        
         scene.emit('afraid')
         ambientLight.emit('afraid')
 
@@ -54,6 +54,25 @@ const changeEvenvironmentTheme = (type) => {
         oceanNormal.emit('hide')
         oceanNormal.emit('hide')
         oceanScary.emit('show')
+    }
+
+    if (type == chapters.relieve) {
+        if (color) {
+            scene.setAttribute('animation__sunriseColor', 'to', color)
+            ambientLight.setAttribute('animation__sunrise', 'to', color)
+        } else {
+            scene.setAttribute('animation__sunriseColor', 'to', '#202D46')
+            ambientLight.setAttribute('animation__sunrise', 'to', '#202D46')
+        }
+
+        // Fog and light
+        scene.emit('sunrise')
+        ambientLight.emit('sunrise')
+
+        // Water
+        oceanWild.emit('hide')
+        oceanScary.emit('hide')
+        oceanNormal.emit('show')
     }
 
     if (type == 'normal') {

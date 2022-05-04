@@ -22,7 +22,7 @@ class BluetoothController {
         this.characteristicCache = null
         this.readBuffer = ''
 
-        // Receive method
+        // Receive callback method
         this.handleReceivedData = handleReceivedData
 
         // Set UI
