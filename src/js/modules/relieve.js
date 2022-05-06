@@ -73,6 +73,8 @@ const startRelieve = () => {
 const handleSunrise = () => {
     btDataMessageHandlers.push(changeSunriseOnBreath)
 
+    setInstruction('Haal diep en langzaam adem.')
+
     //Set sensor request interval
     const breathInterval = setInterval(() => {
         bluetooth.send('BREATH?')
@@ -96,6 +98,7 @@ const changeSunriseOnBreath = (data) => {
 
     // Update sunrise
     if (!relieveBreathState.hasUsedBreath && relieveBreathState.breathIsDeep) {
+        hideInstruction()
         currentSunriseIndex++
         let newColor = sunriseColors[currentSunriseIndex]
         changeEvenvironmentTheme(chapters.relieve, newColor)

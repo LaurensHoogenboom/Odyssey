@@ -135,6 +135,8 @@ const focusObstacles = () => {
 const handleAnger = () => {
     btDataMessageHandlers.push(changeObstacleSizeOnStress)
 
+    setInstruction('Knijp zo hard mogelijk.')
+
     const configurationInterval = setInterval(() => {
         bluetooth.send('ANGER?')
 
@@ -172,6 +174,8 @@ const changeObstacleSizeOnStress = (data) => {
             }
 
             newPosition.y = 0.95 * oldPosition.y
+
+            hideInstruction()
         }
 
         // User is releasing
@@ -218,6 +222,8 @@ const handleFear = () => {
     )
 
     btDataMessageHandlers.push(changeObstacleSizeOnBreath)
+
+    setInstruction('Haal diep en langzaam adem.')
 
     const configurationInterval = setInterval(() => {
         bluetooth.send('BREATH?')
@@ -272,6 +278,8 @@ const changeObstacleSizeOnBreath = (data) => {
 
         // User breathing in
         if (fearBreathState.breathIsDeep && !fearBreathState.hasUsedBreath) {
+            hideInstruction()
+
             newScale = {
                 x: 0.95 * oldScale.x,
                 y: 0.95 * oldScale.y,
@@ -309,7 +317,6 @@ const changeObstacleSizeOnBreath = (data) => {
 
 const quitFear = () => {
     currentFase = fases.angry
-
     handledObstacleType =
         obstacleConfrontationCache[0].getAttribute('data-obstacle-type')
 

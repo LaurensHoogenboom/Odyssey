@@ -195,12 +195,9 @@
 
             <a-text
                 id="instruction"
-                value="0"
-                mixin="text"
-                height="40"
-                width="40"
-                position="0 1.2 -3"
-                opacity="0.75"
+                value="Draai je hoofd naar links en rechts om de speler te bewegen, en de obstakels te ontwijken!"
+                mixin="copy"
+                position="0 0.7 -0.9"
                 visible
             ></a-text>
 
