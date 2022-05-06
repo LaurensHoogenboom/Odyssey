@@ -104,15 +104,6 @@
             scale="0.5 0.5 0.5"
             raycaster="far: 50; interval: 1000; objects: .clickable"
         ></a-entity>
-        <!-- <a-animation
-            begin="fusing"
-            easing="ease-in"
-            attribute="scale"
-            fill="backwards"
-            from="1 1 1"
-            to="0.2 0.2 0.2"
-            dur="250"
-        ></a-animation> -->
     </a-camera>
 
     <!-- Ocean -->
@@ -242,10 +233,10 @@
                 <a-entity mixin="trunk" position="0 -0.5 0"></a-entity>
             </a-entity>
 
-            <!-- Score -->
+            <!-- Instructions -->
 
             <a-text
-                id="score"
+                id="instruction"
                 value="0"
                 mixin="text"
                 height="40"
@@ -273,24 +264,6 @@
                         ></a-box>
                     </a-entity>
                     <a-text value="ERGO" mixin="title"></a-text>
-                </a-entity>
-
-                <a-entity id="game-over" position="0 1.1 -3">
-                    <a-text value="?" mixin="heading" id="game-score" position="0 1.7 0"></a-text>
-                    <a-text value="Score" mixin="copy" position="0 1.2 0"></a-text>
-
-                    <a-entity id="game-over-copy">
-                        <a-text mixin="heading" position="0 0.6 0" value="Restart"></a-text>
-                        <a-box
-                            id="restart-button"
-                            position="0 0.6 -0.5"
-                            width="2"
-                            height="0.6"
-                            depth="0.1"
-                        ></a-box>
-                    </a-entity>
-
-                    <a-text value="Game Over" mixin="title"></a-text>
                 </a-entity>
             </a-entity>
 

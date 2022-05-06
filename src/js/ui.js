@@ -1,42 +1,27 @@
-// Score
+// Instructions
 
-let score
-let countedTrees
-let gameOverScoreDisplay
-let scoreDisplay
+let instructionDisplay
 
-function setupScore() {
-    score = 0
-    countedTrees = new Set()
-    scoreDisplay = document.getElementById('score')
-    gameOverScoreDisplay = document.getElementById('game-score')
-    scoreDisplay.setAttribute('visible', false)
+function setupInstruction() {
+    instructionDisplay = document.getElementById('instruction')
+    instructionDisplay.setAttribute('visible', false)
 }
 
-function tearDownScore() {
-    scoreDisplay.setAttribute('value', 0)
-    scoreDisplay.setAttribute('visible', false)
-    gameOverScoreDisplay.setAttribute('value', score)
+function hideInstruction() {
+    instructionDisplay.setAttribute('value', 0)
+    instructionDisplay.setAttribute('visible', false)
 }
 
-function addScoreForTree(tree_id) {
-    if (countedTrees.has(tree_id)) return
-    score += 1
-    countedTrees.add(tree_id)
-}
-
-function updateScoreDisplay() {
-    scoreDisplay.setAttribute('visible', true)
-    scoreDisplay.setAttribute('value', score)
+function setInstruction(text) {
+    instructionDisplay.setAttribute('visible', true)
+    instructionDisplay.setAttribute('value', text)
 }
 
 // Menu
 
 let menuStart
-let menuGameOver
 let menuContainer
 let startButton
-let restartButton
 let arButton
 let vrButton
 
@@ -69,10 +54,8 @@ function showHTML(el) {
 function setupAllMenus() {
     // In game HTML elements
     menuStart = document.getElementById('start-menu')
-    menuGameOver = document.getElementById('game-over')
     menuContainer = document.getElementById('menu-container')
     startButton = document.getElementById('start-button')
-    restartButton = document.getElementById('restart-button')
     arButton = document.querySelector('.a-enter-ar-button')
     vrButton = document.querySelector('.a-enter-vr-button')
     playerCamera = document.getElementById('player-camera')
@@ -99,7 +82,6 @@ function setupAllMenus() {
     // Set eventlisteners
     enterGameButton.addEventListener('click', enterGame)
     startButton.addEventListener('click', startGame)
-    restartButton.addEventListener('click', startGame)
 
     // Open initial menu's
     hideAllMenus()
@@ -110,26 +92,15 @@ function hideAllMenus() {
     hideEntity(menuContainer)
     hideBluetoothMenu()
     startButton.classList.remove('clickable')
-    restartButton.classList.remove('clickable')
-}
-
-function showGameOverMenu() {
-    showEntity(menuContainer)
-    hideEntity(menuStart)
-    showEntity(menuGameOver)
-    startButton.classList.remove('clickable')
-    restartButton.classList.add('clickable')
 }
 
 function showStartMenu() {
     showEntity(menuContainer)
-    hideEntity(menuGameOver)
     showEntity(menuStart)
     startButton.classList.add('clickable')
-    restartButton.classList.remove('clickable')
 }
 
-// Bluetooth
+//#region Bluetooth
 
 const showBluetoothMenu = () => {
     showHTML(bluetoothMenu)
@@ -187,7 +158,9 @@ const skipBluetoothSetup = () => {
     showBluetoothMenu();
 }
 
-// Look controls
+//#endregion
+
+//#region Look controls
 
 const enableLookControls = () => {
     playerCamera.setAttribute('look-controls', 'enabled: true')
@@ -196,3 +169,5 @@ const enableLookControls = () => {
 const disableLookControls = () => {
     playerCamera.setAttribute('look-controls', 'enabled: false')
 }
+
+//#endregion

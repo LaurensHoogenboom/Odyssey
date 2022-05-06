@@ -186,14 +186,6 @@ const setupCollision = () => {
                         shakePathAndSea()
                     }
                 }
-
-                if (
-                    position.z > Math.abs(POSITION_Z_LINE_END) &&
-                    !countedTrees.has(tree_id)
-                ) {
-                    addScoreForTree(tree_id)
-                    updateScoreDisplay()
-                }
             })
         },
     })
@@ -234,7 +226,7 @@ setupCollision()
 
 const init = () => {
     setupAllMenus()
-    setupScore()
+    setupInstruction()
     setupTrees()
     setupOcean()
     bindToggleVRModeEventSettings()
@@ -254,8 +246,8 @@ function startGame() {
     if (isGameRunning) return
     isGameRunning = true
 
-    setupScore()
-    updateScoreDisplay()
+    setupInstruction()
+    setInstruction(" ")
     addTreesRandomlyLoop()
     hideAllMenus()
     obstacleTypesLeft = obstacleTypes
@@ -269,8 +261,7 @@ function gameOver() {
     obstacleTypesLeft = obstacleTypes
 
     muteAllTrees()
-    tearDownScore()
-    showGameOverMenu()
+    hideInstruction()
 }
 
 const bindToggleVRModeEventSettings = () => {
