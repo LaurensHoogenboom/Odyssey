@@ -34,13 +34,15 @@ const configureStressBal = () => {
 
 const changeStressBalMaxPressure = (data) => {
     const label = getLabelFromBtMessage(data)
-    const value = getDataFromBtMessage(data)
+    const value = parseInt(getDataFromBtMessage(data))
+
+    console.log(data)
 
     if (label == 'ANGER' && value > stressBallMaxPressure) {
         stressBallMaxPressure = value
     }
 
-    if (value > 900) {
+    if (value > 750) {
         sensorConfigurationStarted = true
     }
 }
@@ -108,7 +110,9 @@ const configureBreath = () => {
 
 const changeBreathMaxValue = (data) => {
     const label = getLabelFromBtMessage(data)
-    const value = getDataFromBtMessage(data)
+    const value = parseInt(getDataFromBtMessage(data))
+
+    console.log(data)
 
     if (label == 'BREATH' && value > breathMaxPressure) {
         breathMaxPressure = value;
@@ -121,13 +125,15 @@ const changeBreathMaxValue = (data) => {
 
 const changeBreathMinValue = (data) => {
     const label = getLabelFromBtMessage(data)
-    const value = getDataFromBtMessage(data)
+    const value = parseInt(getDataFromBtMessage(data))
+
+    console.log(data)
 
     if (label == 'BREATH' && value < breathMinPressure) {
         breathMaxPressure = value;
     }
 
-    if (value < 30) {
+    if (value < 40) {
         sensorConfigurationStarted = true
     }
 }

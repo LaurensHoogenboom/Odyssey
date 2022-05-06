@@ -137,6 +137,10 @@ const handleAnger = () => {
 
     setInstruction('Knijp zo hard mogelijk.')
 
+    setTimeout(() => {
+        hideInstruction()
+    }, 5000)
+
     const configurationInterval = setInterval(() => {
         bluetooth.send('ANGER?')
 
@@ -174,10 +178,6 @@ const changeObstacleSizeOnStress = (data) => {
             }
 
             newPosition.y = 0.95 * oldPosition.y
-
-            setTimeout(() => {
-                hideInstruction()
-            }, 5000)
         }
 
         // User is releasing
@@ -226,6 +226,10 @@ const handleFear = () => {
     btDataMessageHandlers.push(changeObstacleSizeOnBreath)
 
     setInstruction('Haal diep en langzaam adem.')
+
+    setTimeout(() => {
+        hideInstruction()
+    }, 5000)
 
     const configurationInterval = setInterval(() => {
         bluetooth.send('BREATH?')
@@ -280,10 +284,6 @@ const changeObstacleSizeOnBreath = (data) => {
 
         // User breathing in
         if (fearBreathState.breathIsDeep && !fearBreathState.hasUsedBreath) {
-            setTimeout(() => {
-                hideInstruction()
-            }, 2300)
-
             newScale = {
                 x: 0.95 * oldScale.x,
                 y: 0.95 * oldScale.y,

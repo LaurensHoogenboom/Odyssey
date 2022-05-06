@@ -130,6 +130,17 @@
             animation__fusing="property: scale; startEvents: fusing; easing: easeInCubic; dur: 750; from: 0.5 0.5 0.5; to: 0.1 0.1 0.1"
             animation__mouseleave="property: scale; startEvents: mouseleave; easing: easeInCubic; dur: 500; to: 0.5 0.5 0.5"
         ></a-entity>
+
+        <!-- Instructions -->
+
+        <a-text
+            id="instruction"
+            value="Draai je hoofd naar links en rechts om de speler te bewegen, en de obstakels te ontwijken!"
+            mixin="copy"
+            position="0 -0.5 -5"
+            side="double"
+            visible
+        ></a-text>
     </a-camera>
 
     <!-- Ocean -->
@@ -190,17 +201,6 @@
                 <a-entity mixin="foliage"></a-entity>
                 <a-entity mixin="trunk" position="0 -0.5 0"></a-entity>
             </a-entity>
-
-            <!-- Instructions -->
-
-            <a-text
-                id="instruction"
-                value="Draai je hoofd naar links en rechts om de speler te bewegen, en de obstakels te ontwijken!"
-                mixin="copy"
-                position="0 0.7 -0.9"
-                side="double"
-                visible
-            ></a-text>
 
             <!-- Menus -->
             <a-entity id="menu-container">
