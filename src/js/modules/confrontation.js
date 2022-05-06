@@ -175,7 +175,9 @@ const changeObstacleSizeOnStress = (data) => {
 
             newPosition.y = 0.95 * oldPosition.y
 
-            hideInstruction()
+            setTimeout(() => {
+                hideInstruction()
+            }, 5000)
         }
 
         // User is releasing
@@ -278,7 +280,9 @@ const changeObstacleSizeOnBreath = (data) => {
 
         // User breathing in
         if (fearBreathState.breathIsDeep && !fearBreathState.hasUsedBreath) {
-            hideInstruction()
+            setTimeout(() => {
+                hideInstruction()
+            }, 2300)
 
             newScale = {
                 x: 0.95 * oldScale.x,

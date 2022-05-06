@@ -98,7 +98,10 @@ const changeSunriseOnBreath = (data) => {
 
     // Update sunrise
     if (!relieveBreathState.hasUsedBreath && relieveBreathState.breathIsDeep) {
-        hideInstruction()
+        setTimeout(() => {
+            hideInstruction()
+        }, 5000)
+
         currentSunriseIndex++
         let newColor = sunriseColors[currentSunriseIndex]
         changeEvenvironmentTheme(chapters.relieve, newColor)

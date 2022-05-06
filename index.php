@@ -198,6 +198,7 @@
                 value="Draai je hoofd naar links en rechts om de speler te bewegen, en de obstakels te ontwijken!"
                 mixin="copy"
                 position="0 0.7 -0.9"
+                side="double"
                 visible
             ></a-text>
 

@@ -266,7 +266,9 @@ const bindToggleVRModeEventSettings = () => {
         POSITION_Z_LINE_START = -0.6
         POSITION_Z_LINE_END = -0.5
 
-        TREE_CONFRONTATION_Z_INDEX = -2
+        TREE_CONFRONTATION_Z_INDEX = -3
+
+        instructionDisplay.setAttribute('position', '0 0.7 -2.4')
     })
 
     document.querySelector('a-scene').addEventListener('exit-vr', function () {
@@ -285,6 +287,8 @@ const bindToggleVRModeEventSettings = () => {
         POSITION_Z_LINE_END = 0.7
 
         TREE_CONFRONTATION_Z_INDEX = 0
+
+        instructionDisplay.setAttribute('position', '0 0.7 -0.9')
     })
 }
 
