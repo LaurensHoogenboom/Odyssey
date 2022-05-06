@@ -114,7 +114,7 @@ const changeBreathMaxValue = (data) => {
         breathMaxPressure = value;
     }
 
-    if (value > 700) {
+    if (value > 80) {
         sensorConfigurationStarted = true
     }
 }
@@ -127,7 +127,7 @@ const changeBreathMinValue = (data) => {
         breathMaxPressure = value;
     }
 
-    if (value < 500) {
+    if (value < 30) {
         sensorConfigurationStarted = true
     }
 }

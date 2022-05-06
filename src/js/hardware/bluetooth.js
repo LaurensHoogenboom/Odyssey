@@ -8,7 +8,6 @@
     The code is rewritten to fit the project.
 */ 
 
-
 class BluetoothController {
     constructor(handleReceivedData) {
         // Html elements
@@ -23,7 +22,7 @@ class BluetoothController {
         this.characteristicCache = null
         this.readBuffer = ''
 
-        // Receive method
+        // Receive callback method
         this.handleReceivedData = handleReceivedData
 
         // Set UI

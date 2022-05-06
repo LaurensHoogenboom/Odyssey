@@ -7,13 +7,32 @@
 <a-scene
     id="scene"
     fog="type: linear; color: #a3d0ed; near:5; far:20"
-    animation__angry="start-events: angry; easing: linear; property: fog.color; to: #1b3045; dur: 2300"
     animation__normal="start-events: normal; easing: linear; property: fog.color; to: #a3d0ed; dur: 2300"
+    animation__normalFogDistance="start-events: normal; easing: linear; property: fog.far; to: 20; dur: 2300"
+    animation__angry="start-events: angry; easing: linear; property: fog.color; to: #1b3045; dur: 2300"
+    animation__afraidColor="start-events: afraid; easing: linear; property: fog.color; to: #25291C; dur: 2300"
+    animation__afraidFogDistance="start-events: afraid; easing: linear; property: fog.far; to: 7; dur: 2300"
+    animation__sunriseColor="start-events: sunrise; easing: linear; property: fog.color; to: #202D46; dur: 2300"
+    animation__sunriseFog="start-events: sunrise; easing: linear; property: fog.far; to: 20; dur: 2300"
 >
     <a-sky id="sky-normal" color="#a3d0ed"> </a-sky>
 
+    <!-- sun -->
+    <a-entity
+        id="sun"
+        geometry="primitive: circle"
+        material="blending: additive; opacity: 0.4;"
+        scale="3 3 3"
+        position="0 -3 -10"
+        animation__position="property: position; from: 0 -3 -10; to: 0 3 -10; dur: 2300; easing: linear; start-events: move"
+        animation__scale="property: scale; from: 1 1 1; to: 1 1 1; dur: 2300; easing: linear; start-events: grow"
+        animation__hide="property: material.opacity; from: 0.4; to: 0; dur: 2300; easing: linear; start-events: hide"
+        animation__show="property: material.opacity; from: 0; to: 0.4; dur: 2300; easing: linear; start-events: show"
+    ></a-entity>
+
     <!-- Mixins -->
     <a-assets id="assets">
+        <!-- Mixins -->
         <a-mixin
             id="foliage"
             geometry="primitive: cone; segments-height: 1; segments-radial: 4; radius-bottom: 0.3"
@@ -38,7 +57,9 @@
             text="font: src/font/Exo2Bold.fnt; height: 5; width: 5; opacity: 0.75; anchor: center; align: center"
         ></a-mixin>
 
+        <!-- Audio -->
         <audio id="sea" src="/src/sound/sea.wav" preload="auto"></audio>
+        <audio id="sea_wild" src="/src/sound/sea_wild.mp3" preload="auto"></audio>
 
         <audio
             id="experience-thought"
@@ -90,6 +111,8 @@
         color="#B4C5EC"
         id="ambient-light"
         animation__angry="start-events: angry; easing: linear; property: color; to: #1b3045; dur: 2300"
+        animation__afraid="start-events: afraid; easing: linear; property: color; to: #25291C; dur: 2300"
+        animation__sunrise="start-events: sunrise; easing: linear; property: color; to: #202D46; dur: 2300"
         animation__normal="start-events: normal; easing: linear; property: color; to: #a3d0ed; dur: 2300"
     ></a-light>
 
@@ -97,86 +120,21 @@
     <a-camera id="player-camera" position="0 1.5 2" lane-controls look-controls="enabled: false">
         <a-entity
             id="cursor-mobile"
-            cursor="fuse: true; fuseTimeout: 250"
+            cursor="fuse: true; fuseTimeout: 750"
             position="0 0 -1"
             geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
             material="color: white; shader: flat"
             scale="0.5 0.5 0.5"
             raycaster="far: 50; interval: 1000; objects: .clickable"
+            animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 150; from: 0.1 0.1 0.1; to: 0.5 0.5 0.5"
+            animation__fusing="property: scale; startEvents: fusing; easing: easeInCubic; dur: 750; from: 0.5 0.5 0.5; to: 0.1 0.1 0.1"
+            animation__mouseleave="property: scale; startEvents: mouseleave; easing: easeInCubic; dur: 500; to: 0.5 0.5 0.5"
         ></a-entity>
     </a-camera>
 
     <!-- Ocean -->
 
-    <a-entity id="ocean-wrapper">
-        <!-- Icebergs -->
-        <lp-cone
-            class="iceberg"
-            amplitude-variance="0.25"
-            segments-radial="5"
-            segments-height="3"
-            height="1"
-            radius-top="0.15"
-            radius-bottom="0.5"
-            position="3 -0.1 -1.5"
-            animation__rotation="property: rotation; from: -5 0 0; to: 5 0 0; loop: true; dir: alternate; dur: 1500;"
-            animation__position="property: position; from: 3 -0.2 -1.5; to: 4 -0.2 -2.5; loop: true; dir: alternate; dur: 12000; easing: linear;"
-        >
-        </lp-cone>
-        <lp-cone
-            class="iceberg"
-            amplitude="0.12"
-            segments-radial="7"
-            segments-height="3"
-            height="0.5"
-            radius-top="0.25"
-            radius-bottom="0.35"
-            position="-3 -0.1 -0.5"
-            animation__rotation="property: rotation; from: 0 0 -5; to: 5 0 0; loop: true; dir: alternate; dur: 1500;"
-            animation__position="property: position; from: -4 -0.2 -0.5; to: -2 -0.2 -0.5; loop: true; dir: alternate; dur: 15000; easing: linear;"
-        >
-        </lp-cone>
-        <lp-cone
-            class="iceberg"
-            amplitude="0.1"
-            segments-radial="6"
-            segments-height="2"
-            height="0.5"
-            radius-top="0.25"
-            radius-bottom="0.25"
-            position="-5 -0.2 -3.5"
-            animation__rotation="property: rotation; from: 5 0 -5; to: 5 0 0; loop: true; dir: alternate; dur: 800;"
-            animation__position="property: position; from: -3 -0.2 -3.5; to: -5 -0.2 -5.5; loop: true; dir: alternate; dur: 15000; easing: linear;"
-        >
-        </lp-cone>
-
-        <!-- Water -->
-
-        <a-ocean
-            class="ocean"
-            depth="50"
-            width="50"
-            amplitude="0"
-            amplitude-variance="0.1"
-            speed="1.5"
-            speed-variance="1"
-            opacity="1"
-            density="50"
-        ></a-ocean>
-        <a-ocean
-            id="ocean"
-            class="ocean"
-            depth="50"
-            width="50"
-            opacity="0.5"
-            amplitude="0"
-            amplitude-variance="0.15"
-            speed="1.5"
-            speed-variance="1"
-            density="50"
-            sound="src: #sea; on: click; positional: false; loop: true; volume:0;"
-        ></a-ocean>
-    </a-entity>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/src/php/scene/ocean.php"; ?>
 
     <!-- Platform -->
     <lp-cone
@@ -248,22 +206,22 @@
 
             <!-- Menus -->
             <a-entity id="menu-container">
-                <a-entity id="start-menu" position="0 1.1 -3">
+                <a-entity id="start-menu" position="0 1.4 -3">
                     <a-entity id="start-copy" position="0 1 0">
                         <a-text
-                            value="Turn left and right to move your player, and avoid the trees!"
+                            value="Draai je hoofd naar links en rechts om de speler te bewegen, en de obstakels te ontwijken!"
                             mixin="copy"
                         ></a-text>
-                        <a-text value="Start" position="0 0.75 0" mixin="heading"></a-text>
+                        <a-text value="Start" position="0 0.9 0" mixin="heading"></a-text>
                         <a-box
                             id="start-button"
-                            position="0 0.65 -0.05"
+                            position="0 0.8 -0.05"
                             width="1.5"
                             height="0.6"
                             depth="0.1"
                         ></a-box>
                     </a-entity>
-                    <a-text value="ERGO" mixin="title"></a-text>
+                    <a-text value="Odyssey" mixin="title"></a-text>
                 </a-entity>
             </a-entity>
 

@@ -4,16 +4,20 @@
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>De-moodify</title>
+        <title>Odyssey</title>
 
         <!-- Aframe version 1.0.4 -->
         <script src="/src/js/aframe.js"></script>
         <!-- Low Poly Version 0.0.2 -->
         <script src="/src/js/low-poly.js"></script>
         <script src="/src/js/components/ocean.js"></script>
+        <script src="/src/js/components/animation-timeline.js"></script>
         <script src="/src/js/hardware/bluetooth.js"></script>
         <script src="/src/js/ui.js"></script>
         <script src="/src/js/hardware/sensorConfiguration.js"></script>
+        <script src="/src/js/models/breathState.js"></script>
+        <script src="/src/js/modules/environment.js"></script>
+        <script src="/src/js/modules/relieve.js"></script>
         <script src="/src/js/modules/confrontation.js"></script>
         <script src="/src/js/game.js"></script>
 

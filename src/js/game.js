@@ -88,7 +88,7 @@ function addTree(el, position_index) {
     numberOfTrees += 1
 
     if (runningTime > RUNNING_BEFORE_REAL_OBSTACLES) {
-        let volumes = [0.3, 0.6, 0.9]
+        let volumes = [1.3, 1.6, 1.9]
         let obstacleType =
             obstacleTypesLeft[
                 Math.floor(Math.random() * obstacleTypesLeft.length)
@@ -147,7 +147,7 @@ const muteAllTrees = () => {
     const treeList = document.querySelectorAll('.tree')
 
     treeList.forEach((tree) => {
-        fadeAudioOut(tree, 0, 0.5)
+        fadeAudioOut(tree, 0, 500)
     })
 }
 
@@ -193,23 +193,13 @@ const setupCollision = () => {
 
 //#endregion
 
-//#region Ocean
-
-let ocean
-
-const setupOcean = () => {
-    ocean = document.getElementById('ocean')
-}
-
-//#endregion
-
 //#region Game
 
 let isGameRunning = false
 const chapters = Object.freeze({
     running: 'running',
     confrontation: 'confrontation',
-    tranquilize: 'tranquilize',
+    relieve: 'relieve',
 })
 
 let currentChapter = chapters.running
@@ -220,15 +210,11 @@ let runningTime = 0
 setupControls()
 setupCollision()
 
-// window.onload = () => {
-    
-// }
-
 const init = () => {
     setupAllMenus()
     setupInstruction()
     setupTrees()
-    setupOcean()
+    setupEnvironment()
     bindToggleVRModeEventSettings()
     btNotificationMessageHandlers.push(handleConnectionConfirmation)
     bluetooth = new BluetoothController(handleReceivedBluetoothData)
@@ -238,8 +224,8 @@ const init = () => {
 const enterGame = () => {
     hideBluetoothMenu()
     showStartMenu()
-    ocean.components.sound.playSound()
-    fadeAudioIn(ocean, 0.03, 10)
+    setupSound()
+    oceanNormal.emit('play')
 }
 
 function startGame() {
@@ -307,33 +293,23 @@ const bindToggleVRModeEventSettings = () => {
 //#region Audio
 
 const fadeAudioIn = (element, max, length) => {
-    //16 for 60 fps
-    step = max / (length * (1000 / 16))
-    currentVolume = element.components.sound.data.volume
-
-    fadeInterval = setInterval(() => {
-        if (currentVolume < max) {
-            element.setAttribute('sound', 'volume', currentVolume + step)
-            currentVolume += step
-        } else {
-            clearInterval(fadeInterval)
-        }
-    }, 16)
+    element.setAttribute('animation__fadeSoundIn', {
+        easing: 'linear',
+        property: 'sound.volume',
+        autoplay: true,
+        to: max,
+        dur: length,
+    })
 }
 
 const fadeAudioOut = (element, min, length) => {
-    //16 for 60 fps
-    step = (1 - min) / (length * (1000 / 16))
-    currentVolume = element.components.sound.data.volume
-
-    fadeInterval = setInterval(() => {
-        if (currentVolume > min) {
-            element.setAttribute('sound', 'volume', currentVolume - step)
-            currentVolume -= step
-        } else {
-            clearInterval(fadeInterval)
-        }
-    }, 16)
+    element.setAttribute('animation__fadeSoundOut', {
+        easing: 'linear',
+        property: 'sound.volume',
+        autoplay: true,
+        to: min,
+        dur: length,
+    })
 }
 
 //#endregion
@@ -406,4 +382,17 @@ const shuffle = (a) => {
         a[j] = x
     }
     return a
+}
+
+function makeid(length) {
+    var result = ''
+    var characters =
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    var charactersLength = characters.length
+    for (var i = 0; i < length; i++) {
+        result += characters.charAt(
+            Math.floor(Math.random() * charactersLength)
+        )
+    }
+    return result
 }
