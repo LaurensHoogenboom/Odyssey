@@ -45,7 +45,10 @@ let sunriseScales = [
 let relieveBreathState
 let sun
 
-const startRelieve = () => {
+const startRelieve = (
+    breathMinPressure = sensorConfiguration.breathMinPressure,
+    breathMaxPressure = sensorConfiguration.breathMaxPressure
+) => {
     // Setup chapter
     currentChapter = chapters.relieve
 

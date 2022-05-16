@@ -1,139 +1,187 @@
-// Stresbal
+class SensorConfiguration {
+    constructor() {
+        this.beltPutOn = false
+        this.sensorConfigurationStarted = false
 
-let isStressballReady = false
-let isBreathSensorReady = false
-let sensorConfigurationStarted = false
-let stressBallMaxPressure = 0
-let breathMinPressure = 0
-let breathMaxPressure = 0
+        //Stressbal
+        this.isStressballReady = false
+        this.isBreathSensorReady = false
+        this.stressBallMaxPressure = 0
 
-const configureStressBal = () => {
-    let progress = 0
-    btDataMessageHandlers.push(changeStressBalMaxPressure)
-
-    const configurationInterval = setInterval(() => {
-        bluetooth.send('ANGER?')
-
-        if (sensorConfigurationStarted) {
-            progress += 20
-            stressbalProgressFill.style.width = `${progress}%`
-        }
-
-        if (progress == 100) {
-            setTimeout(() => {
-                removeBtMessageHandler(changeStressBalMaxPressure)
-                isStressballReady = true
-                sensorConfigurationStarted = false
-                showBluetoothMenu()
-                console.log(`Max anger value: ${stressBallMaxPressure}`)
-                clearInterval(configurationInterval)
-            }, 500)
-        }
-    }, 1000)
-}
-
-const changeStressBalMaxPressure = (data) => {
-    const label = getLabelFromBtMessage(data)
-    const value = parseInt(getDataFromBtMessage(data))
-
-    console.log(data)
-
-    if (label == 'ANGER' && value > stressBallMaxPressure) {
-        stressBallMaxPressure = value
+        //Breath
+        this.breathNormalValue = 0
+        this.breathMinPressure = []
+        this.breathMaxPressure = []
+        this.breathConfigureModes = Object.freeze({ max: 'max', min: 'min' })
     }
 
-    if (value > 750) {
-        sensorConfigurationStarted = true
+    //#region Stressball
+
+    configureStressBal() {
+        let progress = 0
+        btDataMessageHandlers.push(this.changeStressBallMaxPressure.bind(this))
+
+        const configurationInterval = setInterval(() => {
+            bluetooth.send('ANGER?')
+
+            if (this.sensorConfigurationStarted) {
+                progress += 20
+                stressbalProgressFill.style.width = `${progress}%`
+            }
+
+            if (progress == 100) {
+                setTimeout(() => {
+                    clearInterval(configurationInterval)
+                    removeBtMessageHandler(
+                        this.changeStressBallMaxPressure.bind(this)
+                    )
+                    this.isStressballReady = true
+                    this.sensorConfigurationStarted = false
+                    showBluetoothMenu()
+                    console.log(
+                        `Max anger value: ${this.stressBallMaxPressure}`
+                    )
+                }, 250)
+            }
+        }, 1000)
     }
-}
 
-// Breath
+    changeStressBallMaxPressure(data) {
+        const label = getLabelFromBtMessage(data)
+        const value = getDataFromBtMessage(data)
 
-let maxBreathPressureProgress = 0
-let minBreathPressureProgress = 0
+        if (label == 'ANGER' && value > this.stressBallMaxPressure) {
+            this.stressBallMaxPressure = value
+        }
 
-const configureBreath = () => {
-    if (maxBreathPressureProgress == 0) {
-        btDataMessageHandlers.push(changeBreathMaxValue)
-        changeBreathSectionInstruction('max')
-        breathProgressFill.style.width = 0
+        if (value > 750) {
+            this.sensorConfigurationStarted = true
+        }
+    }
 
-        const configurationInterval = setInterval(() => {
-            bluetooth.send('BREATH?')
-    
-            if (sensorConfigurationStarted) {
-                maxBreathPressureProgress += 20
-                breathProgressFill.style.width = `${maxBreathPressureProgress}%`
-            }
-    
-            if (maxBreathPressureProgress == 100) {
-                setTimeout(() => {
-                    removeBtMessageHandler(changeBreathMaxValue)
-                    sensorConfigurationStarted = false
-                    console.log(`Max breath pressure: ${breathMaxPressure}`)
-                    clearInterval(configurationInterval)
-                    configureBreath();
-                }, 500)
-            }
-        }, 1000)
+    //#endregion
 
-        
-    } else if (minBreathPressureProgress == 0) {
-        btDataMessageHandlers.push(changeBreathMinValue)
-        changeBreathSectionInstruction('min')
-        breathProgressFill.style.width = 0
+    //#region Breath
 
-        const configurationInterval = setInterval(() => {
-            bluetooth.send('BREATH?')
-    
-            if (sensorConfigurationStarted) {
-                minBreathPressureProgress += 20
-                breathProgressFill.style.width = `${minBreathPressureProgress}%`
-            }
-    
-            if (minBreathPressureProgress == 100) {
-                setTimeout(() => {
-                    removeBtMessageHandler(changeBreathMinValue)
-                    sensorConfigurationStarted = false
-                    console.log(`Min breath pressure: ${breathMinPressure}`)
-                    clearInterval(configurationInterval)
-                    configureBreath();
-                }, 500)
-            }
-        }, 1000)
-    } else {
-        isBreathSensorReady = true
+    changeBreathNormalValue(data) {
+        const label = getLabelFromBtMessage(data)
+        const value = getDataFromBtMessage(data)
+
+        if (label != 'BREATH') return
+
+        this.breathNormalValue = value
+        this.beltPutOn = true
+        console.log(`Breath normal value: ${this.breathNormalValue}`)
+        showBluetoothMenu()
+    }
+
+    configureBreath(mode = this.breathConfigureModes.max) {
+        let maxBreathPressureProgress = 0
+        let minBreathPressureProgress = 0
+
+        if (mode == this.breathConfigureModes.max) {
+            btDataMessageHandlers.push(this.changeBreathMaxValue.bind(this))
+            changeBreathSectionInstruction('max')
+            breathProgressFill.style.width = 0
+
+            const configurationInterval = setInterval(() => {
+                bluetooth.send('BREATH?')
+
+                if (this.sensorConfigurationStarted) {
+                    maxBreathPressureProgress += 20
+                    breathProgressFill.style.width = `${maxBreathPressureProgress}%`
+                }
+
+                if (maxBreathPressureProgress == 100) {
+                    setTimeout(() => {
+                        clearInterval(configurationInterval)
+
+                        this.breathMaxPressure = parseInt(
+                            calculateAverageFromArray(this.breathMaxPressure)
+                        )
+
+                        removeBtMessageHandler(
+                            this.changeBreathMaxValue.bind(this)
+                        )
+                        this.sensorConfigurationStarted = false
+                        console.log(
+                            `Max breath pressure: ${this.breathMaxPressure}`
+                        )
+                        
+                        this.configureBreath(this.breathConfigureModes.min)
+                    }, 250)
+                }
+            }, 1000)
+        } else if (mode == this.breathConfigureModes.min) {
+            btDataMessageHandlers.push(this.changeBreathMinValue.bind(this))
+            changeBreathSectionInstruction('min')
+            breathProgressFill.style.width = 0
+
+            const configurationInterval = setInterval(() => {
+                bluetooth.send('BREATH?')
+
+                if (this.sensorConfigurationStarted) {
+                    minBreathPressureProgress += 20
+                    breathProgressFill.style.width = `${minBreathPressureProgress}%`
+                }
+
+                if (minBreathPressureProgress == 100) {
+                    setTimeout(() => {
+                        clearInterval(configurationInterval)
+
+                        this.breathMinPressure = parseInt(
+                            calculateAverageFromArray(this.breathMinPressure)
+                        )
+
+                        removeBtMessageHandler(
+                            this.changeBreathMinValue.bind(this)
+                        )
+                        this.sensorConfigurationStarted = false
+                        console.log(
+                            `Min breath pressure: ${this.breathMinPressure}`
+                        )
+                        
+                        this.quitBreathConfiguration()
+                    }, 250)
+                }
+            }, 1000)
+        }
+    }
+
+    changeBreathMaxValue(data) {
+        const label = getLabelFromBtMessage(data)
+        const value = getDataFromBtMessage(data)
+
+        if (label != 'BREATH') return
+
+        if (value > this.breathNormalValue * 1.15) {
+            this.sensorConfigurationStarted = true
+            this.breathMaxPressure.push(value)
+        } else {
+            this.sensorConfigurationStarted = false
+        }
+    }
+
+    changeBreathMinValue(data) {
+        const label = getLabelFromBtMessage(data)
+        const value = getDataFromBtMessage(data)
+
+        if (label != 'BREATH') return
+
+        if (value < this.breathNormalValue * 0.85) {
+            this.sensorConfigurationStarted = true
+            this.breathMinPressure.push(value)
+        } else {
+            this.sensorConfigurationStarted = false
+        }
+    }
+
+    quitBreathConfiguration() {
+        this.isBreathSensorReady = true
+        console.log(`Breath delta: ${this.breathMaxPressure - this.breathMinPressure}`)
         showBluetoothMenu()
         return
     }
-}
 
-const changeBreathMaxValue = (data) => {
-    const label = getLabelFromBtMessage(data)
-    const value = parseInt(getDataFromBtMessage(data))
-
-    console.log(data)
-
-    if (label == 'BREATH' && value > breathMaxPressure) {
-        breathMaxPressure = value;
-    }
-
-    if (value > 80) {
-        sensorConfigurationStarted = true
-    }
-}
-
-const changeBreathMinValue = (data) => {
-    const label = getLabelFromBtMessage(data)
-    const value = parseInt(getDataFromBtMessage(data))
-
-    console.log(data)
-
-    if (label == 'BREATH' && value < breathMinPressure) {
-        breathMaxPressure = value;
-    }
-
-    if (value < 40) {
-        sensorConfigurationStarted = true
-    }
+    //#endregion
 }

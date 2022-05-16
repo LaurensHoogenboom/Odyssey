@@ -204,6 +204,7 @@ const chapters = Object.freeze({
 
 let currentChapter = chapters.running
 let bluetooth
+let sensorConfiguration
 let playerSphere
 let runningTime = 0
 
@@ -211,14 +212,15 @@ setupControls()
 setupCollision()
 
 const init = () => {
+    btNotificationMessageHandlers.push(handleConnectionConfirmation)
+    bluetooth = new BluetoothController(handleReceivedBluetoothData)
+    sensorConfiguration = new SensorConfiguration()
+    playerSphere = document.getElementById('player-sphere')
     setupAllMenus()
     setupInstruction()
     setupTrees()
     setupEnvironment()
     bindToggleVRModeEventSettings()
-    btNotificationMessageHandlers.push(handleConnectionConfirmation)
-    bluetooth = new BluetoothController(handleReceivedBluetoothData)
-    playerSphere = document.getElementById('player-sphere')
 }
 
 const enterGame = () => {
@@ -233,7 +235,7 @@ function startGame() {
     isGameRunning = true
 
     setupInstruction()
-    setInstruction(" ")
+    setInstruction(' ')
     addTreesRandomlyLoop()
     hideAllMenus()
     obstacleTypesLeft = obstacleTypes
@@ -336,10 +338,13 @@ const handleReceivedBluetoothData = (data) => {
     }
 }
 
-const removeBtMessageHandler = (handler) => {
-    const dataHandlerIndex = btDataMessageHandlers.indexOf(handler)
-    const notifcationHandlerIndex =
-        btNotificationMessageHandlers.indexOf(handler)
+const removeBtMessageHandler = (handlerToRemove) => {
+    const dataHandlerIndex = btDataMessageHandlers.findIndex(
+        (handler) => handler.name == handlerToRemove.name
+    )
+    const notifcationHandlerIndex = btNotificationMessageHandlers.findIndex(
+        (handler) => handler.name == handlerToRemove.name
+    )
 
     if (dataHandlerIndex > -1) {
         btDataMessageHandlers.splice(dataHandlerIndex, 1)
@@ -366,12 +371,12 @@ const getLabelFromBtMessage = (data) => {
 
 const getDataFromBtMessage = (data) => {
     const messageArray = data.split(': ')
-    return messageArray[1]
+    return parseInt(messageArray[1])
 }
 
 //#endregion
 
-//utilities
+//#region utilities
 
 const shuffle = (a) => {
     let j, x, i
@@ -396,3 +401,17 @@ function makeid(length) {
     }
     return result
 }
+
+function calculateAverageFromArray(array) {
+    var total = 0;
+    var count = 0;
+
+    array.forEach(function(item, index) {
+        total += item;
+        count++;
+    });
+
+    return total / count;
+}
+
+//#endregion

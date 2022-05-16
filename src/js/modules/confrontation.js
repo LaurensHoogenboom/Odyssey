@@ -71,7 +71,7 @@ const startConfrontation = (obstacleToConfrontWith, fase = fases.angry) => {
     currentChapter = chapters.confrontation
     currentFase = fase
 
-    //Setup obstacle
+    // Setup obstacle(s)
     obstacleConfrontationCache.push(obstacleToConfrontWith)
 
     if (currentFase == fases.afraid) {
@@ -82,14 +82,14 @@ const startConfrontation = (obstacleToConfrontWith, fase = fases.angry) => {
         }
     }
 
-    //Setup obstacle position
+    // Setup obstacle position
     setupObstaclePositions()
     focusObstacles()
 
-    //Change Environment
+    // Change Environment
     changeEvenvironmentTheme(currentFase)
 
-    //Start Emotion Handling
+    // Start Emotion Handling
     setTimeout(() => {
         if (currentFase == fases.angry) handleAnger()
         if (currentFase == fases.afraid) handleFear()
@@ -139,7 +139,7 @@ const handleAnger = () => {
 
     setTimeout(() => {
         hideInstruction()
-    }, 5000)
+    }, 7500)
 
     const configurationInterval = setInterval(() => {
         bluetooth.send('ANGER?')
@@ -154,7 +154,10 @@ const handleAnger = () => {
     }, 200)
 }
 
-const changeObstacleSizeOnStress = (data) => {
+const changeObstacleSizeOnStress = (
+    data,
+    stressBallMaxPressure = sensorConfiguration.stressBallMaxPressure
+) => {
     let label = getLabelFromBtMessage(data)
     let value = getDataFromBtMessage(data)
     let shrinkThreshold = 0.8 * stressBallMaxPressure
@@ -215,7 +218,10 @@ const quitAnger = () => {
 
 let fearBreathState
 
-const handleFear = () => {
+const handleFear = (
+    breathMinPressure = sensorConfiguration.breathMinPressure,
+    breathMaxPressure = sensorConfiguration.breathMaxPressure
+) => {
     fearBreathState = new BreathState(
         breathMinPressure,
         breathMaxPressure,
@@ -244,19 +250,24 @@ const handleFear = () => {
     }, 250)
 
     const swapObstacles = setInterval(() => {
-        if (currentFase == fases.afraid && currentChapter == chapters.confrontation) {
+        if (
+            currentFase == fases.afraid &&
+            currentChapter == chapters.confrontation
+        ) {
             for (i = 0; i < obstacleConfrontationCache.length; i++) {
                 obstacleConfrontationCache[i].setAttribute('visible', false)
                 fadeAudioOut(obstacleConfrontationCache[i], 0, 250)
             }
-    
+
             let obstacleToShow =
                 obstacleConfrontationCache[
-                    Math.floor(Math.random() * obstacleConfrontationCache.length)
+                    Math.floor(
+                        Math.random() * obstacleConfrontationCache.length
+                    )
                 ]
-    
+
             obstacleToShow.setAttribute('visible', true)
-            fadeAudioIn(obstacleToShow, 12, 250);
+            fadeAudioIn(obstacleToShow, 12, 250)
         } else {
             clearInterval(configurationInterval)
             removeBtMessageHandler(swapObstacles)
@@ -267,7 +278,7 @@ const handleFear = () => {
 const changeObstacleSizeOnBreath = (data) => {
     let label = getLabelFromBtMessage(data)
     let value = getDataFromBtMessage(data)
-    let shouldQuit = false;
+    let shouldQuit = false
 
     // Data is not from breathsensor
     if (label != 'BREATH') return
@@ -294,7 +305,7 @@ const changeObstacleSizeOnBreath = (data) => {
         }
 
         // User is holding breath too long
-        if (fearBreathState.hasUsedBreath) {
+        if (fearBreathState.breathStateTime > 10000) {
             if (newScale.z < OBSTACLE_MAX_SCALE.z) {
                 newScale = {
                     x: 1.05 * oldScale.x,
@@ -316,7 +327,7 @@ const changeObstacleSizeOnBreath = (data) => {
         }
     })
 
-    if (shouldQuit) quitFear();
+    if (shouldQuit) quitFear()
 }
 
 const quitFear = () => {
@@ -332,7 +343,7 @@ const quitFear = () => {
     })
 
     obstacleConfrontationCache = []
-    
+
     switchToNextChapter(handledObstacleType)
 }
 

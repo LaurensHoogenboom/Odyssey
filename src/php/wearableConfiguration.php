@@ -23,6 +23,11 @@
             </div>
         </section>
 
+        <section id="belt-section" class="hidden">
+            <h2>Doe de riem om. Zorg ervoor dat hij niet te los zit.</h2>
+            <label id="start-sensor-configuration" class="button depth-border">Volgende</label>
+        </section>
+
         <section id="stressball-configuration-section" class="hidden">
             <h2>Knijp zo hard mogelijk in de stressbal.</h2>
             <div class="progress-bar depth-border" id="stressbal-progress">
@@ -32,7 +37,7 @@
 
         <section id="breath-configuration-section" class="hidden">
             <h2 id="breath-configuration-instruction">
-                Doe de riem om je buik, en adem zo ver mogelijk in. Hou je adem vast tot de balk vol is.
+                Adem zo ver mogelijk in met je buik. Hou je adem vast tot de balk vol is.
             </h2>
             <div class="progress-bar depth-border" id="breath-progress">
                 <div class="filling"></div>

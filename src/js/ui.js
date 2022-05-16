@@ -27,6 +27,8 @@ let vrButton
 
 let bluetoothMenu
 let connectionSection
+let beltSection
+let startSensorConfigurationButton
 let stressbalConfigurationSection
 let stressbalProgressFill
 let breathConfigurationSection
@@ -63,6 +65,8 @@ function setupAllMenus() {
     //Pre-game html elements
     bluetoothMenu = document.getElementById('bluetooth-menu')
     connectionSection = document.getElementById('connection-section')
+    beltSection = document.getElementById('belt-section')
+    startSensorConfigurationButton = document.getElementById('start-sensor-configuration')
     stressbalConfigurationSection = document.getElementById(
         'stressball-configuration-section'
     )
@@ -80,6 +84,7 @@ function setupAllMenus() {
     enterGameButton = document.getElementById('enter-game')
 
     // Set eventlisteners
+    startSensorConfigurationButton.addEventListener('click', setupBreath)
     enterGameButton.addEventListener('click', enterGame)
     startButton.addEventListener('click', startGame)
 
@@ -111,14 +116,17 @@ const showBluetoothMenu = () => {
     if (!isConnectedToDevice) {
         hideAllBluetoothMenuSections()
         showHTML(connectionSection)
-    } else if (!isStressballReady) {
+    } else if (!sensorConfiguration.beltPutOn) {
+        hideAllBluetoothMenuSections()
+        showHTML(beltSection)
+    } else if (!sensorConfiguration.isStressballReady) {
         hideAllBluetoothMenuSections()
         showHTML(stressbalConfigurationSection)
-        configureStressBal()
-    } else if (!isBreathSensorReady) {
+        sensorConfiguration.configureStressBal()
+    } else if (!sensorConfiguration.isBreathSensorReady) {
         hideAllBluetoothMenuSections()
         showHTML(breathConfigurationSection)
-        configureBreath()
+        sensorConfiguration.configureBreath()
     } else {
         hideAllBluetoothMenuSections()
         showHTML(enterGameSection)
@@ -127,6 +135,7 @@ const showBluetoothMenu = () => {
 
 const hideAllBluetoothMenuSections = () => {
     hideHTML(connectionSection)
+    hideHTML(beltSection)
     hideHTML(stressbalConfigurationSection)
     hideHTML(breathConfigurationSection)
     hideHTML(enterGameSection)
@@ -142,7 +151,7 @@ const hideBluetoothMenu = () => {
 const changeBreathSectionInstruction = (mode) => {
     if (mode == 'max') {
         breathConfigurationInstruction.innerText =
-            'Doe de riem om je buik, en adem zo ver mogelijk in. Hou je adem vast tot de balk vol is.'
+            'Adem zo ver mogelijk in met je buik. Hou je adem vast tot de balk vol is.'
     }
 
     if (mode == 'min') {
@@ -152,13 +161,31 @@ const changeBreathSectionInstruction = (mode) => {
 }
 
 const skipBluetoothSetup = () => {
-    isStressballReady = true;
-    isConnectedToDevice = true;
-    isBreathSensorReady = true;
+    sensorConfiguration.isStressballReady = true;
+    sensorConfiguration.isConnectedToDevice = true;
+    sensorConfiguration.isBreathSensorReady = true;
     showBluetoothMenu();
-    breathMaxPressure = 900;
-    breathMinPressure = 0;
-    stressBallMaxPressure = 900;
+    sensorConfiguration.breathMaxPressure = 900;
+    sensorConfiguration.breathMinPressure = 0;
+    sensorConfiguration.stressBallMaxPressure = 900;
+}
+
+//#endregion
+
+//#region Belt
+
+const setupBreath = () => {
+    startSensorConfigurationButton.innerHTML = 'Laden...'
+    btDataMessageHandlers.push(sensorConfiguration.changeBreathNormalValue.bind(sensorConfiguration))
+
+    const setupBreathInterval = setInterval(() => {
+        bluetooth.send('BREATH?')
+
+        if (sensorConfiguration.beltPutOn) {
+            clearInterval(setupBreathInterval)
+            removeBtMessageHandler(sensorConfiguration.changeBreathNormalValue.bind(sensorConfiguration))
+        }
+    }, 1000)
 }
 
 //#endregion
