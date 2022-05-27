@@ -54,7 +54,7 @@ class SensorConfiguration {
             this.stressBallMaxPressure = value
         }
 
-        if (value > 750) {
+        if (value > 650) {
             this.sensorConfigurationStarted = true
         }
     }
@@ -151,8 +151,6 @@ class SensorConfiguration {
     changeBreathMaxValue(data) {
         const label = getLabelFromBtMessage(data)
         const value = getDataFromBtMessage(data)
-
-        console.log(data)
 
         if (label != 'BREATH') return
 

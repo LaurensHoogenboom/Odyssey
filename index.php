@@ -117,31 +117,33 @@
     ></a-light>
 
     <!-- Camera -->
-    <a-camera id="player-camera" position="0 1.5 2" lane-controls look-controls="enabled: false">
-        <a-entity
-            id="cursor-mobile"
-            cursor="fuse: true; fuseTimeout: 750"
-            position="0 0 -1"
-            geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
-            material="color: white; shader: flat"
-            scale="0.5 0.5 0.5"
-            raycaster="far: 50; interval: 1000; objects: .clickable"
-            animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 150; from: 0.1 0.1 0.1; to: 0.5 0.5 0.5"
-            animation__fusing="property: scale; startEvents: fusing; easing: easeInCubic; dur: 750; from: 0.5 0.5 0.5; to: 0.1 0.1 0.1"
-            animation__mouseleave="property: scale; startEvents: mouseleave; easing: easeInCubic; dur: 500; to: 0.5 0.5 0.5"
-        ></a-entity>
+    <a-entity id="camera-container" position="0 0 0">
+        <a-camera id="player-camera" position="0 1.5 2" lane-controls look-controls="enabled: false">
+            <a-entity
+                id="cursor-mobile"
+                cursor="fuse: true; fuseTimeout: 750"
+                position="0 0 -1"
+                geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
+                material="color: white; shader: flat"
+                scale="0.5 0.5 0.5"
+                raycaster="far: 50; interval: 1000; objects: .clickable"
+                animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 150; from: 0.1 0.1 0.1; to: 0.5 0.5 0.5"
+                animation__fusing="property: scale; startEvents: fusing; easing: easeInCubic; dur: 750; from: 0.5 0.5 0.5; to: 0.1 0.1 0.1"
+                animation__mouseleave="property: scale; startEvents: mouseleave; easing: easeInCubic; dur: 500; to: 0.5 0.5 0.5"
+            ></a-entity>
 
-        <!-- Instructions -->
+            <!-- Instructions -->
 
-        <a-text
-            id="instruction"
-            value="Draai je hoofd naar links en rechts om de speler te bewegen, en de obstakels te ontwijken!"
-            mixin="copy"
-            position="0 0.5 -4.5"
-            side="double"
-            visible
-        ></a-text>
-    </a-camera>
+            <a-text
+                id="instruction"
+                value="Draai je hoofd naar links en rechts om de speler te bewegen, en de obstakels te ontwijken!"
+                mixin="copy"
+                position="0 0.5 -4.5"
+                side="double"
+                visible
+            ></a-text>
+        </a-camera>
+    </a-entity>
 
     <!-- Ocean -->
 

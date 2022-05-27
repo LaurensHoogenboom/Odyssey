@@ -161,8 +161,9 @@ const changeBreathSectionInstruction = (mode) => {
 }
 
 const skipBluetoothSetup = () => {
+    isConnectedToDevice = true;
+    sensorConfiguration.beltPutOn = true;
     sensorConfiguration.isStressballReady = true;
-    sensorConfiguration.isConnectedToDevice = true;
     sensorConfiguration.isBreathSensorReady = true;
     showBluetoothMenu();
     sensorConfiguration.breathMaxPressure = 900;

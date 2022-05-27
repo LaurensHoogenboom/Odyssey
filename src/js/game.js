@@ -206,6 +206,7 @@ let currentChapter = chapters.running
 let bluetooth
 let sensorConfiguration
 let playerSphere
+let playerCamera
 let runningTime = 0
 
 setupControls()
@@ -216,6 +217,7 @@ const init = () => {
     bluetooth = new BluetoothController(handleReceivedBluetoothData)
     sensorConfiguration = new SensorConfiguration()
     playerSphere = document.getElementById('player-sphere')
+    cameraContainer = document.getElementById('camera-container')
     setupAllMenus()
     setupInstruction()
     setupTrees()
@@ -254,39 +256,55 @@ function gameOver() {
 
 const bindToggleVRModeEventSettings = () => {
     document.querySelector('a-scene').addEventListener('enter-vr', function () {
-        playerSphere.setAttribute('animation__position', {
-            property: 'position',
-            from: { x: 0, y: 0.5, z: -0.5 },
-            to: { x: 0, y: 0.525, z: -0.5 },
-            loop: true,
-            dir: 'alternate',
-            dur: 15000,
-            easing: 'easeInOutQuad',
+        console.log('vr')
+
+        cameraContainer.setAttribute('position', {
+            x: 0,
+            y: 0,
+            z: 2
         })
 
-        POSITION_Z_OUT_OF_SIGHT = 1.9
-        POSITION_Z_LINE_START = -0.6
-        POSITION_Z_LINE_END = -0.5
+        // playerSphere.setAttribute('animation__position', {
+        //     property: 'position',
+        //     from: { x: 0, y: 0.5, z: -0.5 },
+        //     to: { x: 0, y: 0.525, z: -0.5 },
+        //     loop: true,
+        //     dir: 'alternate',
+        //     dur: 15000,
+        //     easing: 'easeInOutQuad',
+        // })
 
-        TREE_CONFRONTATION_Z_INDEX = -2
+        // POSITION_Z_OUT_OF_SIGHT = 1.9
+        // POSITION_Z_LINE_START = -0.6
+        // POSITION_Z_LINE_END = -0.5
+
+        // TREE_CONFRONTATION_Z_INDEX = -2
     })
 
     document.querySelector('a-scene').addEventListener('exit-vr', function () {
-        playerSphere.setAttribute('animation__position', {
-            property: 'position',
-            from: { x: 0, y: 0.5, z: 0.6 },
-            to: { x: 0, y: 0.525, z: 0.6 },
-            loop: true,
-            dir: 'alternate',
-            dur: 15000,
-            easing: 'easeInOutQuad',
+        cameraContainer.setAttribute('position', {
+            x: 0,
+            y: 0,
+            z: 0
         })
 
-        POSITION_Z_OUT_OF_SIGHT = 1.9
-        POSITION_Z_LINE_START = 0.6
-        POSITION_Z_LINE_END = 0.7
+        console.log('normal')
 
-        TREE_CONFRONTATION_Z_INDEX = 0
+        // playerSphere.setAttribute('animation__position', {
+        //     property: 'position',
+        //     from: { x: 0, y: 0.5, z: 0.6 },
+        //     to: { x: 0, y: 0.525, z: 0.6 },
+        //     loop: true,
+        //     dir: 'alternate',
+        //     dur: 15000,
+        //     easing: 'easeInOutQuad',
+        // })
+
+        // POSITION_Z_OUT_OF_SIGHT = 1.9
+        // POSITION_Z_LINE_START = 0.6
+        // POSITION_Z_LINE_END = 0.7
+
+        // TREE_CONFRONTATION_Z_INDEX = 0
     })
 }
 
