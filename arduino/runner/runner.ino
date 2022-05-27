@@ -1,6 +1,6 @@
 #include <SoftwareSerial.h>
 
-SoftwareSerial bluetooth(8, 9); //TX, RX
+SoftwareSerial bluetooth(9, 8); //TX, RX
 
 const int angerPressurePin = A0;
 const int breathPressurePin = A1;

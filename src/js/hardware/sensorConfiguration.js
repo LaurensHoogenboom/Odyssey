@@ -152,9 +152,11 @@ class SensorConfiguration {
         const label = getLabelFromBtMessage(data)
         const value = getDataFromBtMessage(data)
 
+        console.log(data)
+
         if (label != 'BREATH') return
 
-        if (value > this.breathNormalValue * 1.15) {
+        if (value > this.breathNormalValue * 1.2) {
             this.sensorConfigurationStarted = true
             this.breathMaxPressure.push(value)
         } else {
@@ -168,7 +170,7 @@ class SensorConfiguration {
 
         if (label != 'BREATH') return
 
-        if (value < this.breathNormalValue * 0.85) {
+        if (value <= this.breathNormalValue) {
             this.sensorConfigurationStarted = true
             this.breathMinPressure.push(value)
         } else {
