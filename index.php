@@ -30,7 +30,7 @@
         animation__show="property: material.opacity; from: 0; to: 0.4; dur: 2300; easing: linear; start-events: show"
     ></a-entity>
 
-    <!-- Mixins -->
+    <!-- Assets -->
     <a-assets id="assets">
         <!-- Mixins -->
         <a-mixin
@@ -94,6 +94,9 @@
             src="/src/sound/factors/negative/mirror-reverb.wav"
             preload="auto"
         ></audio>
+
+        <!-- Models -->
+        <a-asset-item id="neutral_cloud" src="/src/3d/neutral_cloud.gltf"></a-asset-item>
     </a-assets>
 
     <!-- Lights -->
@@ -187,8 +190,7 @@
                 data-tree-position-index="1"
                 animation__position="property: position; from: 0 0.6 -7; to: 0 0.6 2; dur: 5000; easing: linear;"
             >
-                <a-entity mixin="foliage"></a-entity>
-                <a-entity mixin="trunk" position="0 -0.5 0"></a-entity>
+                <a-entity gltf-model="#neutral_cloud"></a-entity>
             </a-entity>
             <a-entity
                 id="template-tree-left"
@@ -199,8 +201,7 @@
                 data-tree-position-index="0"
                 animation__position="property: position; from: -0.5 0.6 -7; to: -0.5 0.6 2; dur: 5000; easing: linear;"
             >
-                <a-entity mixin="foliage"></a-entity>
-                <a-entity mixin="trunk" position="0 -0.5 0"></a-entity>
+                <a-entity gltf-model="#neutral_cloud"></a-entity>
             </a-entity>
             <a-entity
                 id="template-tree-right"
@@ -211,8 +212,7 @@
                 data-tree-position-index="2"
                 animation__position="property: position; from: 0.5 0.6 -7; to: 0.5 0.6 2; dur: 5000; easing: linear;"
             >
-                <a-entity mixin="foliage"></a-entity>
-                <a-entity mixin="trunk" position="0 -0.5 0"></a-entity>
+                <a-entity gltf-model="#neutral_cloud"></a-entity>
             </a-entity>
 
             <!-- Menus -->

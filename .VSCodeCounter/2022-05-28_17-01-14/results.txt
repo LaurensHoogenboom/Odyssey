@@ -1,0 +1,69 @@
+Date : 2022-05-28 17:01:14
+Directory : c:\xampp\htdocs
+Total : 26 files,  3213 codes, 531 comments, 734 blanks, all 4478 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| JavaScript |         14 |      2,423 |        516 |        635 |      3,574 |
+| PHP        |          5 |        476 |          0 |         45 |        521 |
+| CSS        |          1 |        133 |          5 |         28 |        166 |
+| JSON       |          2 |         72 |          5 |          1 |         78 |
+| C++        |          1 |         61 |          5 |         22 |         88 |
+| XML        |          2 |         47 |          0 |          2 |         49 |
+| Markdown   |          1 |          1 |          0 |          1 |          2 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++-----------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                      | files      | code       | comment    | blank      | total      |
++-----------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                         |         26 |      3,213 |        531 |        734 |      4,478 |
+| arduino                                                   |          1 |         61 |          5 |         22 |         88 |
+| arduino\runner                                            |          1 |         61 |          5 |         22 |         88 |
+| src                                                       |         20 |      2,774 |        519 |        684 |      3,977 |
+| src\css                                                   |          1 |        133 |          5 |         28 |        166 |
+| src\images                                                |          2 |         47 |          0 |          2 |         49 |
+| src\images\favicons                                       |          2 |         47 |          0 |          2 |         49 |
+| src\js                                                    |         13 |      2,358 |        514 |        630 |      3,502 |
+| src\js\chapters                                           |          4 |        541 |         90 |        129 |        760 |
+| src\js\components                                         |          3 |        464 |         14 |         18 |        496 |
+| src\js\hardware                                           |          2 |        311 |         30 |         84 |        425 |
+| src\js\models                                             |          1 |         68 |          5 |         14 |         87 |
+| src\php                                                   |          4 |        236 |          0 |         24 |        260 |
+| src\php\scene                                             |          1 |        142 |          0 |          8 |        150 |
++-----------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-----------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                  | language   | code       | comment    | blank      | total      |
++-----------------------------------------------------------+------------+------------+------------+------------+------------+
+| c:\xampp\htdocs\.prettierrc                               | JSON       |         16 |          5 |          0 |         21 |
+| c:\xampp\htdocs\README.md                                 | Markdown   |          1 |          0 |          1 |          2 |
+| c:\xampp\htdocs\arduino\runner\runner.ino                 | C++        |         61 |          5 |         22 |         88 |
+| c:\xampp\htdocs\index.php                                 | PHP        |        240 |          0 |         21 |        261 |
+| c:\xampp\htdocs\service-worker.js                         | JavaScript |         65 |          2 |          5 |         72 |
+| c:\xampp\htdocs\site.webmanifest                          | JSON       |         56 |          0 |          1 |         57 |
+| c:\xampp\htdocs\src\css\style.css                         | CSS        |        133 |          5 |         28 |        166 |
+| c:\xampp\htdocs\src\images\favicons\browserconfig.xml     | XML        |          9 |          0 |          1 |         10 |
+| c:\xampp\htdocs\src\images\favicons\safari-pinned-tab.svg | XML        |         38 |          0 |          1 |         39 |
+| c:\xampp\htdocs\src\js\aframe.js                          | JavaScript |        493 |        343 |        255 |      1,091 |
+| c:\xampp\htdocs\src\js\chapters\confrontation.js          | JavaScript |        275 |         51 |         74 |        400 |
+| c:\xampp\htdocs\src\js\chapters\environment.js            | JavaScript |         57 |         18 |         16 |         91 |
+| c:\xampp\htdocs\src\js\chapters\introduction.js           | JavaScript |         86 |          1 |         13 |        100 |
+| c:\xampp\htdocs\src\js\chapters\relieve.js                | JavaScript |        123 |         20 |         26 |        169 |
+| c:\xampp\htdocs\src\js\components\animation-timeline.js   | JavaScript |        175 |          0 |          1 |        176 |
+| c:\xampp\htdocs\src\js\components\low-poly.js             | JavaScript |        213 |          0 |          1 |        214 |
+| c:\xampp\htdocs\src\js\components\ocean.js                | JavaScript |         76 |         14 |         16 |        106 |
+| c:\xampp\htdocs\src\js\game.js                            | JavaScript |        324 |         20 |         94 |        438 |
+| c:\xampp\htdocs\src\js\hardware\bluetooth.js              | JavaScript |        167 |         24 |         46 |        237 |
+| c:\xampp\htdocs\src\js\hardware\sensorConfiguration.js    | JavaScript |        144 |          6 |         38 |        188 |
+| c:\xampp\htdocs\src\js\models\breathState.js              | JavaScript |         68 |          5 |         14 |         87 |
+| c:\xampp\htdocs\src\js\ui.js                              | JavaScript |        157 |         12 |         36 |        205 |
+| c:\xampp\htdocs\src\php\footer.php                        | PHP        |          2 |          0 |          1 |          3 |
+| c:\xampp\htdocs\src\php\header.php                        | PHP        |         45 |          0 |          5 |         50 |
+| c:\xampp\htdocs\src\php\scene\ocean.php                   | PHP        |        142 |          0 |          8 |        150 |
+| c:\xampp\htdocs\src\php\wearableConfiguration.php         | PHP        |         47 |          0 |         10 |         57 |
+| Total                                                     |            |      3,213 |        531 |        734 |      4,478 |
++-----------------------------------------------------------+------------+------------+------------+------------+------------+
