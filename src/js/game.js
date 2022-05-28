@@ -256,29 +256,11 @@ function gameOver() {
 
 const bindToggleVRModeEventSettings = () => {
     document.querySelector('a-scene').addEventListener('enter-vr', function () {
-        console.log('vr')
-
         cameraContainer.setAttribute('position', {
             x: 0,
             y: 0,
             z: 2
         })
-
-        // playerSphere.setAttribute('animation__position', {
-        //     property: 'position',
-        //     from: { x: 0, y: 0.5, z: -0.5 },
-        //     to: { x: 0, y: 0.525, z: -0.5 },
-        //     loop: true,
-        //     dir: 'alternate',
-        //     dur: 15000,
-        //     easing: 'easeInOutQuad',
-        // })
-
-        // POSITION_Z_OUT_OF_SIGHT = 1.9
-        // POSITION_Z_LINE_START = -0.6
-        // POSITION_Z_LINE_END = -0.5
-
-        // TREE_CONFRONTATION_Z_INDEX = -2
     })
 
     document.querySelector('a-scene').addEventListener('exit-vr', function () {
@@ -287,24 +269,6 @@ const bindToggleVRModeEventSettings = () => {
             y: 0,
             z: 0
         })
-
-        console.log('normal')
-
-        // playerSphere.setAttribute('animation__position', {
-        //     property: 'position',
-        //     from: { x: 0, y: 0.5, z: 0.6 },
-        //     to: { x: 0, y: 0.525, z: 0.6 },
-        //     loop: true,
-        //     dir: 'alternate',
-        //     dur: 15000,
-        //     easing: 'easeInOutQuad',
-        // })
-
-        // POSITION_Z_OUT_OF_SIGHT = 1.9
-        // POSITION_Z_LINE_START = 0.6
-        // POSITION_Z_LINE_END = 0.7
-
-        // TREE_CONFRONTATION_Z_INDEX = 0
     })
 }
 

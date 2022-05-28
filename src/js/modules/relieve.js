@@ -45,6 +45,12 @@ let sunriseScales = [
 let relieveBreathState
 let sun
 
+const startRelieveDemo = () => {
+    hideAllMenus()
+    setupEnvironment()
+    startRelieve()
+}
+
 const startRelieve = (
     breathMinPressure = sensorConfiguration.breathMinPressure,
     breathMaxPressure = sensorConfiguration.breathMaxPressure
@@ -56,8 +62,9 @@ const startRelieve = (
     relieveBreathState = new BreathState(
         breathMinPressure,
         breathMaxPressure,
-        2000,
-        2250
+        250,
+        1000,
+        250
     )
 
     // Get sun

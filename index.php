@@ -129,7 +129,18 @@
                 raycaster="far: 50; interval: 1000; objects: .clickable"
                 animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 150; from: 0.1 0.1 0.1; to: 0.5 0.5 0.5"
                 animation__fusing="property: scale; startEvents: fusing; easing: easeInCubic; dur: 750; from: 0.5 0.5 0.5; to: 0.1 0.1 0.1"
-                animation__mouseleave="property: scale; startEvents: mouseleave; easing: easeInCubic; dur: 500; to: 0.5 0.5 0.5"
+                animation__shrink="property: scale; startEvents: mouseleave, stopBreath; easing: easeInCubic; dur: 500; to: 0.5 0.5 0.5"
+                animation__grow="property: scale; startEvents: startBreath; easing: easeInCubic; dur: 500; to: 1.0 1.0 1.0"
+            ></a-entity>
+
+            <a-entity
+                id="cursor-fill"
+                position="0 0 -1"
+                geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03; thetaStart: 90"
+                material="color: red; shader: flat"
+                scale="0.5 0.5 0.5"
+                rotation="0 180 0"
+                animation__fill="property: geometry.thetaLength; startEvents: breath; easing: easeInCubic; dur: 500; from: 0 to: 360"
             ></a-entity>
 
             <!-- Instructions -->

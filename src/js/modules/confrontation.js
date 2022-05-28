@@ -36,7 +36,6 @@ let OBSTACLE_VOLUMES
     GENERAL:
     1. instructions
     2. make animation fluent
-    3. trillen van stressbal en riem
 */
 
 const setupObstaclePositions = () => {
@@ -226,7 +225,8 @@ const handleFear = (
         breathMinPressure,
         breathMaxPressure,
         2000,
-        5000
+        1000,
+        250
     )
 
     btDataMessageHandlers.push(changeObstacleSizeOnBreath)
