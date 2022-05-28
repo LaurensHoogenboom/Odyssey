@@ -259,8 +259,10 @@ const bindToggleVRModeEventSettings = () => {
         cameraContainer.setAttribute('position', {
             x: 0,
             y: 0,
-            z: 2
+            z: 3
         })
+
+        document.getElementById('player-camera').setAttribute('fov', 120)
     })
 
     document.querySelector('a-scene').addEventListener('exit-vr', function () {
@@ -269,6 +271,8 @@ const bindToggleVRModeEventSettings = () => {
             y: 0,
             z: 0
         })
+
+        document.getElementById('player-camera').setAttribute('fov', 80)
     })
 }
 

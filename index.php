@@ -118,7 +118,7 @@
 
     <!-- Camera -->
     <a-entity id="camera-container" position="0 0 0">
-        <a-camera id="player-camera" position="0 1.5 2" lane-controls look-controls="enabled: false">
+        <a-camera id="player-camera" position="0 1.5 2" lane-controls look-controls="enabled: false" fov="100">
             <a-entity
                 id="cursor-mobile"
                 cursor="fuse: true; fuseTimeout: 750"
