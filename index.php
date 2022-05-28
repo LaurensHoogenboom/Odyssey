@@ -118,7 +118,7 @@
 
     <!-- Camera -->
     <a-entity id="camera-container" position="0 0 0">
-        <a-camera id="player-camera" position="0 1.5 2" lane-controls look-controls="enabled: false" fov="100">
+        <a-camera id="player-camera" position="0 1.5 2" look-controls="enabled: false" fov="100">
             <a-entity
                 id="cursor-mobile"
                 cursor="fuse: true; fuseTimeout: 750"
@@ -149,7 +149,7 @@
                 id="instruction"
                 value="Draai je hoofd naar links en rechts om de speler te bewegen, en de obstakels te ontwijken!"
                 mixin="copy"
-                position="0 0.5 -4.5"
+                position="0 1 -3.5"
                 side="double"
                 visible
             ></a-text>

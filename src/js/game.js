@@ -1,39 +1,68 @@
 //#region Controls
 
-const POSITION_X_LEFT = -0.5
-const POSITION_X_CENTER = 0
-const POSITION_X_RIGHT = 0.5
+class Controls {
+    constructor() {
+        this.POSITION_X_LEFT = -0.5
+        this.POSITION_X_CENTER = 0
+        this.POSITION_X_RIGHT = 0.5
 
-//0 = left, 1 = center, 2 = right
-let player_position_index = 1
+        this.player_position_index = 1
+        this.player = document.getElementById('player')
+        this.playerCamera = document.getElementById('player-camera')
 
-//move player to provided index @param {int} lane
-function movePlayerTo(position_index) {
-    player_position_index = position_index
+        this.canMove = false
+        this.registerComponent()
+    }
 
-    var position = { x: 0, y: 0, z: 0 }
+    registerComponent() {
+        let controls = this
 
-    if (position_index == 0) position.x = POSITION_X_LEFT
-    else if (position_index == 1) position.x = POSITION_X_CENTER
-    else position.x = POSITION_X_RIGHT
+        AFRAME.registerComponent('lane-controls', {
+            tick: function (time, timeDelta) {
+                if (controls.canMove) {
+                    let rotation = this.el.object3D.rotation
 
-    document.getElementById('player').setAttribute('position', position)
-}
+                    if (rotation.y > 0.1) controls.movePlayerTo(0)
+                    else if (rotation.y < -0.1) controls.movePlayerTo(2)
+                    else controls.movePlayerTo(1)
+                } else {
+                    controls.movePlayerTo(1)
+                }
+            },
+        })
 
-function setupControls() {
-    AFRAME.registerComponent('lane-controls', {
-        tick: function (time, timeDelta) {
-            if (currentChapter == chapters.running) {
-                var rotation = this.el.object3D.rotation
+        this.playerCamera.setAttribute('lane-controls', '')
+    }
 
-                if (rotation.y > 0.1) movePlayerTo(0)
-                else if (rotation.y < -0.1) movePlayerTo(2)
-                else movePlayerTo(1)
-            } else {
-                movePlayerTo(1)
-            }
-        },
-    })
+    movePlayerTo(position_index) {
+        this.player_position_index = position_index
+        const oldPosition = this.player.getAttribute('position')
+        let position = { x: 0, y: 0, z: 0 }
+
+        if (position_index == 0) position.x = this.POSITION_X_LEFT
+        else if (position_index == 1) position.x = this.POSITION_X_CENTER
+        else position.x = this.POSITION_X_RIGHT
+
+        if (JSON.stringify(oldPosition) != JSON.stringify(position)) {
+            this.fireEvent(position_index)
+        }
+
+        this.player.setAttribute('position', position)
+    }
+
+    fireEvent(position_index, player = this.player) {
+        if (position_index == 0) player.emit('movedLeft', null, false)
+        else if (position_index == 1) player.emit('movedCenter', null, false)
+        else player.emit('movedRight', null, false)
+    }
+
+    enable() {
+        this.canMove = true
+    }
+
+    disable() {
+        this.canMove = false
+    }
 }
 
 //#endregion
@@ -75,8 +104,7 @@ function addTreesRandomlyLoop() {
             intervalLength = 0.98 * intervalLength
         }
 
-        if (isGameRunning && currentChapter == chapters.running)
-            addTreesRandomlyLoop()
+        if (isGameRunning && currentChapter == chapters.running) addTreesRandomlyLoop()
     }, intervalLength)
 }
 
@@ -89,10 +117,7 @@ function addTree(el, position_index) {
 
     if (runningTime > RUNNING_BEFORE_REAL_OBSTACLES) {
         let volumes = [1.3, 1.6, 1.9]
-        let obstacleType =
-            obstacleTypesLeft[
-                Math.floor(Math.random() * obstacleTypesLeft.length)
-            ]
+        let obstacleType = obstacleTypesLeft[Math.floor(Math.random() * obstacleTypesLeft.length)]
 
         shuffle(volumes)
 
@@ -131,10 +156,7 @@ function addTreesRandomly({
     var numberOfTreesAdded = 0
 
     trees.forEach((tree) => {
-        if (
-            Math.random() < tree.propability &&
-            numberOfTreesAdded < maxNumberTrees
-        ) {
+        if (Math.random() < tree.propability && numberOfTreesAdded < maxNumberTrees) {
             addTreeTo(tree.position_index)
             numberOfTreesAdded += 1
         }
@@ -164,9 +186,7 @@ const setupCollision = () => {
         tick: () => {
             document.querySelectorAll('.tree').forEach((tree) => {
                 position = tree.getAttribute('position')
-                tree_position_index = tree.getAttribute(
-                    'data-tree-position-index'
-                )
+                tree_position_index = tree.getAttribute('data-tree-position-index')
                 tree_id = tree.getAttribute('id')
 
                 if (position.z > POSITION_Z_OUT_OF_SIGHT) {
@@ -178,7 +198,7 @@ const setupCollision = () => {
                 if (
                     POSITION_Z_LINE_START < position.z &&
                     position.z < POSITION_Z_LINE_END &&
-                    tree_position_index == player_position_index
+                    tree_position_index == controls.player_position_index
                 ) {
                     if (tree.hasAttribute('data-obstacle-type')) {
                         startConfrontation(tree)
@@ -197,27 +217,38 @@ const setupCollision = () => {
 
 let isGameRunning = false
 const chapters = Object.freeze({
+    introduction: 'introduction',
     running: 'running',
     confrontation: 'confrontation',
     relieve: 'relieve',
 })
 
-let currentChapter = chapters.running
+let currentChapter = chapters.introduction
 let bluetooth
 let sensorConfiguration
+let controls
 let playerSphere
 let playerCamera
 let runningTime = 0
+let introduction
 
-setupControls()
 setupCollision()
 
 const init = () => {
+    // Bluetooth and sensors
     btNotificationMessageHandlers.push(handleConnectionConfirmation)
     bluetooth = new BluetoothController(handleReceivedBluetoothData)
     sensorConfiguration = new SensorConfiguration()
+
+    // Cache Elements
     playerSphere = document.getElementById('player-sphere')
     cameraContainer = document.getElementById('camera-container')
+
+    // Chapters and gameplay
+    introduction = new Introduction(player, playerSphere, addTreesRandomlyLoop)
+    controls = new Controls()
+
+    // Init stuff
     setupAllMenus()
     setupInstruction()
     setupTrees()
@@ -234,32 +265,38 @@ const enterGame = () => {
 
 function startGame() {
     if (isGameRunning) return
+
     isGameRunning = true
+    obstacleTypesLeft = obstacleTypes
 
     setupInstruction()
     setInstruction(' ')
-    addTreesRandomlyLoop()
     hideAllMenus()
-    obstacleTypesLeft = obstacleTypes
+
+    introduction.start(addTreesRandomlyLoop)
 }
 
 function gameOver() {
     isGameRunning = false
     runningTime = 0
     intervalLength = 2000
-    currentChapter = chapters.running
-    obstacleTypesLeft = obstacleTypes
+    currentChapter = chapters.introduction
 
+    introduction.reset()
     muteAllTrees()
     hideInstruction()
 }
+
+//#endregion
+
+//#region VR Mode
 
 const bindToggleVRModeEventSettings = () => {
     document.querySelector('a-scene').addEventListener('enter-vr', function () {
         cameraContainer.setAttribute('position', {
             x: 0,
             y: 0,
-            z: 3
+            z: 3,
         })
 
         document.getElementById('player-camera').setAttribute('fov', 120)
@@ -269,7 +306,7 @@ const bindToggleVRModeEventSettings = () => {
         cameraContainer.setAttribute('position', {
             x: 0,
             y: 0,
-            z: 0
+            z: 0,
         })
 
         document.getElementById('player-camera').setAttribute('fov', 80)
@@ -362,7 +399,7 @@ const getDataFromBtMessage = (data) => {
 
 //#endregion
 
-//#region utilities
+//#region Utilities
 
 const shuffle = (a) => {
     let j, x, i
@@ -377,27 +414,24 @@ const shuffle = (a) => {
 
 function makeid(length) {
     var result = ''
-    var characters =
-        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
     var charactersLength = characters.length
     for (var i = 0; i < length; i++) {
-        result += characters.charAt(
-            Math.floor(Math.random() * charactersLength)
-        )
+        result += characters.charAt(Math.floor(Math.random() * charactersLength))
     }
     return result
 }
 
 function calculateAverageFromArray(array) {
-    var total = 0;
-    var count = 0;
+    var total = 0
+    var count = 0
 
-    array.forEach(function(item, index) {
-        total += item;
-        count++;
-    });
+    array.forEach(function (item, index) {
+        total += item
+        count++
+    })
 
-    return total / count;
+    return total / count
 }
 
 //#endregion

@@ -69,6 +69,7 @@ const startConfrontation = (obstacleToConfrontWith, fase = fases.angry) => {
     //Setup chapter
     currentChapter = chapters.confrontation
     currentFase = fase
+    controls.disable()
 
     // Setup obstacle(s)
     obstacleConfrontationCache.push(obstacleToConfrontWith)
@@ -353,6 +354,7 @@ const switchToNextChapter = (handledObstacleType) => {
     changeEvenvironmentTheme('normal')
 
     if (obstacleTypesLeft.length > 0) {
+        controls.enable()
         currentChapter = chapters.running
         runningTime = 0
         intervalLength = 2000
