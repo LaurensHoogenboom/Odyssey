@@ -79,7 +79,7 @@ AFRAME.registerComponent('ocean', {
                 color: data.color,
                 transparent: data.opacity < 1,
                 opacity: data.opacity,
-                shading: THREE.FlatShading,
+                flatShading: true,
             })
         }
 

@@ -4,13 +4,22 @@ class Introduction {
         this.fases = Object.freeze({ player: 'player', thougts: 'thougts' })
         this.currentFase = this.fases.player
 
+        // Player and controls
         this.hasPointedUser = false
         this.hasLookedLeft = false
         this.hasLookedRight = false
 
+        // Thoughts and coping
+        this.thoughtsHavePassed = false
+        this.hasEvokedEmotions = false
+        this.hasEscaped = false
+
+        // Elements
         this.playerSphere = playerSphere
         this.player = player
+        this.introThoughts = document.getElementsByClassName('intro-thought')
 
+        // Functions
         this.clickedPlayerHandler = this.completePlayerIntro.bind(this)
         this.moveLeftHandler = this.completeLeftIntro.bind(this)
         this.moveRightHandler = this.completeRightIntro.bind(this)
@@ -28,8 +37,8 @@ class Introduction {
         this.show()
     }
 
-    show(fases = this.fases) {
-        if (this.currentFase == fases.player) {
+    show() {
+        if (this.currentFase == this.fases.player) {
             if (!this.hasPointedUser) {
                 setInstruction('Kijk naar de bal voor je.')
                 this.playerSphere.classList.add('clickable')
@@ -42,11 +51,52 @@ class Introduction {
                 setInstruction('Kijk naar rechts om de bal naar rechts te sturen.')
                 this.player.addEventListener('movedRight', this.moveRightHandler)
             } else {
-                this.currentFase = fases.thougts
+                this.currentFase = this.fases.thougts
                 this.show()
             }
-        } else if (this.currentFase == fases.thougts) {
-            this.quit()
+        } else if (this.currentFase == this.fases.thougts) {
+            if (!this.thoughtsHavePassed) {
+                for (let thought of this.introThoughts) {
+                    thought.emit('intro')
+                }
+
+                setInstruction('Gedachten komen langs je heen...')
+
+                setTimeout(() => {
+                    this.thoughtsHavePassed = true
+                    this.show()
+                }, 10000)
+            } else if (!this.hasEvokedEmotions) {
+                setInstruction('Sommigen veroorzaken specifieke emoties...')
+
+                setTimeout(() => {
+                    setInstruction(' ')
+                    changeEvenvironmentTheme(fases.angry)
+
+                    setTimeout(() => {
+                        changeEvenvironmentTheme('normal')
+
+                        setTimeout(() => {
+                            this.hasEvokedEmotions = true
+                            this.show()
+                        }, 3000)
+                    }, 6000)
+                }, 1500)
+            } else if (!this.hasEscaped) {
+                setInstruction('In veel gevallen kun je de confrontatie ontlopen...')
+
+                setTimeout(() => {
+                    setInstruction('Maar soms heb je geen keus.')
+
+                    setTimeout(() => {
+                        setInstruction(' ')
+                        this.hasEscaped = true
+                        this.show()
+                    }, 4000)
+                }, 4000)
+            } else {
+                this.quit()
+            }
         }
     }
 

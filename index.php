@@ -163,6 +163,25 @@
 
     <?php include $_SERVER['DOCUMENT_ROOT'] . "/src/php/scene/ocean.php"; ?>
 
+    <!-- Intro -->
+
+    <a-entity id="intro-thoughts">
+        <a-entity
+            gltf-model="#neutral_cloud"
+            scale="2 2 2"
+            position="-3 2 -23"
+            class="intro-thought"
+            animation__position="startEvents: intro; property: position; from: -3 2 -23; to: -3 2 2; dur: 10000; loop: easing: linear;"
+        ></a-entity>
+        <a-entity
+            gltf-model="#neutral_cloud"
+            scale="2 2 2"
+            position="-3 2 -18"
+            class="intro-thought"
+            animation__position="startEvents: intro; property: position; from: 3 2 -20; to: 3 2 5; dur: 10000; easing: linear;"
+        ></a-entity>
+    </a-entity>
+
     <!-- Platform -->
     <lp-cone
         amplitude="0.05"
@@ -218,6 +237,20 @@
             <!-- Menus -->
             <a-entity id="menu-container">
                 <a-entity id="start-menu" position="0 1.4 -3">
+                    <a-entity>
+                        <a-entity
+                            gltf-model="#neutral_cloud"
+                            scale="2 2 2"
+                            position="-5 0 0"
+                        ></a-entity>
+                        <a-entity
+                            gltf-model="#neutral_cloud"
+                            scale="2 2 2"
+                            position="5 0 0"
+                            rotation="0 180 0"
+                        ></a-entity>
+                    </a-entity>
+
                     <a-entity id="start-copy" position="0 1 0">
                         <a-text
                             value="Draai je hoofd naar links en rechts om de speler te bewegen, en de obstakels te ontwijken!"
