@@ -152,7 +152,7 @@
                 id="instruction"
                 value="Draai je hoofd naar links en rechts om de speler te bewegen, en de obstakels te ontwijken!"
                 mixin="copy"
-                position="0 1 -3.5"
+                position="0 1 -5"
                 side="double"
                 visible
             ></a-text>

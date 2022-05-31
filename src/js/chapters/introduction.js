@@ -63,8 +63,8 @@ class Introduction {
                 setInstruction('Gedachten komen langs je heen...')
 
                 setTimeout(() => {
-                    this.thoughtsHavePassed = true
-                    this.show()
+                    this.thoughtsHavePassed = true;
+                    this.show();
                 }, 10000)
             } else if (!this.hasEvokedEmotions) {
                 setInstruction('Sommigen veroorzaken specifieke emoties...')
@@ -133,16 +133,31 @@ class Introduction {
         this.hasPointedUser = false
         this.hasLookedRight = false
         this.hasLookedLeft = false
+        this.thoughtsHavePassed = false
+        this.hasEvokedEmotions = false
+        this.hasEscaped = false
+
+        for (let thought of this.introThoughts) {
+            thought.setAttribute('visible', true);
+        }
     }
 
     disable() {
         this.hasPointedUser = true
         this.hasLookedRight = true
         this.hasLookedLeft = true
+        this.thoughtsHavePassed = true
+        this.hasEvokedEmotions = true
+        this.hasEscaped = true
     }
 
     quit() {
         currentChapter = chapters.running
+
+        for (let thought of this.introThoughts) {
+            thought.setAttribute('visible', false);
+        }
+        
         setInstruction(' ')
         this.quitCallback()
     }

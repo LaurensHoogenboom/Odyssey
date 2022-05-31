@@ -86,9 +86,9 @@ function setupTrees() {
     treeContainer = document.getElementById('tree-container')
     templates = [templateTreeLeft, templateTreeCenter, templateTreeRight]
 
-    removeTree(templateTreeLeft)
-    removeTree(templateTreeCenter)
-    removeTree(templateTreeRight)
+    removeObject(templateTreeLeft)
+    removeObject(templateTreeCenter)
+    removeObject(templateTreeRight)
 }
 
 let treeTimer
@@ -108,9 +108,7 @@ function addTreesRandomlyLoop() {
     }, intervalLength)
 }
 
-function removeTree(tree) {
-    tree.parentNode.removeChild(tree)
-}
+
 
 function addTree(el, position_index) {
     numberOfTrees += 1
@@ -190,7 +188,7 @@ const setupCollision = () => {
                 tree_id = tree.getAttribute('id')
 
                 if (position.z > POSITION_Z_OUT_OF_SIGHT) {
-                    removeTree(tree)
+                    removeObject(tree)
                 }
 
                 if (!isGameRunning || currentChapter != chapters.running) return
@@ -432,6 +430,10 @@ function calculateAverageFromArray(array) {
     })
 
     return total / count
+}
+
+function removeObject(obj) {
+    obj.parentNode.removeChild(obj);
 }
 
 //#endregion
