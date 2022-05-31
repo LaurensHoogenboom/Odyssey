@@ -199,51 +199,46 @@
         emissive="#005DED"
         emissive-intensity="0.1"
     >
-        <a-entity id="tree-container" position="0 0 -1.5" rotation="-90 0 0">
-            <!-- Trees -->
+        <a-entity id="thought-container" position="0 0 -1.5" rotation="-90 0 0">
+            <!-- Thoughts -->
+
             <a-entity
-                id="template-tree-center"
+                gltf-model="#neutral_cloud"
+                id="template-thought-center"
                 shadow
                 scale="0.3 0.3 0.3"
                 position="0 0.6 0"
-                class="tree"
-                data-tree-position-index="1"
+                class="thought"
+                data-thought-position-index="1"
                 animation__position="property: position; from: 0 0.6 -7; to: 0 0.6 2; dur: 5000; easing: linear;"
-            >
-                <a-entity gltf-model="#neutral_cloud"></a-entity>
-            </a-entity>
+            ></a-entity>
+
             <a-entity
-                id="template-tree-left"
+                id="template-thought-left"
                 shadow
+                gltf-model="#neutral_cloud"
                 scale="0.3 0.3 0.3"
                 position="-0.5 0.6 0"
-                class="tree"
-                data-tree-position-index="0"
+                class="thought"
+                data-thought-position-index="0"
                 animation__position="property: position; from: -0.5 0.6 -7; to: -0.5 0.6 2; dur: 5000; easing: linear;"
-            >
-                <a-entity gltf-model="#neutral_cloud"></a-entity>
-            </a-entity>
+            ></a-entity>
             <a-entity
-                id="template-tree-right"
+                gltf-model="#neutral_cloud"
+                id="template-thought-right"
                 shadow
                 scale="0.3 0.3 0.3"
                 position="0.5 0.6 0"
-                class="tree"
-                data-tree-position-index="2"
+                class="thought"
+                data-thought-position-index="2"
                 animation__position="property: position; from: 0.5 0.6 -7; to: 0.5 0.6 2; dur: 5000; easing: linear;"
-            >
-                <a-entity gltf-model="#neutral_cloud"></a-entity>
-            </a-entity>
+            ></a-entity>
 
             <!-- Menus -->
             <a-entity id="menu-container">
                 <a-entity id="start-menu" position="0 1.4 -3">
                     <a-entity>
-                        <a-entity
-                            gltf-model="#neutral_cloud"
-                            scale="2 2 2"
-                            position="-6 0 0"
-                        ></a-entity>
+                        <a-entity gltf-model="#neutral_cloud" scale="2 2 2" position="-6 0 0"></a-entity>
                         <a-entity
                             gltf-model="#neutral_cloud"
                             scale="2 2 2"
