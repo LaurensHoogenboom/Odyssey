@@ -30,7 +30,7 @@
         animation__show="property: material.opacity; from: 0; to: 0.4; dur: 2300; easing: linear; start-events: show"
     ></a-entity>
 
-    <!-- Mixins -->
+    <!-- Assets -->
     <a-assets id="assets">
         <!-- Mixins -->
         <a-mixin
@@ -94,6 +94,10 @@
             src="/src/sound/factors/negative/mirror-reverb.wav"
             preload="auto"
         ></audio>
+
+        <!-- Models -->
+        <a-asset-item id="neutral_cloud1" src="/src/3d/neutral_cloud.gltf"></a-asset-item>
+        <a-asset-item id="neutral_cloud" src="/src/3d/neutral_cloud_lower_poly.gltf"></a-asset-item>
     </a-assets>
 
     <!-- Lights -->
@@ -149,7 +153,7 @@
                 id="instruction"
                 value="Draai je hoofd naar links en rechts om de speler te bewegen, en de obstakels te ontwijken!"
                 mixin="copy"
-                position="0 1 -3.5"
+                position="0 1 -5"
                 side="double"
                 visible
             ></a-text>
@@ -159,6 +163,25 @@
     <!-- Ocean -->
 
     <?php include $_SERVER['DOCUMENT_ROOT'] . "/src/php/scene/ocean.php"; ?>
+
+    <!-- Intro -->
+
+    <a-entity id="intro-thoughts">
+        <a-entity
+            gltf-model="#neutral_cloud"
+            scale="2 2 2"
+            position="-3 2 -23"
+            class="intro-thought"
+            animation__position="startEvents: intro; property: position; from: -3 2 -23; to: -3 2 2; dur: 10000; loop: easing: linear;"
+        ></a-entity>
+        <a-entity
+            gltf-model="#neutral_cloud"
+            scale="2 2 2"
+            position="-3 2 -18"
+            class="intro-thought"
+            animation__position="startEvents: intro; property: position; from: 3 2 -20; to: 3 2 5; dur: 10000; easing: linear;"
+        ></a-entity>
+    </a-entity>
 
     <!-- Platform -->
     <lp-cone
@@ -176,48 +199,54 @@
         emissive="#005DED"
         emissive-intensity="0.1"
     >
-        <a-entity id="tree-container" position="0 0 -1.5" rotation="-90 0 0">
-            <!-- Trees -->
+        <a-entity id="thought-container" position="0 0 -1.5" rotation="-90 0 0">
+            <!-- Thoughts -->
+
             <a-entity
-                id="template-tree-center"
+                gltf-model="#neutral_cloud"
+                id="template-thought-center"
                 shadow
                 scale="0.3 0.3 0.3"
                 position="0 0.6 0"
-                class="tree"
-                data-tree-position-index="1"
+                class="thought"
+                data-thought-position-index="1"
                 animation__position="property: position; from: 0 0.6 -7; to: 0 0.6 2; dur: 5000; easing: linear;"
-            >
-                <a-entity mixin="foliage"></a-entity>
-                <a-entity mixin="trunk" position="0 -0.5 0"></a-entity>
-            </a-entity>
+            ></a-entity>
+
             <a-entity
-                id="template-tree-left"
+                id="template-thought-left"
                 shadow
+                gltf-model="#neutral_cloud"
                 scale="0.3 0.3 0.3"
                 position="-0.5 0.6 0"
-                class="tree"
-                data-tree-position-index="0"
+                class="thought"
+                data-thought-position-index="0"
                 animation__position="property: position; from: -0.5 0.6 -7; to: -0.5 0.6 2; dur: 5000; easing: linear;"
-            >
-                <a-entity mixin="foliage"></a-entity>
-                <a-entity mixin="trunk" position="0 -0.5 0"></a-entity>
-            </a-entity>
+            ></a-entity>
             <a-entity
-                id="template-tree-right"
+                gltf-model="#neutral_cloud"
+                id="template-thought-right"
                 shadow
                 scale="0.3 0.3 0.3"
                 position="0.5 0.6 0"
-                class="tree"
-                data-tree-position-index="2"
+                class="thought"
+                data-thought-position-index="2"
                 animation__position="property: position; from: 0.5 0.6 -7; to: 0.5 0.6 2; dur: 5000; easing: linear;"
-            >
-                <a-entity mixin="foliage"></a-entity>
-                <a-entity mixin="trunk" position="0 -0.5 0"></a-entity>
-            </a-entity>
+            ></a-entity>
 
             <!-- Menus -->
             <a-entity id="menu-container">
                 <a-entity id="start-menu" position="0 1.4 -3">
+                    <a-entity>
+                        <a-entity gltf-model="#neutral_cloud" scale="2 2 2" position="-6 0 0"></a-entity>
+                        <a-entity
+                            gltf-model="#neutral_cloud"
+                            scale="2 2 2"
+                            position="6 0 0"
+                            rotation="0 180 0"
+                        ></a-entity>
+                    </a-entity>
+
                     <a-entity id="start-copy" position="0 1 0">
                         <a-text
                             value="Draai je hoofd naar links en rechts om de speler te bewegen, en de obstakels te ontwijken!"

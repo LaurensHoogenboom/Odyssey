@@ -67,109 +67,104 @@ class Controls {
 
 //#endregion
 
-//#region Trees
+//#region Thoughts
 
 const obstacleTypes = ['experience', 'feedback', 'imagination', 'mirror']
 let obstacleTypesLeft = ['experience', 'feedback', 'imagination', 'mirror']
-let templateTreeLeft
-let templateTreeCenter
-let templateTreeRight
+let templateThoughtLeft
+let templateThoughtCenter
+let templateThoughtRight
 
-let numberOfTrees = 0
+let numberOfThoughts = 0
 
-let RUNNING_BEFORE_REAL_OBSTACLES = 5000
+let RUNNING_TIME_BEFORE_REAL_OBSTACLES = 5000
 
-function setupTrees() {
-    templateTreeLeft = document.getElementById('template-tree-left')
-    templateTreeCenter = document.getElementById('template-tree-center')
-    templateTreeRight = document.getElementById('template-tree-right')
-    treeContainer = document.getElementById('tree-container')
-    templates = [templateTreeLeft, templateTreeCenter, templateTreeRight]
+function setupThoughts() {
+    templateThoughtLeft = document.getElementById('template-thought-left')
+    templateThoughtCenter = document.getElementById('template-thought-center')
+    templateThoughtRight = document.getElementById('template-thought-right')
+    thoughtContainer = document.getElementById('thought-container')
+    templates = [templateThoughtLeft, templateThoughtCenter, templateThoughtRight]
 
-    removeTree(templateTreeLeft)
-    removeTree(templateTreeCenter)
-    removeTree(templateTreeRight)
+    removeObject(templateThoughtLeft)
+    removeObject(templateThoughtCenter)
+    removeObject(templateThoughtRight)
 }
 
-let treeTimer
+let thoughtTimer
 let intervalLength = 2000
 
-function addTreesRandomlyLoop() {
+function addThoughtsRandomlyLoop() {
     runningTime += intervalLength
 
     setTimeout(() => {
-        addTreesRandomly()
+        addThoughtsRandomly()
 
         if (intervalLength > 500) {
             intervalLength = 0.98 * intervalLength
         }
 
-        if (isGameRunning && currentChapter == chapters.running) addTreesRandomlyLoop()
+        if (isGameRunning && currentChapter == chapters.running) addThoughtsRandomlyLoop()
     }, intervalLength)
 }
 
-function removeTree(tree) {
-    tree.parentNode.removeChild(tree)
-}
 
-function addTree(el, position_index) {
-    numberOfTrees += 1
 
-    if (runningTime > RUNNING_BEFORE_REAL_OBSTACLES) {
-        let volumes = [1.3, 1.6, 1.9]
+function addThought(el) {
+    numberOfThoughts += 1
+
+    if (runningTime > RUNNING_TIME_BEFORE_REAL_OBSTACLES) {
         let obstacleType = obstacleTypesLeft[Math.floor(Math.random() * obstacleTypesLeft.length)]
 
-        shuffle(volumes)
-
-        el.id = `tree-${numberOfTrees}`
+        el.id = `thought-${numberOfThoughts}`
         el.setAttribute('data-obstacle-type', obstacleType)
         el.setAttribute('sound', {
             src: `#${obstacleType}-thought`,
             autoplay: true,
             loop: true,
-            volume: volumes[position_index],
+            volume: 0,
         })
     }
 
-    treeContainer.appendChild(el)
+    thoughtContainer.appendChild(el)
 }
 
-function addTreeTo(position_index) {
+function addThoughtTo(position_index) {
     let template = templates[position_index]
-    addTree(template.cloneNode(true), position_index)
+    addThought(template.cloneNode(true), position_index)
 }
 
-function addTreesRandomly({
-    propTreeLeft = 0.5,
-    propTreeCenter = 0.5,
-    propTreeRight = 0.5,
-    maxNumberTrees = 2,
+function addThoughtsRandomly({
+    propThoughtLeft = 0.5,
+    propThoughtCenter = 0.5,
+    propThoughtRight = 0.5,
+    maxNumberOfThoughts = 2,
 } = {}) {
-    let trees = [
-        { propability: propTreeLeft, position_index: 0 },
-        { propability: propTreeCenter, position_index: 1 },
-        { propability: propTreeRight, position_index: 2 },
+    let thoughts = [
+        { propability: propThoughtLeft, position_index: 0 },
+        { propability: propThoughtCenter, position_index: 1 },
+        { propability: propThoughtRight, position_index: 2 },
     ]
 
-    shuffle(trees)
+    shuffle(thoughts)
 
-    var numberOfTreesAdded = 0
+    var numberOfThoughtsAdded = 0
 
-    trees.forEach((tree) => {
-        if (Math.random() < tree.propability && numberOfTreesAdded < maxNumberTrees) {
-            addTreeTo(tree.position_index)
-            numberOfTreesAdded += 1
+    thoughts.forEach((thought) => {
+        if (Math.random() < thought.propability && numberOfThoughtsAdded < maxNumberOfThoughts) {
+            addThoughtTo(thought.position_index)
+            numberOfThoughtsAdded += 1
         }
     })
 
-    return numberOfTreesAdded
+    return numberOfThoughtsAdded
 }
 
-const muteAllTrees = () => {
-    const treeList = document.querySelectorAll('.tree')
+const muteAllThoughts = () => {
+    const thoughtList = document.querySelectorAll('.thought')
 
-    treeList.forEach((tree) => {
-        fadeAudioOut(tree, 0, 500)
+    thoughtList.forEach((thought) => {
+        fadeAudioOut(thought, 0, 500)
     })
 }
 
@@ -184,13 +179,13 @@ let POSITION_Z_LINE_END = 0.7
 const setupCollision = () => {
     AFRAME.registerComponent('player', {
         tick: () => {
-            document.querySelectorAll('.tree').forEach((tree) => {
-                position = tree.getAttribute('position')
-                tree_position_index = tree.getAttribute('data-tree-position-index')
-                tree_id = tree.getAttribute('id')
+            document.querySelectorAll('.thought').forEach((thought) => {
+                position = thought.getAttribute('position')
+                thought_position_index = thought.getAttribute('data-thought-position-index')
+                thought_id = thought.getAttribute('id')
 
                 if (position.z > POSITION_Z_OUT_OF_SIGHT) {
-                    removeTree(tree)
+                    removeObject(thought)
                 }
 
                 if (!isGameRunning || currentChapter != chapters.running) return
@@ -198,10 +193,10 @@ const setupCollision = () => {
                 if (
                     POSITION_Z_LINE_START < position.z &&
                     position.z < POSITION_Z_LINE_END &&
-                    tree_position_index == controls.player_position_index
+                    thought_position_index == controls.player_position_index
                 ) {
-                    if (tree.hasAttribute('data-obstacle-type')) {
-                        startConfrontation(tree)
+                    if (thought.hasAttribute('data-obstacle-type')) {
+                        startConfrontation(thought)
                     } else {
                         shakePathAndSea()
                     }
@@ -245,13 +240,13 @@ const init = () => {
     cameraContainer = document.getElementById('camera-container')
 
     // Chapters and gameplay
-    introduction = new Introduction(player, playerSphere, addTreesRandomlyLoop)
+    introduction = new Introduction(player, playerSphere, addThoughtsRandomlyLoop)
     controls = new Controls()
 
     // Init stuff
     setupAllMenus()
     setupInstruction()
-    setupTrees()
+    setupThoughts()
     setupEnvironment()
     bindToggleVRModeEventSettings()
 }
@@ -273,7 +268,7 @@ function startGame() {
     setInstruction(' ')
     hideAllMenus()
 
-    introduction.start(addTreesRandomlyLoop)
+    introduction.start(addThoughtsRandomlyLoop)
 }
 
 function gameOver() {
@@ -283,7 +278,7 @@ function gameOver() {
     currentChapter = chapters.introduction
 
     introduction.reset()
-    muteAllTrees()
+    muteAllThoughts()
     hideInstruction()
 }
 
@@ -432,6 +427,10 @@ function calculateAverageFromArray(array) {
     })
 
     return total / count
+}
+
+function removeObject(obj) {
+    obj.parentNode.removeChild(obj);
 }
 
 //#endregion

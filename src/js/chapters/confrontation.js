@@ -6,7 +6,7 @@
 
 // Obstacle
 let obstacleConfrontationCache = []
-let TREE_CONFRONTATION_Z_INDEX = -1
+let THOUGHT_CONFRONTATION_Z_INDEX = -1
 
 // Confrontation Fases
 const fases = Object.freeze({ angry: 'angry', afraid: 'afraid' })
@@ -27,7 +27,7 @@ let OBSTACLE_VOLUMES
 /*
     ANGRY:
     1. add hearthbeath: afnemen als boom kleiner wordt
-    2. add tree pulse animation: als ie hetzelfde blijft of niet wordt ingedrukt
+    2. add thought pulse animation: als ie hetzelfde blijft of niet wordt ingedrukt
     3. add shake animation + geluid: bij klappen obstakel en bij obstakel zonder type
 
     AFRAID:
@@ -44,19 +44,19 @@ const setupObstaclePositions = () => {
         {
             x: 0,
             y: 1.8,
-            z: TREE_CONFRONTATION_Z_INDEX,
+            z: THOUGHT_CONFRONTATION_Z_INDEX,
         },
         // LEFT
         {
             x: -1.5,
             y: 1.6,
-            z: TREE_CONFRONTATION_Z_INDEX + 1,
+            z: THOUGHT_CONFRONTATION_Z_INDEX,
         },
         // RIGHT
         {
             x: 1.5,
             y: 1.6,
-            z: TREE_CONFRONTATION_Z_INDEX + 1,
+            z: THOUGHT_CONFRONTATION_Z_INDEX,
         },
     ]
 
@@ -98,7 +98,7 @@ const startConfrontation = (obstacleToConfrontWith, fase = fases.angry) => {
 
 const addDuplicateObstacle = (obstacle) => {
     obstacle.id = `obstacle-${makeid(5)}`
-    treeContainer.appendChild(obstacle)
+    thoughtContainer.appendChild(obstacle)
 }
 
 const focusObstacles = () => {
@@ -339,7 +339,7 @@ const quitFear = () => {
     obstacleConfrontationCache.forEach((obstacle) => {
         fadeAudioOut(obstacle, 0.0, 2300)
         setTimeout(() => {
-            removeTree(obstacle)
+            removeObject(obstacle)
         }, 2300)
     })
 
@@ -358,7 +358,7 @@ const switchToNextChapter = (handledObstacleType) => {
         currentChapter = chapters.running
         runningTime = 0
         intervalLength = 2000
-        addTreesRandomlyLoop()
+        addThoughtsRandomlyLoop()
     } else {
         startRelieve()
     }
