@@ -77,7 +77,7 @@ let templateTreeRight
 
 let numberOfTrees = 0
 
-let RUNNING_BEFORE_REAL_OBSTACLES = 5000
+let RUNNING_TIME_BEFORE_REAL_OBSTACLES = 5000
 
 function setupTrees() {
     templateTreeLeft = document.getElementById('template-tree-left')
@@ -110,14 +110,11 @@ function addTreesRandomlyLoop() {
 
 
 
-function addTree(el, position_index) {
+function addTree(el) {
     numberOfTrees += 1
 
-    if (runningTime > RUNNING_BEFORE_REAL_OBSTACLES) {
-        let volumes = [1.3, 1.6, 1.9]
+    if (runningTime > RUNNING_TIME_BEFORE_REAL_OBSTACLES) {
         let obstacleType = obstacleTypesLeft[Math.floor(Math.random() * obstacleTypesLeft.length)]
-
-        shuffle(volumes)
 
         el.id = `tree-${numberOfTrees}`
         el.setAttribute('data-obstacle-type', obstacleType)
@@ -125,7 +122,7 @@ function addTree(el, position_index) {
             src: `#${obstacleType}-thought`,
             autoplay: true,
             loop: true,
-            volume: volumes[position_index],
+            volume: 0,
         })
     }
 
