@@ -96,7 +96,8 @@
         ></audio>
 
         <!-- Models -->
-        <a-asset-item id="neutral_cloud" src="/src/3d/neutral_cloud.gltf"></a-asset-item>
+        <a-asset-item id="neutral_cloud1" src="/src/3d/neutral_cloud.gltf"></a-asset-item>
+        <a-asset-item id="neutral_cloud" src="/src/3d/neutral_cloud_lower_poly.gltf"></a-asset-item>
     </a-assets>
 
     <!-- Lights -->
@@ -241,12 +242,12 @@
                         <a-entity
                             gltf-model="#neutral_cloud"
                             scale="2 2 2"
-                            position="-5 0 0"
+                            position="-6 0 0"
                         ></a-entity>
                         <a-entity
                             gltf-model="#neutral_cloud"
                             scale="2 2 2"
-                            position="5 0 0"
+                            position="6 0 0"
                             rotation="0 180 0"
                         ></a-entity>
                     </a-entity>
