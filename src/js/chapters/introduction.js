@@ -137,6 +137,8 @@ class Introduction {
         this.hasEvokedEmotions = false
         this.hasEscaped = false
 
+        controls.disable()
+
         for (let thought of this.introThoughts) {
             thought.setAttribute('visible', true);
         }
@@ -149,6 +151,7 @@ class Introduction {
         this.thoughtsHavePassed = true
         this.hasEvokedEmotions = true
         this.hasEscaped = true
+        controls.enable()
     }
 
     quit() {

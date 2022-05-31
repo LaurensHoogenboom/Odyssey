@@ -206,8 +206,8 @@
                 gltf-model="#neutral_cloud"
                 id="template-thought-center"
                 shadow
-                scale="0.3 0.3 0.3"
-                position="0 0.6 0"
+                scale="0.2 0.2 0.2"
+                position="0 0.5 0"
                 class="thought"
                 data-thought-position-index="1"
                 animation__position="property: position; from: 0 0.6 -7; to: 0 0.6 2; dur: 5000; easing: linear;"
@@ -217,8 +217,8 @@
                 id="template-thought-left"
                 shadow
                 gltf-model="#neutral_cloud"
-                scale="0.3 0.3 0.3"
-                position="-0.5 0.6 0"
+                scale="0.2 0.2 0.2"
+                position="-0.5 0.5 0"
                 class="thought"
                 data-thought-position-index="0"
                 animation__position="property: position; from: -0.5 0.6 -7; to: -0.5 0.6 2; dur: 5000; easing: linear;"
@@ -227,8 +227,8 @@
                 gltf-model="#neutral_cloud"
                 id="template-thought-right"
                 shadow
-                scale="0.3 0.3 0.3"
-                position="0.5 0.6 0"
+                scale="0.2 0.2 0.2"
+                position="0.5 0.5 0"
                 class="thought"
                 data-thought-position-index="2"
                 animation__position="property: position; from: 0.5 0.6 -7; to: 0.5 0.6 2; dur: 5000; easing: linear;"
