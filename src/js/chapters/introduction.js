@@ -86,7 +86,7 @@ class Introduction {
                             this.hasEvokedEmotions = true
                             this.show()
                         }, 3000)
-                    }, 6000)
+                    }, 8000)
                 }, 1500)
             } else if (!this.hasEscaped) {
                 setInstruction('In veel gevallen kun je de confrontatie ontlopen...')
