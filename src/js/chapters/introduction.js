@@ -18,6 +18,7 @@ class Introduction {
         this.playerSphere = playerSphere
         this.player = player
         this.introThoughts = document.getElementsByClassName('intro-thought')
+        this.emotiveThought = document.querySelector('.intro-emotive')
 
         // Functions
         this.clickedPlayerHandler = this.completePlayerIntro.bind(this)
@@ -72,9 +73,14 @@ class Introduction {
                 setTimeout(() => {
                     setInstruction(' ')
                     changeEvenvironmentTheme(fases.angry)
+                    this.emotiveThought.components.sound.playSound();
+                    fadeAudioIn(this.emotiveThought, 0.8, 0);
+                    this.emotiveThought.emit('intro')
 
                     setTimeout(() => {
                         changeEvenvironmentTheme('normal')
+                        this.emotiveThought.emit('outro')
+                        fadeAudioOut(this.emotiveThought, 0, 2300);
 
                         setTimeout(() => {
                             this.hasEvokedEmotions = true
@@ -142,6 +148,8 @@ class Introduction {
         for (let thought of this.introThoughts) {
             thought.setAttribute('visible', true);
         }
+
+        this.emotiveThought.setAttribute('visible', true)
     }
 
     disable() {
@@ -156,10 +164,13 @@ class Introduction {
 
     quit() {
         currentChapter = chapters.running
+        runningTime = 0
 
         for (let thought of this.introThoughts) {
             thought.setAttribute('visible', false);
         }
+
+        this.emotiveThought.setAttribute('visible', false)
         
         setInstruction(' ')
         this.quitCallback()

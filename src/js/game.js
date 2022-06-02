@@ -77,7 +77,9 @@ let templateThoughtRight
 
 let numberOfThoughts = 0
 
-let RUNNING_TIME_BEFORE_REAL_OBSTACLES = 5000
+const RUNNING_TIME_BEFORE_EMOTIVE_OBSTACLES = 1000
+const RUNNING_TIME_BEFORE_TWO_EMOTIVE_OBSTACLES = 15000
+const RUNNING_TIME_BEFORE_ALL_EMOTIVE_OBSTACLES = 50000
 
 function setupThoughts() {
     templateThoughtLeft = document.getElementById('template-thought-left')
@@ -111,25 +113,47 @@ function addThoughtsRandomlyLoop() {
 function addThought(el) {
     numberOfThoughts += 1
 
-    if (runningTime > RUNNING_TIME_BEFORE_REAL_OBSTACLES) {
-        let obstacleType = obstacleTypesLeft[Math.floor(Math.random() * obstacleTypesLeft.length)]
-        let emotiveCloud = el.querySelector('.emotive-cloud')
-        let neutralCloud = el.querySelector('.neutral-cloud')
+    switch (true) {
+        case runningTime > RUNNING_TIME_BEFORE_ALL_EMOTIVE_OBSTACLES:
+            el = addObstacleToElement(el)
+            break
+        case runningTime > RUNNING_TIME_BEFORE_TWO_EMOTIVE_OBSTACLES:
+            if (Math.random() < 0.5) {
+                el = addObstacleToElement(el)
+            }
 
-        emotiveCloud.setAttribute('visible', true);
-        neutralCloud.setAttribute('visible', false)
+            break
+        case runningTime > RUNNING_TIME_BEFORE_EMOTIVE_OBSTACLES:
+            if (numberOfThoughts < 2 && Math.random() < 0.8) {
+                el = addObstacleToElement(el)
+            }
 
-        el.id = `thought-${numberOfThoughts}`
-        el.setAttribute('data-obstacle-type', obstacleType)
-        el.setAttribute('sound', {
-            src: `#${obstacleType}-thought`,
-            autoplay: true,
-            loop: true,
-            volume: 0,
-        })
+            break
+        default:
+            break
     }
 
     thoughtContainer.appendChild(el)
+}
+
+function addObstacleToElement(el) {
+    let obstacleType = obstacleTypesLeft[Math.floor(Math.random() * obstacleTypesLeft.length)]
+    let emotiveCloud = el.querySelector('.emotive-cloud')
+    let neutralCloud = el.querySelector('.neutral-cloud')
+
+    emotiveCloud.setAttribute('visible', true)
+    neutralCloud.setAttribute('visible', false)
+
+    el.id = `thought-${numberOfThoughts}`
+    el.setAttribute('data-obstacle-type', obstacleType)
+    el.setAttribute('sound', {
+        src: `#heartbeat`,
+        autoplay: true,
+        loop: true,
+        volume: 0.4,
+    })
+
+    return el
 }
 
 function addThoughtTo(position_index) {
@@ -433,7 +457,7 @@ function calculateAverageFromArray(array) {
 }
 
 function removeObject(obj) {
-    obj.parentNode.removeChild(obj);
+    obj.parentNode.removeChild(obj)
 }
 
 //#endregion

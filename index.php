@@ -50,6 +50,8 @@
         <audio id="sea" src="/src/sound/sea.wav" preload="auto"></audio>
         <audio id="sea_wild" src="/src/sound/sea_wild.mp3" preload="auto"></audio>
 
+        <audio id="heartbeat" src="/src/sound/heartbeat.wav" preload="auto"></audio>
+
         <audio
             id="experience-thought"
             src="/src/sound/factors/negative/experience.m4a"
@@ -62,7 +64,6 @@
             preload="true"
         ></audio>
         <audio id="mirror-thought" src="/src/sound/factors/negative/mirror.m4a" preload="auto"></audio>
-
         <audio
             id="experience-thought-reverb"
             src="/src/sound/factors/negative/experience-reverb.wav"
@@ -169,6 +170,18 @@
             position="-3 2 -18"
             class="intro-thought"
             animation__position="startEvents: intro; property: position; from: 3 2 -20; to: 3 2 5; dur: 10000; easing: linear;"
+        ></a-entity>
+
+        <a-entity
+            gltf-model="#emotive_cloud"
+            scale="2 2 2"
+            position="0 -2 -3"
+            class="intro-emotive"
+            animation__intro="startEvents: intro; property: position; from: 0 2 -20; to: 0 2 -3; dur: 2300; easing: easeOutQuad;"
+            animation__outro="startEvents: outro; property: position; from: 0 2 -3; to: 0 -2 -3; dur: 2300; easing: easeInOutQuad;"
+            animation__scale="startEvents: outro; property: scale; from: 2 2 2; to: 0 0 0; dur: 3000; easing: easeInOutQuad;"
+            animation__pulse="property: scale; from: 2 2 2; to: 2.3 2.3 2.3 2.3; loop: true; dur: 1000; easing: linear; dir: alternate"
+            sound="src: #heartbeat; volume: 0; loop: true;"
         ></a-entity>
     </a-entity>
 
