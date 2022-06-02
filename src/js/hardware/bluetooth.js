@@ -198,7 +198,6 @@ class BluetoothController {
     }
 
     receive(data) {
-        console.log(data)
         this.log(data, 'in')
         if (this.handleReceivedData) this.handleReceivedData(data)
     }

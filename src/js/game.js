@@ -108,13 +108,16 @@ function addThoughtsRandomlyLoop() {
     }, intervalLength)
 }
 
-
-
 function addThought(el) {
     numberOfThoughts += 1
 
     if (runningTime > RUNNING_TIME_BEFORE_REAL_OBSTACLES) {
         let obstacleType = obstacleTypesLeft[Math.floor(Math.random() * obstacleTypesLeft.length)]
+        let emotiveCloud = el.querySelector('.emotive-cloud')
+        let neutralCloud = el.querySelector('.neutral-cloud')
+
+        emotiveCloud.setAttribute('visible', true);
+        neutralCloud.setAttribute('visible', false)
 
         el.id = `thought-${numberOfThoughts}`
         el.setAttribute('data-obstacle-type', obstacleType)
