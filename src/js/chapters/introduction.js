@@ -74,13 +74,13 @@ class Introduction {
                     setInstruction(' ')
                     changeEvenvironmentTheme(fases.angry)
                     this.emotiveThought.components.sound.playSound();
-                    fadeAudioIn(this.emotiveThought, 0.8, 0);
+                    fadeAudioIn(this.emotiveThought, 1.5, 500);
                     this.emotiveThought.emit('intro')
 
                     setTimeout(() => {
                         changeEvenvironmentTheme('normal')
                         this.emotiveThought.emit('outro')
-                        fadeAudioOut(this.emotiveThought, 0, 2300);
+                        fadeAudioOut(this.emotiveThought, 0, 500);
 
                         setTimeout(() => {
                             this.hasEvokedEmotions = true
