@@ -18,6 +18,7 @@ class Introduction {
         this.playerSphere = playerSphere
         this.player = player
         this.introThoughts = document.getElementsByClassName('intro-thought')
+        this.emotiveThought = document.querySelector('.intro-emotive')
 
         // Functions
         this.clickedPlayerHandler = this.completePlayerIntro.bind(this)
@@ -72,15 +73,20 @@ class Introduction {
                 setTimeout(() => {
                     setInstruction(' ')
                     changeEvenvironmentTheme(fases.angry)
+                    this.emotiveThought.components.sound.playSound();
+                    fadeAudioIn(this.emotiveThought, 1.5, 500);
+                    this.emotiveThought.emit('intro')
 
                     setTimeout(() => {
                         changeEvenvironmentTheme('normal')
+                        this.emotiveThought.emit('outro')
+                        fadeAudioOut(this.emotiveThought, 0, 500);
 
                         setTimeout(() => {
                             this.hasEvokedEmotions = true
                             this.show()
                         }, 3000)
-                    }, 6000)
+                    }, 8000)
                 }, 1500)
             } else if (!this.hasEscaped) {
                 setInstruction('In veel gevallen kun je de confrontatie ontlopen...')
@@ -137,9 +143,13 @@ class Introduction {
         this.hasEvokedEmotions = false
         this.hasEscaped = false
 
+        controls.disable()
+
         for (let thought of this.introThoughts) {
             thought.setAttribute('visible', true);
         }
+
+        this.emotiveThought.setAttribute('visible', true)
     }
 
     disable() {
@@ -149,14 +159,18 @@ class Introduction {
         this.thoughtsHavePassed = true
         this.hasEvokedEmotions = true
         this.hasEscaped = true
+        controls.enable()
     }
 
     quit() {
         currentChapter = chapters.running
+        runningTime = 0
 
         for (let thought of this.introThoughts) {
             thought.setAttribute('visible', false);
         }
+
+        this.emotiveThought.setAttribute('visible', false)
         
         setInstruction(' ')
         this.quitCallback()

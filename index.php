@@ -34,17 +34,6 @@
     <a-assets id="assets">
         <!-- Mixins -->
         <a-mixin
-            id="foliage"
-            geometry="primitive: cone; segments-height: 1; segments-radial: 4; radius-bottom: 0.3"
-            material="color:white;flat-shading:true';"
-        ></a-mixin>
-        <a-mixin
-            id="trunk"
-            geometry="primitive:box; height:0.5; width: 0.1; depth: 0.1;"
-            material="color: white;"
-        ></a-mixin>
-        <a-mixin id="text" text="font: src/font/Exo2Bold.fnt; anchor:center;align:center;"></a-mixin>
-        <a-mixin
             id="title"
             text="font: src/font/Exo2Bold.fnt; height: 40; width: 40; opacity: 0.75; anchor: center; align: center"
         ></a-mixin>
@@ -61,6 +50,8 @@
         <audio id="sea" src="/src/sound/sea.wav" preload="auto"></audio>
         <audio id="sea_wild" src="/src/sound/sea_wild.mp3" preload="auto"></audio>
 
+        <audio id="heartbeat" src="/src/sound/heartbeat.wav" preload="auto"></audio>
+
         <audio
             id="experience-thought"
             src="/src/sound/factors/negative/experience.m4a"
@@ -73,7 +64,6 @@
             preload="true"
         ></audio>
         <audio id="mirror-thought" src="/src/sound/factors/negative/mirror.m4a" preload="auto"></audio>
-
         <audio
             id="experience-thought-reverb"
             src="/src/sound/factors/negative/experience-reverb.wav"
@@ -96,8 +86,8 @@
         ></audio>
 
         <!-- Models -->
-        <a-asset-item id="neutral_cloud1" src="/src/3d/neutral_cloud.gltf"></a-asset-item>
         <a-asset-item id="neutral_cloud" src="/src/3d/neutral_cloud_lower_poly.gltf"></a-asset-item>
+        <a-asset-item id="emotive_cloud" src="/src/3d/neutral_cloud_lower_poly_emotive.gltf"></a-asset-item>
     </a-assets>
 
     <!-- Lights -->
@@ -181,6 +171,18 @@
             class="intro-thought"
             animation__position="startEvents: intro; property: position; from: 3 2 -20; to: 3 2 5; dur: 10000; easing: linear;"
         ></a-entity>
+
+        <a-entity
+            gltf-model="#emotive_cloud"
+            scale="2 2 2"
+            position="0 -2 -3"
+            class="intro-emotive"
+            animation__intro="startEvents: intro; property: position; from: 0 2 -20; to: 0 2 -3; dur: 2300; easing: easeOutQuad;"
+            animation__outro="startEvents: outro; property: position; from: 0 2 -3; to: 0 -2 -3; dur: 2300; easing: easeInOutQuad;"
+            animation__scale="startEvents: outro; property: scale; from: 2 2 2; to: 0 0 0; dur: 3000; easing: easeInOutQuad;"
+            animation__pulse="property: scale; from: 2 2 2; to: 2.3 2.3 2.3 2.3; loop: true; dur: 1000; easing: linear; dir: alternate"
+            sound="src: #heartbeat; volume: 0; loop: true;"
+        ></a-entity>
     </a-entity>
 
     <!-- Platform -->
@@ -201,38 +203,43 @@
     >
         <a-entity id="thought-container" position="0 0 -1.5" rotation="-90 0 0">
             <!-- Thoughts -->
-
             <a-entity
-                gltf-model="#neutral_cloud"
                 id="template-thought-center"
                 shadow
-                scale="0.3 0.3 0.3"
-                position="0 0.6 0"
+                scale="0.2 0.2 0.2"
+                position="0 0.5 0"
                 class="thought"
                 data-thought-position-index="1"
                 animation__position="property: position; from: 0 0.6 -7; to: 0 0.6 2; dur: 5000; easing: linear;"
-            ></a-entity>
+            >
+                <a-entity class="neutral-cloud" gltf-model="#neutral_cloud"></a-entity>
+                <a-entity class="emotive-cloud" gltf-model="#emotive_cloud" visible="false"></a-entity>
+            </a-entity>
 
             <a-entity
                 id="template-thought-left"
-                shadow
-                gltf-model="#neutral_cloud"
-                scale="0.3 0.3 0.3"
-                position="-0.5 0.6 0"
+                shadow  
+                scale="0.2 0.2 0.2"
+                position="-0.5 0.5 0"
                 class="thought"
                 data-thought-position-index="0"
                 animation__position="property: position; from: -0.5 0.6 -7; to: -0.5 0.6 2; dur: 5000; easing: linear;"
-            ></a-entity>
+            >
+                <a-entity class="neutral-cloud" gltf-model="#neutral_cloud"></a-entity>
+                <a-entity class="emotive-cloud" gltf-model="#emotive_cloud" visible="false"></a-entity>
+            </a-entity>
             <a-entity
-                gltf-model="#neutral_cloud"
                 id="template-thought-right"
                 shadow
-                scale="0.3 0.3 0.3"
-                position="0.5 0.6 0"
+                scale="0.2 0.2 0.2"
+                position="0.5 0.5 0"
                 class="thought"
                 data-thought-position-index="2"
                 animation__position="property: position; from: 0.5 0.6 -7; to: 0.5 0.6 2; dur: 5000; easing: linear;"
-            ></a-entity>
+            >
+                <a-entity class="neutral-cloud" gltf-model="#neutral_cloud"></a-entity>
+                <a-entity class="emotive-cloud" gltf-model="#emotive_cloud" visible="false"></a-entity>
+            </a-entity>
 
             <!-- Menus -->
             <a-entity id="menu-container">
