@@ -64,23 +64,23 @@ class Introduction {
                 setInstruction('Gedachten komen langs je heen...')
 
                 setTimeout(() => {
-                    this.thoughtsHavePassed = true;
-                    this.show();
+                    this.thoughtsHavePassed = true
+                    this.show()
                 }, 10000)
             } else if (!this.hasEvokedEmotions) {
                 setInstruction('Sommigen veroorzaken specifieke emoties...')
 
                 setTimeout(() => {
                     setInstruction(' ')
-                    changeEvenvironmentTheme(fases.angry)
-                    this.emotiveThought.components.sound.playSound();
-                    fadeAudioIn(this.emotiveThought, 1.5, 500);
+                    environment.changeTheme(environment.Themes.storm)
+                    this.emotiveThought.components.sound.playSound()
+                    fadeAudioIn(this.emotiveThought, 1.5, 500)
                     this.emotiveThought.emit('intro')
 
                     setTimeout(() => {
-                        changeEvenvironmentTheme('normal')
+                        environment.changeTheme(environment.Themes.normal)
                         this.emotiveThought.emit('outro')
-                        fadeAudioOut(this.emotiveThought, 0, 500);
+                        fadeAudioOut(this.emotiveThought, 0, 500)
 
                         setTimeout(() => {
                             this.hasEvokedEmotions = true
@@ -146,7 +146,7 @@ class Introduction {
         controls.disable()
 
         for (let thought of this.introThoughts) {
-            thought.setAttribute('visible', true);
+            thought.setAttribute('visible', true)
         }
 
         this.emotiveThought.setAttribute('visible', true)
@@ -167,11 +167,11 @@ class Introduction {
         runningTime = 0
 
         for (let thought of this.introThoughts) {
-            thought.setAttribute('visible', false);
+            thought.setAttribute('visible', false)
         }
 
         this.emotiveThought.setAttribute('visible', false)
-        
+
         setInstruction(' ')
         this.quitCallback()
     }

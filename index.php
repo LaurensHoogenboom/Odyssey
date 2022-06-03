@@ -7,15 +7,10 @@
 <a-scene
     id="scene"
     fog="type: linear; color: #a3d0ed; near:5; far:20"
-    animation__normal="start-events: normal; easing: linear; property: fog.color; to: #a3d0ed; dur: 2300"
-    animation__normalFogDistance="start-events: normal; easing: linear; property: fog.far; to: 20; dur: 2300"
-    animation__angry="start-events: angry; easing: linear; property: fog.color; to: #1b3045; dur: 2300"
-    animation__afraidColor="start-events: afraid; easing: linear; property: fog.color; to: #25291C; dur: 2300"
-    animation__afraidFogDistance="start-events: afraid; easing: linear; property: fog.far; to: 7; dur: 2300"
-    animation__sunriseColor="start-events: sunrise; easing: linear; property: fog.color; to: #202D46; dur: 2300"
-    animation__sunriseFog="start-events: sunrise; easing: linear; property: fog.far; to: 20; dur: 2300"
+    animation__color= "start-events: color; easing: linear; property: fog.color; to: #a3d0ed; dur: 2300"
+    animation__fogDistance = "start-events: fogDistance; easing: linear; property: fog.far; to: 7; dur: 2300"
 >
-    <a-sky id="sky-normal" color="#a3d0ed"> </a-sky>
+    <a-sky color="#a3d0ed"> </a-sky>
 
     <!-- sun -->
     <a-entity
@@ -104,10 +99,7 @@
         type="ambient"
         color="#B4C5EC"
         id="ambient-light"
-        animation__angry="start-events: angry; easing: linear; property: color; to: #1b3045; dur: 2300"
-        animation__afraid="start-events: afraid; easing: linear; property: color; to: #25291C; dur: 2300"
-        animation__sunrise="start-events: sunrise; easing: linear; property: color; to: #202D46; dur: 2300"
-        animation__normal="start-events: normal; easing: linear; property: color; to: #a3d0ed; dur: 2300"
+        animation__color= "start-events: color; easing: linear; property: color; to: #1b3045; dur: 2300"
     ></a-light>
 
     <!-- Camera -->
