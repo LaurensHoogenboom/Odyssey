@@ -7,8 +7,8 @@
 <a-scene
     id="scene"
     fog="type: linear; color: #a3d0ed; near:5; far:20"
-    animation__color= "start-events: color; easing: linear; property: fog.color; to: #a3d0ed; dur: 2300"
-    animation__fogDistance = "start-events: fogDistance; easing: linear; property: fog.far; to: 7; dur: 2300"
+    animation__color="start-events: color; easing: linear; property: fog.color; to: #a3d0ed; dur: 2300"
+    animation__fogDistance="start-events: fogDistance; easing: linear; property: fog.far; to: 7; dur: 2300"
 >
     <a-sky color="#a3d0ed"> </a-sky>
 
@@ -46,8 +46,9 @@
         <audio id="sea_wild" src="/src/sound/sea_wild.mp3" preload="auto"></audio>
 
         <audio id="heartbeat" src="/src/sound/heartbeat.wav" preload="auto"></audio>
+        <audio id="explosion" src="/src/sound/explosion.wav" preload="auto"></audio>
 
-        <audio
+        <!-- <audio
             id="experience-thought"
             src="/src/sound/factors/negative/experience.m4a"
             preload="auto"
@@ -78,7 +79,7 @@
             id="mirror-thought-reverb"
             src="/src/sound/factors/negative/mirror-reverb.wav"
             preload="auto"
-        ></audio>
+        ></audio> -->
 
         <!-- Models -->
         <a-asset-item id="neutral_cloud" src="/src/3d/neutral_cloud_lower_poly.gltf"></a-asset-item>
@@ -99,11 +100,16 @@
         type="ambient"
         color="#B4C5EC"
         id="ambient-light"
-        animation__color= "start-events: color; easing: linear; property: color; to: #1b3045; dur: 2300"
+        animation__color="start-events: color; easing: linear; property: color; to: #1b3045; dur: 2300"
     ></a-light>
 
     <!-- Camera -->
-    <a-entity id="camera-container" position="0 0 0">
+    <a-entity
+        id="camera-container"
+        position="0 0 0"
+        animation__shake="startEvents: shake; property: rotation; from: 0 -10 0; to: 0 10 0; easing: linear"
+        sound="src: #explosion; volume: 1; loop: false;"
+    >
         <a-camera id="player-camera" position="0 1.5 2" look-controls="enabled: false" fov="100">
             <a-entity
                 id="cursor-mobile"
@@ -115,22 +121,9 @@
                 raycaster="far: 50; interval: 1000; objects: .clickable"
                 animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 150; from: 0.1 0.1 0.1; to: 0.5 0.5 0.5"
                 animation__fusing="property: scale; startEvents: fusing; easing: easeInCubic; dur: 750; from: 0.5 0.5 0.5; to: 0.1 0.1 0.1"
-                animation__shrink="property: scale; startEvents: mouseleave, stopBreath; easing: easeInCubic; dur: 500; to: 0.5 0.5 0.5"
-                animation__grow="property: scale; startEvents: startBreath; easing: easeInCubic; dur: 500; to: 1.0 1.0 1.0"
-            ></a-entity>
-
-            <a-entity
-                id="cursor-fill"
-                position="0 0 -1"
-                geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03; thetaStart: 90"
-                material="color: red; shader: flat"
-                scale="0.5 0.5 0.5"
-                rotation="0 180 0"
-                animation__fill="property: geometry.thetaLength; startEvents: breath; easing: easeInCubic; dur: 500; from: 0 to: 360"
             ></a-entity>
 
             <!-- Instructions -->
-
             <a-text
                 id="instruction"
                 value="Draai je hoofd naar links en rechts om de speler te bewegen, en de obstakels te ontwijken!"
@@ -203,6 +196,7 @@
                 class="thought"
                 data-thought-position-index="1"
                 animation__position="property: position; from: 0 0.6 -7; to: 0 0.6 2; dur: 5000; easing: linear;"
+                animation__pulse="property: scale; from: 0.2 0.2 0.2; to: 0.3 0.3 0.3; loop: true; dur: 500; easing: linear; dir: alternate; startEvents: pulse"
             >
                 <a-entity class="neutral-cloud" gltf-model="#neutral_cloud"></a-entity>
                 <a-entity class="emotive-cloud" gltf-model="#emotive_cloud" visible="false"></a-entity>
@@ -210,12 +204,13 @@
 
             <a-entity
                 id="template-thought-left"
-                shadow  
+                shadow
                 scale="0.2 0.2 0.2"
                 position="-0.5 0.5 0"
                 class="thought"
                 data-thought-position-index="0"
                 animation__position="property: position; from: -0.5 0.6 -7; to: -0.5 0.6 2; dur: 5000; easing: linear;"
+                animation__pulse="property: scale; from: 0.2 0.2 0.2; to: 0.3 0.3 0.3; loop: true; dur: 500; easing: linear; dir: alternate; startEvents: pulse"
             >
                 <a-entity class="neutral-cloud" gltf-model="#neutral_cloud"></a-entity>
                 <a-entity class="emotive-cloud" gltf-model="#emotive_cloud" visible="false"></a-entity>
@@ -228,6 +223,7 @@
                 class="thought"
                 data-thought-position-index="2"
                 animation__position="property: position; from: 0.5 0.6 -7; to: 0.5 0.6 2; dur: 5000; easing: linear;"
+                animation__pulse="property: scale; from: 0.2 0.2 0.2; to: 0.3 0.3 0.3; loop: true; dur: 500; easing: linear; dir: alternate; startEvents: pulse"
             >
                 <a-entity class="neutral-cloud" gltf-model="#neutral_cloud"></a-entity>
                 <a-entity class="emotive-cloud" gltf-model="#emotive_cloud" visible="false"></a-entity>

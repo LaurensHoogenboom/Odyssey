@@ -25,6 +25,22 @@ class Confrontation {
         this.OBSTACLE_MAX_SCALE = { x: 2, y: 2, z: 2 }
         this.OBSTACLE_VOLUMES = [12, 8, 8]
 
+        this.ANGER_START_POSITION = {
+            x: 0,
+            y: 1,
+            z: 0.5,
+        }
+        this.ANGER_EXPLODED_POSITION = {
+            x: 0,
+            y: 1.3,
+            z: -2,
+        }
+        this.ANGER_EXPLODED_SCALE = {
+            x: 1.8,
+            y: 1.8,
+            z: 1.8,
+        }
+
         // Fases
         this.fases = Object.freeze({ angry: 'angry', afraid: 'afraid' })
         this.currentFase = this.fases.angry
@@ -39,7 +55,7 @@ class Confrontation {
         )
     }
 
-    //#region Setup
+    //#region Start
 
     start(obstacleToConfrontWith, fase = this.fases.angry) {
         // Global stuff
@@ -61,16 +77,16 @@ class Confrontation {
 
         // Change environment
         if (this.currentFase == this.fases.angry) {
-            environment.changeTheme(environment.Themes.storm)
+            environment.changeColor(environment.Colors.blueStorm, 2000)
         } else {
             environment.changeTheme(environment.Themes.scaryStorm)
         }
 
         // Start Emotion Handling
         setTimeout(() => {
-            if (this.currentFase == this.fases.angry) this.handleAnger()
+            if (this.currentFase == this.fases.angry) this.startAnger()
             if (this.currentFase == this.fases.afraid) this.handleFear()
-        }, 2000)
+        }, 1000)
     }
 
     addDuplicateObstacle(obstacle) {
@@ -80,37 +96,76 @@ class Confrontation {
     }
 
     focusObstacles() {
-        // Change position and scale
-        this.obstacleConfrontationCache.forEach((obstacle, index) => {
-            let focusedPosition = this.ObstaclePositions[index]
-            this.adjustObstaclePosition(obstacle, focusedPosition, 2300, 0)
-        })
+        // Anger position
+        if (this.currentFase == this.fases.angry) {
+            const obstacle = this.obstacleConfrontationCache[0]
+            this.adjustObstaclePosition(obstacle, this.ANGER_START_POSITION, 1000, 0)
+        }
 
-        this.obstacleConfrontationCache.forEach((obstacle, index) => {
-            let foccusedScale = this.OBSTACLE_MAX_SCALE
-            this.adjustObstacleScale(obstacle, foccusedScale, 2300, 0)
-        })
+        // Fear position
+        if (this.currentFase == this.fases.afraid) {
+            this.obstacleConfrontationCache.forEach((obstacle, index) => {
+                let focusedPosition = this.ObstaclePositions[index]
+                this.adjustObstaclePosition(obstacle, focusedPosition, 1000, 0)
+            })
+
+            this.obstacleConfrontationCache.forEach((obstacle, index) => {
+                let foccusedScale = this.OBSTACLE_MAX_SCALE
+                this.adjustObstacleScale(obstacle, foccusedScale, 1000, 0)
+            })
+        }
 
         // Change sound
         this.obstacleConfrontationCache.forEach((obstacle, index) => {
-            let confrontationObstacleType = obstacle.getAttribute('data-obstacle-type')
-
-            setTimeout(() => {
-                setTimeout(() => {
-                    obstacle.setAttribute('sound', {
-                        src: `#${confrontationObstacleType}-thought-reverb`,
-                        autoplay: true,
-                        loop: true,
-                        volume: this.OBSTACLE_VOLUMES[index],
-                    })
-                }, 2000)
-            })
+            //let confrontationObstacleType = obstacle.getAttribute('data-obstacle-type')
+            // setTimeout(() => {
+            //     setTimeout(() => {
+            //         obstacle.setAttribute('sound', {
+            //             src: `#${confrontationObstacleType}-thought-reverb`,
+            //             autoplay: true,
+            //             loop: true,
+            //             volume: this.OBSTACLE_VOLUMES[index],
+            //         })
+            //     }, 2000)
+            // })
         })
     }
 
     //#endregion
 
     //#region Anger
+
+    startAnger() {
+        const obstacle = this.obstacleConfrontationCache[0]
+
+        // 1. Build up
+        fadeAudioIn(obstacle, 4, 4000)
+        obstacle.emit('pulse')
+
+        // 2. Earthquake
+        setTimeout(() => {
+            environment.earthquake()
+
+            // 3. Grow and storm
+            setTimeout(() => {
+                fadeAudioIn(obstacle, 6, 3000)
+                this.adjustObstacleScale(obstacle, this.ANGER_EXPLODED_SCALE, 1500)
+                this.adjustObstaclePosition(obstacle, this.ANGER_EXPLODED_POSITION, 1500)
+                environment.changeTheme(environment.Themes.storm)
+                environment.changeColor(environment.Colors.redStorm)
+
+                setTimeout(() => {
+                    obstacle.setAttribute('animation__pulse', 'from', '1.8 1.8 1.8')
+                    obstacle.setAttribute('animation__pulse', 'to', '2 2 2')
+                    obstacle.emit('pulse')
+                }, 1500);
+            }, 400)
+
+            setTimeout(() => {
+                this.handleAnger()
+            }, 5000)
+        }, 4000)
+    }
 
     handleAnger() {
         btDataMessageHandlers.push(this.changeObstacleSizeOnStress.bind(this))
@@ -297,25 +352,26 @@ class Confrontation {
 
     quitFear() {
         this.currentFase = this.fases.angry
-        let handledObstacleType = this.obstacleConfrontationCache[0].getAttribute('data-obstacle-type')
-    
+        let handledObstacleType =
+            this.obstacleConfrontationCache[0].getAttribute('data-obstacle-type')
+
         this.obstacleConfrontationCache.forEach((obstacle) => {
             fadeAudioOut(obstacle, 0.0, 500)
             setTimeout(() => {
                 removeObject(obstacle)
             }, 500)
         })
-    
+
         this.obstacleConfrontationCache = []
-    
+
         this.switchToNextChapter(handledObstacleType)
     }
 
-    switchToNextChapter (handledObstacleType) {
+    switchToNextChapter(handledObstacleType) {
         const index = obstacleTypesLeft.indexOf(handledObstacleType)
         obstacleTypesLeft.splice(index, 1)
         environment.changeTheme(environment.Themes.normal)
-    
+
         if (obstacleTypesLeft.length > 0) {
             controls.enable()
             currentChapter = chapters.running
