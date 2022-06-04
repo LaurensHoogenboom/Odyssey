@@ -12,10 +12,11 @@
         <script src="/src/js/components/low-poly.js"></script>
         <script src="/src/js/components/ocean.js"></script>
         <script src="/src/js/components/animation-timeline.js"></script>
+        <script src="/src/js/components/rain.js"></script>
         <script src="/src/js/hardware/bluetooth.js"></script>
         <script src="/src/js/hardware/sensorConfiguration.js"></script>
         <script src="/src/js/models/breathState.js"></script>
-        <script src="/src/js/chapters/environment.js"></script>
+        <script src="/src/js/environment.js"></script>
         <script src="/src/js/chapters/introduction.js"></script>
         <script src="/src/js/chapters/relieve.js"></script>
         <script src="/src/js/chapters/confrontation.js"></script>

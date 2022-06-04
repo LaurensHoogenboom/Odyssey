@@ -10,20 +10,7 @@
     animation__color="start-events: color; easing: linear; property: fog.color; to: #a3d0ed; dur: 2300"
     animation__fogDistance="start-events: fogDistance; easing: linear; property: fog.far; to: 7; dur: 2300"
 >
-    <a-sky color="#a3d0ed"> </a-sky>
-
-    <!-- sun -->
-    <a-entity
-        id="sun"
-        geometry="primitive: circle"
-        material="blending: additive; opacity: 0.4;"
-        scale="3 3 3"
-        position="0 -3 -10"
-        animation__position="property: position; from: 0 -3 -10; to: 0 3 -10; dur: 2300; easing: linear; start-events: move"
-        animation__scale="property: scale; from: 1 1 1; to: 1 1 1; dur: 2300; easing: linear; start-events: grow"
-        animation__hide="property: material.opacity; from: 0.4; to: 0; dur: 2300; easing: linear; start-events: hide"
-        animation__show="property: material.opacity; from: 0; to: 0.4; dur: 2300; easing: linear; start-events: show"
-    ></a-entity>
+    <a-entity particle-system="preset: rain"></a-entity>
 
     <!-- Assets -->
     <a-assets id="assets">
@@ -44,47 +31,30 @@
         <!-- Audio -->
         <audio id="sea" src="/src/sound/sea.wav" preload="auto"></audio>
         <audio id="sea_wild" src="/src/sound/sea_wild.mp3" preload="auto"></audio>
+        <audio id="thunder" src="/src/sound/thunder.wav" preload="auto"></audio>
 
         <audio id="heartbeat" src="/src/sound/heartbeat.wav" preload="auto"></audio>
         <audio id="explosion" src="/src/sound/explosion.wav" preload="auto"></audio>
-
-        <!-- <audio
-            id="experience-thought"
-            src="/src/sound/factors/negative/experience.m4a"
-            preload="auto"
-        ></audio>
-        <audio id="feedback-thought" src="/src/sound/factors/negative/feedback.m4a" preload="auto"></audio>
-        <audio
-            id="imagination-thought"
-            src="/src/sound/factors/negative/imagination.m4a"
-            preload="true"
-        ></audio>
-        <audio id="mirror-thought" src="/src/sound/factors/negative/mirror.m4a" preload="auto"></audio>
-        <audio
-            id="experience-thought-reverb"
-            src="/src/sound/factors/negative/experience-reverb.wav"
-            preload="auto"
-        ></audio>
-        <audio
-            id="feedback-thought-reverb"
-            src="/src/sound/factors/negative/feedback-reverb.wav"
-            preload="auto"
-        ></audio>
-        <audio
-            id="imagination-thought-reverb"
-            src="/src/sound/factors/negative/imagination-reverb.wav"
-            preload="auto"
-        ></audio>
-        <audio
-            id="mirror-thought-reverb"
-            src="/src/sound/factors/negative/mirror-reverb.wav"
-            preload="auto"
-        ></audio> -->
 
         <!-- Models -->
         <a-asset-item id="neutral_cloud" src="/src/3d/neutral_cloud_lower_poly.gltf"></a-asset-item>
         <a-asset-item id="emotive_cloud" src="/src/3d/neutral_cloud_lower_poly_emotive.gltf"></a-asset-item>
     </a-assets>
+
+    <a-sky id="sky" color="#a3d0ed" sound="src: #thunder; positional: false; loop: true; volume:0;"> </a-sky>
+
+    <!-- sun -->
+    <a-entity
+        id="sun"
+        geometry="primitive: circle"
+        material="blending: additive; opacity: 0.4;"
+        scale="3 3 3"
+        position="0 -3 -10"
+        animation__position="property: position; from: 0 -3 -10; to: 0 3 -10; dur: 2300; easing: linear; start-events: move"
+        animation__scale="property: scale; from: 1 1 1; to: 1 1 1; dur: 2300; easing: linear; start-events: grow"
+        animation__hide="property: material.opacity; from: 0.4; to: 0; dur: 2300; easing: linear; start-events: hide"
+        animation__show="property: material.opacity; from: 0; to: 0.4; dur: 2300; easing: linear; start-events: show"
+    ></a-entity>
 
     <!-- Lights -->
     <a-entity

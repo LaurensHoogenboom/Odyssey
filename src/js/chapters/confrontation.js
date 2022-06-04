@@ -1,33 +1,11 @@
 class Confrontation {
     constructor() {
-        // Obstacle
-        this.obstacleConfrontationCache = []
-        this.ObstaclePositions = [
-            // FRONT
-            {
-                x: 0,
-                y: 1.8,
-                z: -1,
-            },
-            // LEFT
-            {
-                x: -1.5,
-                y: 1.6,
-                z: -1,
-            },
-            // RIGHT
-            {
-                x: 1.5,
-                y: 1.6,
-                z: -1,
-            },
-        ]
-        this.OBSTACLE_MAX_SCALE = { x: 2, y: 2, z: 2 }
-        this.OBSTACLE_VOLUMES = [12, 8, 8]
+        //#region Anger Constants
+        this.currentAngerStep = 0
 
         this.ANGER_START_POSITION = {
             x: 0,
-            y: 1,
+            y: 0.7,
             z: 0.5,
         }
         this.ANGER_EXPLODED_POSITION = {
@@ -40,6 +18,41 @@ class Confrontation {
             y: 1.8,
             z: 1.8,
         }
+        this.ANGER_SCALE_STEPS = [
+            { x: 1.3, y: 1.3, z: 1.3 },
+            { x: 0.9, y: 0.9, z: 0.9 },
+            { x: 0.6, y: 0.6, z: 0.6 },
+        ]
+
+        //#endregion
+
+        //#region Fear Constants
+
+        this.obstacleConfrontationCache = []
+        this.ObstaclePositions = [
+            // FRONT
+            {
+                x: 0,
+                y: 1.5,
+                z: -1,
+            },
+            // LEFT
+            {
+                x: -3,
+                y: 1.5,
+                z: 0.75,
+            },
+            // RIGHT
+            {
+                x: 3,
+                y: 1.5,
+                z: 0.75,
+            },
+        ]
+        this.OBSTACLE_MAX_SCALE = { x: 1.8, y: 1.8, z: 1.8 }
+        this.OBSTACLE_VOLUMES = [12, 8, 8]
+
+        //#endregion
 
         // Fases
         this.fases = Object.freeze({ angry: 'angry', afraid: 'afraid' })
@@ -114,21 +127,6 @@ class Confrontation {
                 this.adjustObstacleScale(obstacle, foccusedScale, 1000, 0)
             })
         }
-
-        // Change sound
-        this.obstacleConfrontationCache.forEach((obstacle, index) => {
-            //let confrontationObstacleType = obstacle.getAttribute('data-obstacle-type')
-            // setTimeout(() => {
-            //     setTimeout(() => {
-            //         obstacle.setAttribute('sound', {
-            //             src: `#${confrontationObstacleType}-thought-reverb`,
-            //             autoplay: true,
-            //             loop: true,
-            //             volume: this.OBSTACLE_VOLUMES[index],
-            //         })
-            //     }, 2000)
-            // })
-        })
     }
 
     //#endregion
@@ -139,31 +137,33 @@ class Confrontation {
         const obstacle = this.obstacleConfrontationCache[0]
 
         // 1. Build up
-        fadeAudioIn(obstacle, 4, 4000)
+        fadeAudioIn(obstacle, 6, 4000)
         obstacle.emit('pulse')
 
-        // 2. Earthquake
+        // 2. Explode
         setTimeout(() => {
             environment.earthquake()
+            fadeAudioIn(sky, 5, 500, 500)
 
             // 3. Grow and storm
             setTimeout(() => {
                 fadeAudioIn(obstacle, 6, 3000)
+
                 this.adjustObstacleScale(obstacle, this.ANGER_EXPLODED_SCALE, 1500)
                 this.adjustObstaclePosition(obstacle, this.ANGER_EXPLODED_POSITION, 1500)
-                environment.changeTheme(environment.Themes.storm)
-                environment.changeColor(environment.Colors.redStorm)
+                environment.changeTheme(environment.Themes.storm, environment.Colors.redStorm)
 
                 setTimeout(() => {
                     obstacle.setAttribute('animation__pulse', 'from', '1.8 1.8 1.8')
-                    obstacle.setAttribute('animation__pulse', 'to', '2 2 2')
+                    obstacle.setAttribute('animation__pulse', 'to', '2.2 2.2 2.2')
+                    obstacle.setAttribute('animation__pulse', 'dur', 250)
                     obstacle.emit('pulse')
-                }, 1500);
+                }, 1500)
             }, 400)
 
             setTimeout(() => {
                 this.handleAnger()
-            }, 5000)
+            }, 3000)
         }, 4000)
     }
 
@@ -183,7 +183,7 @@ class Confrontation {
                 clearInterval(configurationInterval)
                 removeBtMessageHandler(this.changeObstacleSizeOnStress.bind(this))
             }
-        }, 200)
+        }, 500)
     }
 
     changeObstacleSizeOnStress(
@@ -199,49 +199,73 @@ class Confrontation {
         if (label != 'ANGER') return
 
         this.obstacleConfrontationCache.forEach((obstacle) => {
-            let oldScale = obstacle.getAttribute('scale')
-            let newScale = oldScale
-            let oldPosition = obstacle.getAttribute('position')
-            let newPosition = oldPosition
+            const oldScale = obstacle.getAttribute('scale')
+            const oldPosition = obstacle.getAttribute('position')
 
             // User is pressing
             if (value > shrinkThreshold) {
-                newScale = {
-                    x: 0.95 * oldScale.x,
-                    y: 0.95 * oldScale.y,
-                    z: 0.95 * oldScale.z,
-                }
+                const from = `${oldScale.x} ${oldScale.y} ${oldScale.z}`
+                const to = `${oldScale.x * 0.8} ${oldScale.y * 0.8} ${oldScale.z * 0.8}`
+                const newPosition = { x: oldPosition.x, y: oldPosition.y * 0.97, z: oldPosition.z }
 
-                newPosition.y = 0.95 * oldPosition.y
+                obstacle.setAttribute('animation__pulse', 'from', from)
+                obstacle.setAttribute('animation__pulse', 'to', to)
+                obstacle.emit('pulse')
+                this.adjustObstaclePosition(obstacle, newPosition, 250, 0)
             }
 
             // User is releasing
-            if (value < growThreshold && newScale.z < this.OBSTACLE_MAX_SCALE.z) {
-                newScale = {
-                    x: 1.05 * oldScale.x,
-                    y: 1.05 * oldScale.y,
-                    z: 1.05 * oldScale.z,
-                }
+            if (
+                value < growThreshold &&
+                oldScale.z < this.ANGER_SCALE_STEPS[this.currentAngerStep].z
+            ) {
+                const from = `${oldScale.x} ${oldScale.y} ${oldScale.z}`
+                const to = `${oldScale.x * 1.1} ${oldScale.y * 1.1} ${oldScale.z * 1.1}`
+                const newPosition = { x: oldPosition.x, y: oldPosition.y * 1.1, z: oldPosition.z }
 
-                newPosition.y = 1.05 * oldPosition.y
+                obstacle.setAttribute('animation__pulse', 'from', from)
+                obstacle.setAttribute('animation__pulse', 'to', to)
+                obstacle.emit('pulse')
+                this.adjustObstaclePosition(obstacle, newPosition, 250, 0)
             }
 
-            // Apply new scale and position
-            this.adjustObstaclePosition(obstacle, newPosition, 250, 0)
-            this.adjustObstacleScale(obstacle, newScale, 250, 0)
-
-            // Anger destroyed
-            if (newScale.z <= 0.5) {
+            // Toggle step or quit
+            if (oldScale.z <= 0.5) {
                 this.quitAnger()
+            } else if (
+                this.currentAngerStep < this.ANGER_SCALE_STEPS.length - 1 &&
+                oldScale.z < this.ANGER_SCALE_STEPS[this.currentAngerStep].z
+            ) {
+                this.currentAngerStep++
+                environment.earthquake()
             }
         })
     }
 
     quitAnger() {
+        // Set fase
         this.currentFase = this.fases.afraid
-        let mainObstacle = this.obstacleConfrontationCache[0]
+        const mainObstacle = this.obstacleConfrontationCache[0]
         this.obstacleConfrontationCache = []
-        this.start(mainObstacle, this.currentFase)
+        this.currentAngerStep = 0
+
+        // Set position
+        const oldPosition = mainObstacle.getAttribute('position')
+        const newPosition = { x: oldPosition.x, y: -3, z: oldPosition.z }
+        this.adjustObstaclePosition(mainObstacle, newPosition, 250, 0)
+
+        // Adjust environment
+        environment.earthquake()
+        fadeAudioOut(sky, 0, 500)
+
+        setTimeout(() => {
+            environment.changeTheme(environment.Themes.storm, environment.Colors.blueStorm)
+            environment.startRain()
+
+            setTimeout(() => {
+                this.start(mainObstacle, this.currentFase)
+            }, 10000)
+        }, 250)
     }
 
     //#endregion
@@ -364,6 +388,8 @@ class Confrontation {
 
         this.obstacleConfrontationCache = []
 
+        environment.stopRain();
+
         this.switchToNextChapter(handledObstacleType)
     }
 
@@ -388,7 +414,7 @@ class Confrontation {
     //#region Modification
 
     adjustObstaclePosition(obstacle, position, duration, delay) {
-        let oldPosition = obstacle.getAttribute('position')
+        const oldPosition = obstacle.getAttribute('position')
 
         obstacle.setAttribute(`animation__position`, {
             property: 'position',
@@ -402,7 +428,7 @@ class Confrontation {
     }
 
     adjustObstacleScale = (obstacle, scale, duration, delay) => {
-        let oldScale = obstacle.getAttribute('scale')
+        const oldScale = obstacle.getAttribute('scale')
 
         obstacle.setAttribute(`animation__size`, {
             property: 'scale',
