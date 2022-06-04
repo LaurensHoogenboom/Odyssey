@@ -304,7 +304,7 @@ function gameOver() {
     round = 0
     intervalLength = 2000
     currentChapter = chapters.introduction
-
+    controls.enable()
     introduction.reset()
     muteAllThoughts()
     hideInstruction()

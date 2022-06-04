@@ -33,19 +33,19 @@ class Confrontation {
             // FRONT
             {
                 x: 0,
-                y: 1.5,
+                y: 2,
                 z: -1,
             },
             // LEFT
             {
-                x: -2,
-                y: 1.5,
+                x: -2.5,
+                y: 2,
                 z: 0.5,
             },
             // RIGHT
             {
-                x: 2,
-                y: 1.5,
+                x: 2.5,
+                y: 2,
                 z: 0.5,
             },
         ]
@@ -100,7 +100,7 @@ class Confrontation {
         setTimeout(() => {
             if (this.currentFase == this.fases.angry) this.startAnger()
             if (this.currentFase == this.fases.afraid) this.handleFear()
-        }, 1000)
+        }, 2000)
     }
 
     addDuplicateObstacle(obstacle) {
@@ -120,6 +120,7 @@ class Confrontation {
         if (this.currentFase == this.fases.afraid) {
             this.obstacleConfrontationCache.forEach((obstacle, index) => {
                 let focusedPosition = this.ObstaclePositions[index]
+
                 this.adjustObstaclePosition(obstacle, focusedPosition, 2000, 0)
             })
 
@@ -255,8 +256,6 @@ class Confrontation {
         const newPosition = { x: oldPosition.x, y: -3, z: oldPosition.z }
         this.adjustObstaclePosition(mainObstacle, newPosition, 250, 0)
 
-        
-
         // Adjust environment
         environment.earthquake()
         environment.stopThunder()
@@ -324,7 +323,7 @@ class Confrontation {
             } else {
                 clearInterval(swapObstacles)
             }
-        }, 1500)
+        }, 1000)
     }
 
     changeObstacleSizeOnBreath(data) {
@@ -383,7 +382,7 @@ class Confrontation {
     }
 
     quitFear() {
-        environment.stopRain(environment.Colors.blueDay);
+        environment.stopRain();
 
         this.obstacleConfrontationCache.forEach((obstacle) => {
             removeObject(obstacle)
@@ -395,11 +394,11 @@ class Confrontation {
     }
 
     switchToNextChapter() {
-        environment.changeTheme(environment.Themes.normal)
-
-        if (round > 2) {
+        if (round > 3) {
+            environment.changeTheme(environment.Themes.sunrise)
             startRelieve();
         } else {
+            environment.changeTheme(environment.Themes.normal)
             controls.enable()
             currentChapter = chapters.running
             runningTime = 0

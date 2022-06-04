@@ -4,13 +4,6 @@
     ==============
 */
 
-/*
-    TODO:
-    1. move directional light to center
-    3. bird sounds
-    4. music
-*/
-
 let currentSunriseIndex = 0
 let sunriseColors = [
     '#202D46',
@@ -47,7 +40,6 @@ let sun
 
 const startRelieveDemo = () => {
     hideAllMenus()
-    setupEnvironment()
     startRelieve()
 }
 
@@ -70,9 +62,6 @@ const startRelieve = (
     // Get sun
     sun = document.getElementById('sun')
     sun.emit('show')
-
-    // Change environment
-    changeEvenvironmentTheme(chapters.relieve)
 
     // Start emotion handling
     setTimeout(() => {
@@ -114,7 +103,7 @@ const changeSunriseOnBreath = (data) => {
 
         currentSunriseIndex++
         let newColor = sunriseColors[currentSunriseIndex]
-        changeEvenvironmentTheme(chapters.relieve, newColor)
+        environment.changeColor(newColor)
         changeSunPosition(currentSunriseIndex)
         changeSunScale(currentSunriseIndex)
     }
