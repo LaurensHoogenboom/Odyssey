@@ -229,8 +229,8 @@ class Environment {
 
         setTimeout(() => {
             this.scene.setAttribute('rain', '')
-            fadeAudioIn(this.rainSound, 0.5, 500)
-        }, color ? 2000 : 0)
+            fadeAudioIn(this.rainSound, 0.75, 500)
+        }, color ? 1000 : 0)
     }
 
     stopRain(color = undefined) {
@@ -239,6 +239,6 @@ class Environment {
 
         setTimeout(() => {
             if (color) this.changeColor(color);
-        }, 2000)
+        }, 1000)
     }
 }

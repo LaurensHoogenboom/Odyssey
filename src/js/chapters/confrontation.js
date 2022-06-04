@@ -38,13 +38,13 @@ class Confrontation {
             },
             // LEFT
             {
-                x: -2.5,
+                x: -2,
                 y: 2,
                 z: 0.5,
             },
             // RIGHT
             {
-                x: 2.5,
+                x: 2,
                 y: 2,
                 z: 0.5,
             },
@@ -91,7 +91,7 @@ class Confrontation {
 
         // Change environment
         if (this.currentFase == this.fases.angry) {
-            environment.changeColor(environment.Colors.blueStorm, 2000)
+            environment.changeColor(environment.Colors.blueStorm)
         } else {
             environment.changeTheme(environment.Themes.scaryStorm)
         }
@@ -291,8 +291,8 @@ class Confrontation {
             250
         )
         btDataMessageHandlers.push(this.changeObstacleSizeOnBreath.bind(this))
-        setInstruction('Haal diep en langzaam adem.')
 
+        setInstruction('Haal diep en langzaam adem.')
         setTimeout(() => {
             hideInstruction()
         }, 5000)
