@@ -21,6 +21,7 @@ class Environment {
             blueDay: '#a3d0ed',
             blueNight: '#202D46',
             blueStorm: '#1b3045',
+            blueRain: '#233A48',
             redStorm: '#401F11',
             greenStorm: '#25291C',
         })
@@ -36,8 +37,11 @@ class Environment {
 
         // Scene
         this.scene = document.getElementById('scene')
-        this.sky = document.getElementById('sky')
         this.ambientLight = document.getElementById('ambient-light')
+
+        // Sound
+        this.thunderSound = document.getElementById('thunder-sound')
+        this.rainSound = document.getElementById('rain-sound')
 
         // Ocean
         this.oceanWrapper = document.getElementById('ocean-wrapper')
@@ -53,7 +57,8 @@ class Environment {
         this.oceanNormal.components.sound.playSound()
         this.oceanWild.components.sound.playSound()
         this.oceanScary.components.sound.playSound()
-        this.sky.components.sound.playSound()
+        this.rainSound.components.sound.playSound()
+        this.thunderSound.components.sound.playSound()
     }
 
     changeTheme(theme, color) {
@@ -211,11 +216,29 @@ class Environment {
         shake()
     }
 
-    startRain() {
-        this.scene.setAttribute('rain', '')
+    startThunder() {
+        fadeAudioIn(this.thunderSound, 5, 500)
     }
 
-    stopRain() {
+    stopThunder() {
+        fadeAudioOut(this.thunderSound, 0, 500)
+    }
+
+    startRain(color = undefined) {
+        if (color) this.changeColor(color);
+
+        setTimeout(() => {
+            this.scene.setAttribute('rain', '')
+            fadeAudioIn(this.rainSound, 0.5, 500)
+        }, color ? 2000 : 0)
+    }
+
+    stopRain(color = undefined) {
         this.scene.removeAttribute('rain')
+        fadeAudioOut(this.rainSound, 0, 500)
+
+        setTimeout(() => {
+            if (color) this.changeColor(color);
+        }, 2000)
     }
 }

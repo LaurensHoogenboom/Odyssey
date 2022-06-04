@@ -38,15 +38,15 @@ class Confrontation {
             },
             // LEFT
             {
-                x: -3,
+                x: -2,
                 y: 1.5,
-                z: 0.75,
+                z: 0.5,
             },
             // RIGHT
             {
-                x: 3,
+                x: 2,
                 y: 1.5,
-                z: 0.75,
+                z: 0.5,
             },
         ]
         this.OBSTACLE_MAX_SCALE = { x: 1.8, y: 1.8, z: 1.8 }
@@ -75,6 +75,7 @@ class Confrontation {
         this.currentFase = fase
         currentChapter = chapters.confrontation
         controls.disable()
+        round++;
 
         // Setup obstacle(s)
         this.obstacleConfrontationCache.push(obstacleToConfrontWith)
@@ -112,19 +113,19 @@ class Confrontation {
         // Anger position
         if (this.currentFase == this.fases.angry) {
             const obstacle = this.obstacleConfrontationCache[0]
-            this.adjustObstaclePosition(obstacle, this.ANGER_START_POSITION, 1000, 0)
+            this.adjustObstaclePosition(obstacle, this.ANGER_START_POSITION, 2000, 0)
         }
 
         // Fear position
         if (this.currentFase == this.fases.afraid) {
             this.obstacleConfrontationCache.forEach((obstacle, index) => {
                 let focusedPosition = this.ObstaclePositions[index]
-                this.adjustObstaclePosition(obstacle, focusedPosition, 1000, 0)
+                this.adjustObstaclePosition(obstacle, focusedPosition, 2000, 0)
             })
 
             this.obstacleConfrontationCache.forEach((obstacle, index) => {
                 let foccusedScale = this.OBSTACLE_MAX_SCALE
-                this.adjustObstacleScale(obstacle, foccusedScale, 1000, 0)
+                this.adjustObstacleScale(obstacle, foccusedScale, 2000, 0)
             })
         }
     }
@@ -143,11 +144,11 @@ class Confrontation {
         // 2. Explode
         setTimeout(() => {
             environment.earthquake()
-            fadeAudioIn(sky, 5, 500, 500)
+            environment.startThunder()
 
             // 3. Grow and storm
             setTimeout(() => {
-                fadeAudioIn(obstacle, 6, 3000)
+                fadeAudioIn(obstacle, 8, 3000)
 
                 this.adjustObstacleScale(obstacle, this.ANGER_EXPLODED_SCALE, 1500)
                 this.adjustObstaclePosition(obstacle, this.ANGER_EXPLODED_POSITION, 1500)
@@ -205,7 +206,7 @@ class Confrontation {
             // User is pressing
             if (value > shrinkThreshold) {
                 const from = `${oldScale.x} ${oldScale.y} ${oldScale.z}`
-                const to = `${oldScale.x * 0.8} ${oldScale.y * 0.8} ${oldScale.z * 0.8}`
+                const to = `${oldScale.x * 0.7} ${oldScale.y * 0.7} ${oldScale.z * 0.7}`
                 const newPosition = { x: oldPosition.x, y: oldPosition.y * 0.97, z: oldPosition.z }
 
                 obstacle.setAttribute('animation__pulse', 'from', from)
@@ -220,7 +221,7 @@ class Confrontation {
                 oldScale.z < this.ANGER_SCALE_STEPS[this.currentAngerStep].z
             ) {
                 const from = `${oldScale.x} ${oldScale.y} ${oldScale.z}`
-                const to = `${oldScale.x * 1.1} ${oldScale.y * 1.1} ${oldScale.z * 1.1}`
+                const to = `${oldScale.x * 1.15} ${oldScale.y * 1.15} ${oldScale.z * 1.15}`
                 const newPosition = { x: oldPosition.x, y: oldPosition.y * 1.1, z: oldPosition.z }
 
                 obstacle.setAttribute('animation__pulse', 'from', from)
@@ -254,18 +255,25 @@ class Confrontation {
         const newPosition = { x: oldPosition.x, y: -3, z: oldPosition.z }
         this.adjustObstaclePosition(mainObstacle, newPosition, 250, 0)
 
+        
+
         // Adjust environment
         environment.earthquake()
-        fadeAudioOut(sky, 0, 500)
+        environment.stopThunder()
 
-        setTimeout(() => {
-            environment.changeTheme(environment.Themes.storm, environment.Colors.blueStorm)
-            environment.startRain()
-
+        if (round > 1) {
             setTimeout(() => {
-                this.start(mainObstacle, this.currentFase)
-            }, 10000)
-        }, 250)
+                environment.changeTheme(environment.Themes.storm, environment.Colors.blueStorm)
+                environment.startRain(environment.Colors.blueRain)
+    
+                setTimeout(() => {
+                    this.start(mainObstacle, this.currentFase)
+                }, 15000)
+            }, 250)
+        } else {
+            this.switchToNextChapter()
+            removeObject(mainObstacle)
+        }
     }
 
     //#endregion
@@ -303,7 +311,7 @@ class Confrontation {
             if (this.currentFase == this.fases.afraid && currentChapter == chapters.confrontation) {
                 for (i = 0; i < this.obstacleConfrontationCache.length; i++) {
                     this.obstacleConfrontationCache[i].setAttribute('visible', false)
-                    fadeAudioOut(this.obstacleConfrontationCache[i], 0, 250)
+                    fadeAudioOut(this.obstacleConfrontationCache[i], 4, 250)
                 }
 
                 let obstacleToShow =
@@ -312,7 +320,7 @@ class Confrontation {
                     ]
 
                 obstacleToShow.setAttribute('visible', true)
-                fadeAudioIn(obstacleToShow, 12, 250)
+                fadeAudioIn(obstacleToShow, 8, 250)
             } else {
                 clearInterval(swapObstacles)
             }
@@ -375,37 +383,28 @@ class Confrontation {
     }
 
     quitFear() {
-        this.currentFase = this.fases.angry
-        let handledObstacleType =
-            this.obstacleConfrontationCache[0].getAttribute('data-obstacle-type')
+        environment.stopRain(environment.Colors.blueDay);
 
         this.obstacleConfrontationCache.forEach((obstacle) => {
-            fadeAudioOut(obstacle, 0.0, 500)
-            setTimeout(() => {
-                removeObject(obstacle)
-            }, 500)
+            removeObject(obstacle)
         })
-
         this.obstacleConfrontationCache = []
 
-        environment.stopRain();
-
-        this.switchToNextChapter(handledObstacleType)
+        this.currentFase = this.fases.angry
+        this.switchToNextChapter()
     }
 
-    switchToNextChapter(handledObstacleType) {
-        const index = obstacleTypesLeft.indexOf(handledObstacleType)
-        obstacleTypesLeft.splice(index, 1)
+    switchToNextChapter() {
         environment.changeTheme(environment.Themes.normal)
 
-        if (obstacleTypesLeft.length > 0) {
+        if (round > 2) {
+            startRelieve();
+        } else {
             controls.enable()
             currentChapter = chapters.running
             runningTime = 0
             intervalLength = 2000
             addThoughtsRandomlyLoop()
-        } else {
-            startRelieve()
         }
     }
 

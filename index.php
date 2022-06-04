@@ -10,8 +10,6 @@
     animation__color="start-events: color; easing: linear; property: fog.color; to: #a3d0ed; dur: 2300"
     animation__fogDistance="start-events: fogDistance; easing: linear; property: fog.far; to: 7; dur: 2300"
 >
-    <a-entity particle-system="preset: rain"></a-entity>
-
     <!-- Assets -->
     <a-assets id="assets">
         <!-- Mixins -->
@@ -32,7 +30,7 @@
         <audio id="sea" src="/src/sound/sea.wav" preload="auto"></audio>
         <audio id="sea_wild" src="/src/sound/sea_wild.mp3" preload="auto"></audio>
         <audio id="thunder" src="/src/sound/thunder.wav" preload="auto"></audio>
-
+        <audio id="rain" src="/src/sound/rain.wav" preload="auto"></audio>
         <audio id="heartbeat" src="/src/sound/heartbeat.wav" preload="auto"></audio>
         <audio id="explosion" src="/src/sound/explosion.wav" preload="auto"></audio>
 
@@ -41,9 +39,14 @@
         <a-asset-item id="emotive_cloud" src="/src/3d/neutral_cloud_lower_poly_emotive.gltf"></a-asset-item>
     </a-assets>
 
-    <a-sky id="sky" color="#a3d0ed" sound="src: #thunder; positional: false; loop: true; volume:0;"> </a-sky>
+    <!-- Global Sound -->
+    <a-entity id="thunder-sound" sound="src: #thunder; positional: false; loop: true; volume:0;"></a-entity>
+    <a-entity id="rain-sound" sound="src: #rain; positional: false; loop: true; volume:0;"></a-entity>
 
-    <!-- sun -->
+    <!-- Sky -->
+    <a-sky id="sky" color="#a3d0ed"> </a-sky>
+
+    <!-- Sun -->
     <a-entity
         id="sun"
         geometry="primitive: circle"

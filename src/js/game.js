@@ -68,9 +68,7 @@ class Controls {
 //#endregion
 
 //#region Thoughts
-
-const obstacleTypes = ['experience', 'feedback', 'imagination', 'mirror']
-let obstacleTypesLeft = ['experience', 'feedback', 'imagination', 'mirror']
+let templates
 let templateThoughtLeft
 let templateThoughtCenter
 let templateThoughtRight
@@ -169,16 +167,14 @@ function addThought(el) {
 }
 
 function addObstacleToElement(el) {
-    let obstacleType = obstacleTypesLeft[Math.floor(Math.random() * obstacleTypesLeft.length)]
-    
     toggleEmotiveThought(el)
     el.id = `thought-${numberOfThoughts}`
-    el.setAttribute('data-obstacle-type', obstacleType)
+    el.setAttribute('emotive')
     el.setAttribute('sound', {
         src: `#heartbeat`,
         autoplay: true,
         loop: true,
-        volume: 0.4,
+        volume: 1,
     })
 
     return el
@@ -225,11 +221,10 @@ const setupCollision = () => {
                 if (
                     POSITION_Z_LINE_START < position.z &&
                     position.z < POSITION_Z_LINE_END &&
-                    thought_position_index == controls.player_position_index
+                    thought_position_index == controls.player_position_index &&
+                    thought.hasAttribute('emotive')
                 ) {
-                    if (thought.hasAttribute('data-obstacle-type')) {
-                        confrontation.start(thought)
-                    }
+                    confrontation.start(thought)
                 }
             })
         },
@@ -257,6 +252,7 @@ let environment
 let playerSphere
 let playerCamera
 let runningTime = 0
+let round = 0
 let introduction
 
 setupCollision()
@@ -294,7 +290,6 @@ function startGame() {
     if (isGameRunning) return
 
     isGameRunning = true
-    obstacleTypesLeft = obstacleTypes
 
     setupInstruction()
     setInstruction(' ')
@@ -306,6 +301,7 @@ function startGame() {
 function gameOver() {
     isGameRunning = false
     runningTime = 0
+    round = 0
     intervalLength = 2000
     currentChapter = chapters.introduction
 
