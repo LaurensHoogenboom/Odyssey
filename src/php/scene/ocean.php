@@ -86,7 +86,7 @@
         animation__hide="start-events: hide; easing: easeInOutSine; property: position; to: 0 -0.5 0; dur: 3000;"
         animation__show="start-events: show; easing: easeInOutSine; property: position; to: 0 0 0; dur: 3000;"
         animation__mute="start-events: hide; easing: linear; property: sound.volume; to: 0; dur: 3000;"
-        animation__play="start-events: show; easing: linear; property: sound.volume; to: 0.7; dur: 3000;"
+        animation__play="start-events: show; easing: linear; property: sound.volume; to: 1.5; dur: 3000;"
     >
         <a-ocean
             class="ocean"

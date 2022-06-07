@@ -7,29 +7,9 @@
 <a-scene
     id="scene"
     fog="type: linear; color: #a3d0ed; near:5; far:20"
-    animation__normal="start-events: normal; easing: linear; property: fog.color; to: #a3d0ed; dur: 2300"
-    animation__normalFogDistance="start-events: normal; easing: linear; property: fog.far; to: 20; dur: 2300"
-    animation__angry="start-events: angry; easing: linear; property: fog.color; to: #1b3045; dur: 2300"
-    animation__afraidColor="start-events: afraid; easing: linear; property: fog.color; to: #25291C; dur: 2300"
-    animation__afraidFogDistance="start-events: afraid; easing: linear; property: fog.far; to: 7; dur: 2300"
-    animation__sunriseColor="start-events: sunrise; easing: linear; property: fog.color; to: #202D46; dur: 2300"
-    animation__sunriseFog="start-events: sunrise; easing: linear; property: fog.far; to: 20; dur: 2300"
+    animation__color="start-events: color; easing: linear; property: fog.color; to: #a3d0ed; dur: 2300"
+    animation__fogDistance="start-events: fogDistance; easing: linear; property: fog.far; to: 7; dur: 2300"
 >
-    <a-sky id="sky-normal" color="#a3d0ed"> </a-sky>
-
-    <!-- sun -->
-    <a-entity
-        id="sun"
-        geometry="primitive: circle"
-        material="blending: additive; opacity: 0.4;"
-        scale="3 3 3"
-        position="0 -3 -10"
-        animation__position="property: position; from: 0 -3 -10; to: 0 3 -10; dur: 2300; easing: linear; start-events: move"
-        animation__scale="property: scale; from: 1 1 1; to: 1 1 1; dur: 2300; easing: linear; start-events: grow"
-        animation__hide="property: material.opacity; from: 0.4; to: 0; dur: 2300; easing: linear; start-events: hide"
-        animation__show="property: material.opacity; from: 0; to: 0.4; dur: 2300; easing: linear; start-events: show"
-    ></a-entity>
-
     <!-- Assets -->
     <a-assets id="assets">
         <!-- Mixins -->
@@ -49,46 +29,35 @@
         <!-- Audio -->
         <audio id="sea" src="/src/sound/sea.wav" preload="auto"></audio>
         <audio id="sea_wild" src="/src/sound/sea_wild.mp3" preload="auto"></audio>
-
+        <audio id="thunder" src="/src/sound/thunder.wav" preload="auto"></audio>
+        <audio id="rain" src="/src/sound/rain.wav" preload="auto"></audio>
         <audio id="heartbeat" src="/src/sound/heartbeat.wav" preload="auto"></audio>
-
-        <audio
-            id="experience-thought"
-            src="/src/sound/factors/negative/experience.m4a"
-            preload="auto"
-        ></audio>
-        <audio id="feedback-thought" src="/src/sound/factors/negative/feedback.m4a" preload="auto"></audio>
-        <audio
-            id="imagination-thought"
-            src="/src/sound/factors/negative/imagination.m4a"
-            preload="true"
-        ></audio>
-        <audio id="mirror-thought" src="/src/sound/factors/negative/mirror.m4a" preload="auto"></audio>
-        <audio
-            id="experience-thought-reverb"
-            src="/src/sound/factors/negative/experience-reverb.wav"
-            preload="auto"
-        ></audio>
-        <audio
-            id="feedback-thought-reverb"
-            src="/src/sound/factors/negative/feedback-reverb.wav"
-            preload="auto"
-        ></audio>
-        <audio
-            id="imagination-thought-reverb"
-            src="/src/sound/factors/negative/imagination-reverb.wav"
-            preload="auto"
-        ></audio>
-        <audio
-            id="mirror-thought-reverb"
-            src="/src/sound/factors/negative/mirror-reverb.wav"
-            preload="auto"
-        ></audio>
+        <audio id="explosion" src="/src/sound/explosion.wav" preload="auto"></audio>
 
         <!-- Models -->
         <a-asset-item id="neutral_cloud" src="/src/3d/neutral_cloud_lower_poly.gltf"></a-asset-item>
         <a-asset-item id="emotive_cloud" src="/src/3d/neutral_cloud_lower_poly_emotive.gltf"></a-asset-item>
     </a-assets>
+
+    <!-- Global Sound -->
+    <a-entity id="thunder-sound" sound="src: #thunder; positional: false; loop: true; volume:0;"></a-entity>
+    <a-entity id="rain-sound" sound="src: #rain; positional: false; loop: true; volume:0;"></a-entity>
+
+    <!-- Sky -->
+    <a-sky id="sky" color="#a3d0ed"> </a-sky>
+
+    <!-- Sun -->
+    <a-entity
+        id="sun"
+        geometry="primitive: circle"
+        material="blending: additive; opacity: 0.4;"
+        scale="3 3 3"
+        position="0 -3 -10"
+        animation__position="property: position; from: 0 -3 -10; to: 0 3 -10; dur: 2300; easing: linear; start-events: move"
+        animation__scale="property: scale; from: 1 1 1; to: 1 1 1; dur: 2300; easing: linear; start-events: grow"
+        animation__hide="property: material.opacity; from: 0.4; to: 0; dur: 2300; easing: linear; start-events: hide"
+        animation__show="property: material.opacity; from: 0; to: 0.4; dur: 2300; easing: linear; start-events: show"
+    ></a-entity>
 
     <!-- Lights -->
     <a-entity
@@ -104,14 +73,16 @@
         type="ambient"
         color="#B4C5EC"
         id="ambient-light"
-        animation__angry="start-events: angry; easing: linear; property: color; to: #1b3045; dur: 2300"
-        animation__afraid="start-events: afraid; easing: linear; property: color; to: #25291C; dur: 2300"
-        animation__sunrise="start-events: sunrise; easing: linear; property: color; to: #202D46; dur: 2300"
-        animation__normal="start-events: normal; easing: linear; property: color; to: #a3d0ed; dur: 2300"
+        animation__color="start-events: color; easing: linear; property: color; to: #1b3045; dur: 2300"
     ></a-light>
 
     <!-- Camera -->
-    <a-entity id="camera-container" position="0 0 0">
+    <a-entity
+        id="camera-container"
+        position="0 0 0"
+        animation__shake="startEvents: shake; property: rotation; from: 0 -10 0; to: 0 10 0; easing: linear"
+        sound="src: #explosion; volume: 1; loop: false;"
+    >
         <a-camera id="player-camera" position="0 1.5 2" look-controls="enabled: false" fov="100">
             <a-entity
                 id="cursor-mobile"
@@ -123,22 +94,9 @@
                 raycaster="far: 50; interval: 1000; objects: .clickable"
                 animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 150; from: 0.1 0.1 0.1; to: 0.5 0.5 0.5"
                 animation__fusing="property: scale; startEvents: fusing; easing: easeInCubic; dur: 750; from: 0.5 0.5 0.5; to: 0.1 0.1 0.1"
-                animation__shrink="property: scale; startEvents: mouseleave, stopBreath; easing: easeInCubic; dur: 500; to: 0.5 0.5 0.5"
-                animation__grow="property: scale; startEvents: startBreath; easing: easeInCubic; dur: 500; to: 1.0 1.0 1.0"
-            ></a-entity>
-
-            <a-entity
-                id="cursor-fill"
-                position="0 0 -1"
-                geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03; thetaStart: 90"
-                material="color: red; shader: flat"
-                scale="0.5 0.5 0.5"
-                rotation="0 180 0"
-                animation__fill="property: geometry.thetaLength; startEvents: breath; easing: easeInCubic; dur: 500; from: 0 to: 360"
             ></a-entity>
 
             <!-- Instructions -->
-
             <a-text
                 id="instruction"
                 value="Draai je hoofd naar links en rechts om de speler te bewegen, en de obstakels te ontwijken!"
@@ -211,6 +169,7 @@
                 class="thought"
                 data-thought-position-index="1"
                 animation__position="property: position; from: 0 0.6 -7; to: 0 0.6 2; dur: 5000; easing: linear;"
+                animation__pulse="property: scale; from: 0.2 0.2 0.2; to: 0.3 0.3 0.3; loop: true; dur: 500; easing: linear; dir: alternate; startEvents: pulse"
             >
                 <a-entity class="neutral-cloud" gltf-model="#neutral_cloud"></a-entity>
                 <a-entity class="emotive-cloud" gltf-model="#emotive_cloud" visible="false"></a-entity>
@@ -218,12 +177,13 @@
 
             <a-entity
                 id="template-thought-left"
-                shadow  
+                shadow
                 scale="0.2 0.2 0.2"
                 position="-0.5 0.5 0"
                 class="thought"
                 data-thought-position-index="0"
                 animation__position="property: position; from: -0.5 0.6 -7; to: -0.5 0.6 2; dur: 5000; easing: linear;"
+                animation__pulse="property: scale; from: 0.2 0.2 0.2; to: 0.3 0.3 0.3; loop: true; dur: 500; easing: linear; dir: alternate; startEvents: pulse"
             >
                 <a-entity class="neutral-cloud" gltf-model="#neutral_cloud"></a-entity>
                 <a-entity class="emotive-cloud" gltf-model="#emotive_cloud" visible="false"></a-entity>
@@ -236,6 +196,7 @@
                 class="thought"
                 data-thought-position-index="2"
                 animation__position="property: position; from: 0.5 0.6 -7; to: 0.5 0.6 2; dur: 5000; easing: linear;"
+                animation__pulse="property: scale; from: 0.2 0.2 0.2; to: 0.3 0.3 0.3; loop: true; dur: 500; easing: linear; dir: alternate; startEvents: pulse"
             >
                 <a-entity class="neutral-cloud" gltf-model="#neutral_cloud"></a-entity>
                 <a-entity class="emotive-cloud" gltf-model="#emotive_cloud" visible="false"></a-entity>

@@ -68,14 +68,13 @@ class Controls {
 //#endregion
 
 //#region Thoughts
-
-const obstacleTypes = ['experience', 'feedback', 'imagination', 'mirror']
-let obstacleTypesLeft = ['experience', 'feedback', 'imagination', 'mirror']
+let templates
 let templateThoughtLeft
 let templateThoughtCenter
 let templateThoughtRight
 
 let numberOfThoughts = 0
+let numberOfThoughtsInRow = 0
 
 const RUNNING_TIME_BEFORE_EMOTIVE_OBSTACLES = 1000
 const RUNNING_TIME_BEFORE_TWO_EMOTIVE_OBSTACLES = 15000
@@ -110,57 +109,6 @@ function addThoughtsRandomlyLoop() {
     }, intervalLength)
 }
 
-function addThought(el) {
-    numberOfThoughts += 1
-
-    switch (true) {
-        case runningTime > RUNNING_TIME_BEFORE_ALL_EMOTIVE_OBSTACLES:
-            el = addObstacleToElement(el)
-            break
-        case runningTime > RUNNING_TIME_BEFORE_TWO_EMOTIVE_OBSTACLES:
-            if (Math.random() < 0.5) {
-                el = addObstacleToElement(el)
-            }
-
-            break
-        case runningTime > RUNNING_TIME_BEFORE_EMOTIVE_OBSTACLES:
-            if (numberOfThoughts < 2 && Math.random() < 0.8) {
-                el = addObstacleToElement(el)
-            }
-
-            break
-        default:
-            break
-    }
-
-    thoughtContainer.appendChild(el)
-}
-
-function addObstacleToElement(el) {
-    let obstacleType = obstacleTypesLeft[Math.floor(Math.random() * obstacleTypesLeft.length)]
-    let emotiveCloud = el.querySelector('.emotive-cloud')
-    let neutralCloud = el.querySelector('.neutral-cloud')
-
-    emotiveCloud.setAttribute('visible', true)
-    neutralCloud.setAttribute('visible', false)
-
-    el.id = `thought-${numberOfThoughts}`
-    el.setAttribute('data-obstacle-type', obstacleType)
-    el.setAttribute('sound', {
-        src: `#heartbeat`,
-        autoplay: true,
-        loop: true,
-        volume: 0.4,
-    })
-
-    return el
-}
-
-function addThoughtTo(position_index) {
-    let template = templates[position_index]
-    addThought(template.cloneNode(true), position_index)
-}
-
 function addThoughtsRandomly({
     propThoughtLeft = 0.5,
     propThoughtCenter = 0.5,
@@ -175,16 +123,69 @@ function addThoughtsRandomly({
 
     shuffle(thoughts)
 
-    var numberOfThoughtsAdded = 0
+    numberOfThoughtsInRow = 0
 
     thoughts.forEach((thought) => {
-        if (Math.random() < thought.propability && numberOfThoughtsAdded < maxNumberOfThoughts) {
+        if (Math.random() < thought.propability && numberOfThoughtsInRow < maxNumberOfThoughts) {
             addThoughtTo(thought.position_index)
-            numberOfThoughtsAdded += 1
+            numberOfThoughtsInRow += 1
         }
     })
 
-    return numberOfThoughtsAdded
+    return numberOfThoughtsInRow
+}
+
+function addThoughtTo(position_index) {
+    let template = templates[position_index]
+    addThought(template.cloneNode(true), position_index)
+}
+
+function addThought(el) {
+    numberOfThoughts += 1
+
+    switch (true) {
+        case runningTime > RUNNING_TIME_BEFORE_ALL_EMOTIVE_OBSTACLES:
+            el = addObstacleToElement(el)
+            break
+        case runningTime > RUNNING_TIME_BEFORE_TWO_EMOTIVE_OBSTACLES:
+            if (Math.random() < 0.5) {
+                el = addObstacleToElement(el)
+            }
+
+            break
+        case runningTime > RUNNING_TIME_BEFORE_EMOTIVE_OBSTACLES:
+            if (numberOfThoughts > 2 && Math.random() < 0.5 && numberOfThoughtsInRow < 2) {
+                el = addObstacleToElement(el)
+            }
+
+            break
+        default:
+            break
+    }
+
+    thoughtContainer.appendChild(el)
+}
+
+function addObstacleToElement(el) {
+    toggleEmotiveThought(el)
+    el.id = `thought-${numberOfThoughts}`
+    el.setAttribute('emotive')
+    el.setAttribute('sound', {
+        src: `#heartbeat`,
+        autoplay: true,
+        loop: true,
+        volume: 1,
+    })
+
+    return el
+}
+
+const toggleEmotiveThought = (obstacle) => {
+    let emotiveCloud = obstacle.querySelector('.emotive-cloud')
+    let neutralCloud = obstacle.querySelector('.neutral-cloud')
+
+    emotiveCloud.setAttribute('visible', true)
+    neutralCloud.setAttribute('visible', false)
 }
 
 const muteAllThoughts = () => {
@@ -220,13 +221,10 @@ const setupCollision = () => {
                 if (
                     POSITION_Z_LINE_START < position.z &&
                     position.z < POSITION_Z_LINE_END &&
-                    thought_position_index == controls.player_position_index
+                    thought_position_index == controls.player_position_index &&
+                    thought.hasAttribute('emotive')
                 ) {
-                    if (thought.hasAttribute('data-obstacle-type')) {
-                        startConfrontation(thought)
-                    } else {
-                        shakePathAndSea()
-                    }
+                    confrontation.start(thought)
                 }
             })
         },
@@ -249,9 +247,12 @@ let currentChapter = chapters.introduction
 let bluetooth
 let sensorConfiguration
 let controls
+let confrontation
+let environment
 let playerSphere
 let playerCamera
 let runningTime = 0
+let round = 0
 let introduction
 
 setupCollision()
@@ -269,27 +270,26 @@ const init = () => {
     // Chapters and gameplay
     introduction = new Introduction(player, playerSphere, addThoughtsRandomlyLoop)
     controls = new Controls()
+    confrontation = new Confrontation()
+    environment = new Environment()
 
     // Init stuff
     setupAllMenus()
     setupInstruction()
     setupThoughts()
-    setupEnvironment()
     bindToggleVRModeEventSettings()
 }
 
 const enterGame = () => {
     hideBluetoothMenu()
     showStartMenu()
-    setupSound()
-    oceanNormal.emit('play')
+    environment.setupSound()
 }
 
 function startGame() {
     if (isGameRunning) return
 
     isGameRunning = true
-    obstacleTypesLeft = obstacleTypes
 
     setupInstruction()
     setInstruction(' ')
@@ -301,9 +301,10 @@ function startGame() {
 function gameOver() {
     isGameRunning = false
     runningTime = 0
+    round = 0
     intervalLength = 2000
     currentChapter = chapters.introduction
-
+    controls.enable()
     introduction.reset()
     muteAllThoughts()
     hideInstruction()
@@ -320,8 +321,6 @@ const bindToggleVRModeEventSettings = () => {
             y: 0,
             z: 3,
         })
-
-        document.getElementById('player-camera').setAttribute('fov', 120)
     })
 
     document.querySelector('a-scene').addEventListener('exit-vr', function () {
@@ -330,8 +329,6 @@ const bindToggleVRModeEventSettings = () => {
             y: 0,
             z: 0,
         })
-
-        document.getElementById('player-camera').setAttribute('fov', 80)
     })
 }
 
@@ -343,20 +340,24 @@ const fadeAudioIn = (element, max, length) => {
     element.setAttribute('animation__fadeSoundIn', {
         easing: 'linear',
         property: 'sound.volume',
-        autoplay: true,
+        startEvents: 'fadeIn',
         to: max,
         dur: length,
     })
+
+    element.emit('fadeIn')
 }
 
 const fadeAudioOut = (element, min, length) => {
     element.setAttribute('animation__fadeSoundOut', {
         easing: 'linear',
         property: 'sound.volume',
-        autoplay: true,
+        startEvents: 'fadeOut',
         to: min,
         dur: length,
     })
+
+    element.emit('fadeOut')
 }
 
 //#endregion
