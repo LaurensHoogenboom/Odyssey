@@ -340,20 +340,24 @@ const fadeAudioIn = (element, max, length) => {
     element.setAttribute('animation__fadeSoundIn', {
         easing: 'linear',
         property: 'sound.volume',
-        autoplay: true,
+        startEvents: 'fadeIn',
         to: max,
         dur: length,
     })
+
+    element.emit('fadeIn')
 }
 
 const fadeAudioOut = (element, min, length) => {
     element.setAttribute('animation__fadeSoundOut', {
         easing: 'linear',
         property: 'sound.volume',
-        autoplay: true,
+        startEvents: 'fadeOut',
         to: min,
         dur: length,
     })
+
+    element.emit('fadeOut')
 }
 
 //#endregion

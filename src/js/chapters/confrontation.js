@@ -4,12 +4,12 @@ class Confrontation {
         this.currentAngerStep = 0
 
         this.ANGER_START_POSITION = {
-            x: -1,
+            x: 0,
             y: 0.7,
             z: 0.5,
         }
         this.ANGER_EXPLODED_POSITION = {
-            x: -1,
+            x: 0,
             y: 1.3,
             z: -2,
         }
