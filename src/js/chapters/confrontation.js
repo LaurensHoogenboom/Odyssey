@@ -310,7 +310,7 @@ class Confrontation {
             if (this.currentFase == this.fases.afraid && currentChapter == chapters.confrontation) {
                 for (i = 0; i < this.obstacleConfrontationCache.length; i++) {
                     this.obstacleConfrontationCache[i].setAttribute('visible', false)
-                    fadeAudioOut(this.obstacleConfrontationCache[i], 4, 250)
+                    fadeAudioOut(this.obstacleConfrontationCache[i], 3, 250)
                 }
 
                 let obstacleToShow =

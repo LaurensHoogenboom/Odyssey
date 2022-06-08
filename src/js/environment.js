@@ -217,7 +217,7 @@ class Environment {
     }
 
     startThunder() {
-        fadeAudioIn(this.thunderSound, 8, 500)
+        fadeAudioIn(this.thunderSound, 4, 500)
     }
 
     stopThunder() {
