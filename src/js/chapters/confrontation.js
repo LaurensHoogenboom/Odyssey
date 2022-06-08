@@ -347,12 +347,12 @@ class Confrontation {
             // User breathing in
             if (this.fearBreathState.breathIsDeep && !this.fearBreathState.hasUsedBreath) {
                 newScale = {
-                    x: 0.97 * oldScale.x,
-                    y: 0.97 * oldScale.y,
-                    z: 0.97 * oldScale.z,
+                    x: 0.98 * oldScale.x,
+                    y: 0.98 * oldScale.y,
+                    z: 0.98 * oldScale.z,
                 }
 
-                newPostion.y = 0.97 * oldPosition.y
+                newPostion.y = 0.98 * oldPosition.y
             }
 
             // User is holding breath too long
