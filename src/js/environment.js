@@ -227,8 +227,6 @@ class Environment {
     startRain(color = undefined) {
         if (color) this.changeColor(color);
 
-        console.log(this.rainSound.components.sound)
-
         setTimeout(() => {
             this.scene.setAttribute('rain', '')
             fadeAudioIn(this.rainSound, 0.75, 500)

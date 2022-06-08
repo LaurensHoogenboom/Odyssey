@@ -1,6 +1,13 @@
 class Confrontation {
     constructor() {
-        //#region Anger Constants
+        //#region General
+        this.obstacleConfrontationCache = []
+        this.fases = Object.freeze({ angry: 'angry', afraid: 'afraid' })
+        this.currentFase = this.fases.angry
+
+        //#endregion
+
+        //#region Anger
         this.currentAngerStep = 0
 
         this.ANGER_START_POSITION = {
@@ -26,39 +33,30 @@ class Confrontation {
 
         //#endregion
 
-        //#region Fear Constants
+        //#region Fear
 
-        this.obstacleConfrontationCache = []
-        this.ObstaclePositions = [
+        this.FEAR_OBSTACLE_CONFRONTATION_POSITIONS = [
             // FRONT
             {
                 x: 0,
-                y: 2,
+                y: 3,
                 z: -1,
             },
             // LEFT
             {
                 x: -2,
-                y: 2,
+                y: 3,
                 z: 0.5,
             },
             // RIGHT
             {
                 x: 2,
-                y: 2,
+                y: 3,
                 z: 0.5,
             },
         ]
-        this.OBSTACLE_MAX_SCALE = { x: 1.8, y: 1.8, z: 1.8 }
-        this.OBSTACLE_VOLUMES = [12, 8, 8]
+        this.FEAR_OBSTACLE_MAX_SCALE = { x: 1.8, y: 1.8, z: 1.8 }
 
-        //#endregion
-
-        // Fases
-        this.fases = Object.freeze({ angry: 'angry', afraid: 'afraid' })
-        this.currentFase = this.fases.angry
-
-        // Breath
         this.fearBreathState = new BreathState(
             sensorConfiguration.breathMinPressure,
             sensorConfiguration.breathMaxPressure,
@@ -66,6 +64,8 @@ class Confrontation {
             1000,
             250
         )
+
+        //#endregion
     }
 
     //#region Start
@@ -81,7 +81,7 @@ class Confrontation {
         this.obstacleConfrontationCache.push(obstacleToConfrontWith)
 
         if (this.currentFase == this.fases.afraid) {
-            for (i = 1; i < this.ObstaclePositions.length; i++) {
+            for (i = 1; i < this.FEAR_OBSTACLE_CONFRONTATION_POSITIONS.length; i++) {
                 this.obstacleConfrontationCache[i] = obstacleToConfrontWith.cloneNode(true)
                 this.addDuplicateObstacle(this.obstacleConfrontationCache[i])
             }
@@ -119,13 +119,13 @@ class Confrontation {
         // Fear position
         if (this.currentFase == this.fases.afraid) {
             this.obstacleConfrontationCache.forEach((obstacle, index) => {
-                let focusedPosition = this.ObstaclePositions[index]
+                let focusedPosition = this.FEAR_OBSTACLE_CONFRONTATION_POSITIONS[index]
 
                 this.adjustObstaclePosition(obstacle, focusedPosition, 2000, 0)
             })
 
             this.obstacleConfrontationCache.forEach((obstacle, index) => {
-                let foccusedScale = this.OBSTACLE_MAX_SCALE
+                let foccusedScale = this.FEAR_OBSTACLE_MAX_SCALE
                 this.adjustObstacleScale(obstacle, foccusedScale, 2000, 0)
             })
         }
@@ -347,24 +347,24 @@ class Confrontation {
             // User breathing in
             if (this.fearBreathState.breathIsDeep && !this.fearBreathState.hasUsedBreath) {
                 newScale = {
-                    x: 0.95 * oldScale.x,
-                    y: 0.95 * oldScale.y,
-                    z: 0.95 * oldScale.z,
+                    x: 0.97 * oldScale.x,
+                    y: 0.97 * oldScale.y,
+                    z: 0.97 * oldScale.z,
                 }
 
-                newPostion.y = 0.95 * oldPosition.y
+                newPostion.y = 0.97 * oldPosition.y
             }
 
             // User is holding breath too long
             if (this.fearBreathState.breathStateTime > 10000) {
-                if (newScale.z < this.OBSTACLE_MAX_SCALE.z) {
+                if (newScale.z < this.FEAR_OBSTACLE_MAX_SCALE.z) {
                     newScale = {
-                        x: 1.05 * oldScale.x,
-                        y: 1.05 * oldScale.y,
-                        z: 1.05 * oldScale.z,
+                        x: 1.03 * oldScale.x,
+                        y: 1.03 * oldScale.y,
+                        z: 1.03 * oldScale.z,
                     }
 
-                    newPostion.y = 1.05 * oldPosition.y
+                    newPostion.y = 1.03 * oldPosition.y
                 }
             }
 
