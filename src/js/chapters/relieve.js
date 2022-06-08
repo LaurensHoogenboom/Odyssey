@@ -51,13 +51,7 @@ const startRelieve = (
     currentChapter = chapters.relieve
 
     // Setup breath
-    relieveBreathState = new BreathState(
-        breathMinPressure,
-        breathMaxPressure,
-        250,
-        1000,
-        250
-    )
+    relieveBreathState = new BreathState(breathMinPressure, breathMaxPressure, 250, 1000, 250)
 
     // Get sun
     sun = document.getElementById('sun')
@@ -96,7 +90,11 @@ const changeSunriseOnBreath = (data) => {
     relieveBreathState.currentBreathPosition = value
 
     // Update sunrise
-    if (!relieveBreathState.hasUsedBreath && relieveBreathState.breathIsDeep) {
+    if (
+        !relieveBreathState.hasUsedBreath &&
+        relieveBreathState.breathIsDeep &&
+        relieveBreathState.currentBreathPosition == relieveBreathState.breathPositions.out
+    ) {
         setTimeout(() => {
             hideInstruction()
         }, 5000)
@@ -136,16 +134,8 @@ const changeSunScale = (index) => {
     let oldScale = sunriseScales[index - 1]
     let newScale = sunriseScales[index]
 
-    sun.setAttribute(
-        'animation__scale',
-        'from',
-        `${oldScale.x} ${oldScale.y} ${oldScale.z}`
-    )
-    sun.setAttribute(
-        'animation__scale',
-        'to',
-        `${newScale.x} ${newScale.y} ${newScale.z}`
-    )
+    sun.setAttribute('animation__scale', 'from', `${oldScale.x} ${oldScale.y} ${oldScale.z}`)
+    sun.setAttribute('animation__scale', 'to', `${newScale.x} ${newScale.y} ${newScale.z}`)
 
     sun.emit('grow')
 }
