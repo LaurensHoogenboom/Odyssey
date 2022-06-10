@@ -254,6 +254,7 @@ let playerCamera
 let runningTime = 0
 let round = 0
 let introduction
+let progress
 
 setupCollision()
 
@@ -272,6 +273,7 @@ const init = () => {
     controls = new Controls()
     confrontation = new Confrontation()
     environment = new Environment()
+    progress = new Progress()
 
     // Init stuff
     setupAllMenus()
@@ -307,7 +309,6 @@ function gameOver() {
     controls.enable()
     introduction.reset()
     muteAllThoughts()
-    hideInstruction()
 }
 
 //#endregion
@@ -459,6 +460,16 @@ function calculateAverageFromArray(array) {
 
 function removeObject(obj) {
     obj.parentNode.removeChild(obj)
+}
+
+const scale = (inputY, yRange, xRange) => {
+    const [xMin, xMax] = xRange
+    const [yMin, yMax] = yRange
+
+    const percent = (inputY - yMin) / (yMax - yMin)
+    const outputX = percent * (xMax - xMin) + xMin
+
+    return outputX
 }
 
 //#endregion

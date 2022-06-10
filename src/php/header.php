@@ -21,6 +21,7 @@
         <script src="/src/js/chapters/relieve.js"></script>
         <script src="/src/js/chapters/confrontation.js"></script>
         <script src="/src/js/ui.js"></script>
+        <script src="/src/js/progress.js"></script>
         <script src="/src/js/game.js"></script>
 
         <!-- <script>

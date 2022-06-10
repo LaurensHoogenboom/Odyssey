@@ -39,6 +39,7 @@ let relieveBreathState
 let sun
 
 const startRelieveDemo = () => {
+    currentSunriseIndex = 0
     hideAllMenus()
     startRelieve()
 }
@@ -47,36 +48,37 @@ const startRelieve = (
     breathMinPressure = sensorConfiguration.breathMinPressure,
     breathMaxPressure = sensorConfiguration.breathMaxPressure
 ) => {
-    // Setup chapter
+    // General
     currentChapter = chapters.relieve
 
-    // Setup breath
-    relieveBreathState = new BreathState(breathMinPressure, breathMaxPressure, 250, 1000, 250)
-
-    // Get sun
+    // Init relieve
+    relieveBreathState = new BreathState(breathMinPressure, breathMaxPressure, 500, 1000, 500)
     sun = document.getElementById('sun')
     sun.emit('show')
+    environment.changeTheme(environment.Themes.sunrise)
 
     // Start emotion handling
     setTimeout(() => {
         handleSunrise()
-    }, 2300)
+    }, 2000)
 }
 
 const handleSunrise = () => {
     btDataMessageHandlers.push(changeSunriseOnBreath)
 
-    setInstruction('Haal diep en langzaam adem.')
+    progress.start(0, sunrisePositions.length, currentSunriseIndex, 'Haal diep en langzaam adem.')
 
-    //Set sensor request interval
-    const breathInterval = setInterval(() => {
-        bluetooth.send('BREATH?')
+    setTimeout(() => {
+        //Set sensor request interval
+        const breathInterval = setInterval(() => {
+            bluetooth.send('BREATH?')
 
-        if (currentChapter != chapters.relieve) {
-            clearInterval(breathInterval)
-            removeBtMessageHandler(changeSunriseOnBreath)
-        }
-    }, 250)
+            if (currentChapter != chapters.relieve) {
+                clearInterval(breathInterval)
+                removeBtMessageHandler(changeSunriseOnBreath)
+            }
+        }, 500)
+    }, 1000)
 }
 
 const changeSunriseOnBreath = (data) => {
@@ -92,18 +94,14 @@ const changeSunriseOnBreath = (data) => {
     // Update sunrise
     if (
         !relieveBreathState.hasUsedBreath &&
-        relieveBreathState.breathIsDeep &&
-        relieveBreathState.currentBreathPosition == relieveBreathState.breathPositions.out
+        relieveBreathState.breathIsDeep
     ) {
-        setTimeout(() => {
-            hideInstruction()
-        }, 5000)
-
         currentSunriseIndex++
         let newColor = sunriseColors[currentSunriseIndex]
         environment.changeColor(newColor)
         changeSunPosition(currentSunriseIndex)
         changeSunScale(currentSunriseIndex)
+        progress.set(currentSunriseIndex)
     }
 
     if (currentSunriseIndex >= sunriseColors.length - 1) {
@@ -144,4 +142,5 @@ const quitRelieve = () => {
     gameOver()
     showStartMenu()
     currentSunriseIndex = 0
+    progress.stop()
 }

@@ -58,7 +58,7 @@ class BreathState {
 
         // Set breath statetime
         if (this._currentBreathPosition == this.oldBreathPosition) {
-            this._breathStateTime += 250
+            this._breathStateTime += this.measureInterval
 
             // Used?
             if (this._breathStateTime >= this.breathMaxTime) {
