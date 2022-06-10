@@ -8,7 +8,7 @@ class BreathState {
     ) {
         this.breathPositions = Object.freeze({ in: 'in', out: 'out' })
         this.breathDelta = breathMaxPressure - breathMinPressure
-        this.oldBreathValue = null
+        this._oldBreathValue = null
         this.breathMaxTime = breathMaxTime
 
         this.measureInterval = measureInterval
@@ -32,26 +32,26 @@ class BreathState {
             this.measureTime = 0
 
             // First Breath
-            if (this.oldBreathValue == null) {
-                this.oldBreathValue = value
+            if (this._oldBreathValue == null) {
+                this._oldBreathValue = value
                 return
             }
 
             // Check if breath position has changed
             if (
-                Math.abs(this.oldBreathValue - value) >
+                Math.abs(this._oldBreathValue - value) >
                 0.4 * this.breathDelta
             ) {
                 this._breathIsDeep = true
 
-                if (this.oldBreathValue < value) {
+                if (this._oldBreathValue < value) {
                     this._currentBreathPosition = this.breathPositions.out
                 } else {
                     this._currentBreathPosition = this.breathPositions.in
                 }
             }
 
-            this.oldBreathValue = value
+            this._oldBreathValue = value
         } else {
             this.measureTime += this.measureInterval
         }
@@ -82,5 +82,9 @@ class BreathState {
 
     get breathStateTime() {
         return this._breathStateTime
+    }
+
+    get oldBreathValue() {
+        return this._oldBreathValue
     }
 }

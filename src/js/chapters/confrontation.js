@@ -181,7 +181,8 @@ class Confrontation {
         )
 
         const configurationInterval = setInterval(() => {
-            bluetooth.send('ANGER?')
+            if (bluetooth.connected) bluetooth.send('ANGER?')
+            else this.changeObstacleSizeOnStress('ANGER: ', undefined, true)
 
             if (this.currentFase != this.fases.angry || currentChapter != chapters.confrontation) {
                 clearInterval(configurationInterval)
@@ -192,7 +193,8 @@ class Confrontation {
 
     changeObstacleSizeOnStress(
         data,
-        stressBallMaxPressure = sensorConfiguration.stressBallMaxPressure
+        stressBallMaxPressure = sensorConfiguration.stressBallMaxPressure,
+        noData = false
     ) {
         let label = getLabelFromBtMessage(data)
         let value = getDataFromBtMessage(data)
@@ -207,7 +209,7 @@ class Confrontation {
             const oldPosition = obstacle.getAttribute('position')
 
             // User is pressing
-            if (value > shrinkThreshold) {
+            if (value > shrinkThreshold || noData) {
                 const from = `${oldScale.x} ${oldScale.y} ${oldScale.z}`
                 const to = `${oldScale.x * 0.85} ${oldScale.y * 0.85} ${oldScale.z * 0.85}`
                 const newPosition = { x: oldPosition.x, y: oldPosition.y * 0.98, z: oldPosition.z }
@@ -220,10 +222,7 @@ class Confrontation {
             }
 
             // User is releasing
-            if (
-                value < growThreshold &&
-                oldScale.z < this.ANGER_SCALE_STEPS[this.currentAngerStep].z
-            ) {
+            if (value < growThreshold && oldScale.z < this.ANGER_SCALE_STEPS[this.currentAngerStep].z) {
                 const from = `${oldScale.x} ${oldScale.y} ${oldScale.z}`
                 const to = `${oldScale.x * 1.2} ${oldScale.y * 1.2} ${oldScale.z * 1.2}`
                 const newPosition = { x: oldPosition.x, y: oldPosition.y * 1.02, z: oldPosition.z }
@@ -288,13 +287,7 @@ class Confrontation {
         breathMinPressure = sensorConfiguration.breathMinPressure,
         breathMaxPressure = sensorConfiguration.breathMaxPressure
     ) {
-        this.fearBreathState = new BreathState(
-            breathMinPressure,
-            breathMaxPressure,
-            2000,
-            1000,
-            500
-        )
+        this.fearBreathState = new BreathState(breathMinPressure, breathMaxPressure, 2000, 1000, 500)
         btDataMessageHandlers.push(this.changeObstacleSizeOnBreath.bind(this))
 
         progress.start(
@@ -305,7 +298,8 @@ class Confrontation {
         )
 
         const configurationInterval = setInterval(() => {
-            bluetooth.send('BREATH?')
+            if (bluetooth.connected) bluetooth.send('BREATH?')
+            else setTimeout(() => this.changeObstacleSizeOnBreath('BREATH: ', true).bind(this), 500)
 
             if (this.currentFase != this.fases.afraid || currentChapter != chapters.confrontation) {
                 clearInterval(configurationInterval)
@@ -333,7 +327,7 @@ class Confrontation {
         }, 1000)
     }
 
-    changeObstacleSizeOnBreath(data) {
+    changeObstacleSizeOnBreath(data, noData = false) {
         let label = getLabelFromBtMessage(data)
         let value = getDataFromBtMessage(data)
         let shouldQuit = false
@@ -342,7 +336,9 @@ class Confrontation {
         if (label != 'BREATH') return
 
         // Update breathstate
-        this.fearBreathState.currentBreathPosition = value
+        this.fearBreathState.currentBreathPosition = !noData
+            ? value
+            : this.fearBreathState.oldBreathValue
 
         // Update size
         this.obstacleConfrontationCache.forEach((obstacle) => {
@@ -352,7 +348,7 @@ class Confrontation {
             let newPostion = oldPosition
 
             // User breathing
-            if (this.fearBreathState.breathIsDeep && !this.fearBreathState.hasUsedBreath) {
+            if ((this.fearBreathState.breathIsDeep && !this.fearBreathState.hasUsedBreath) || noData) {
                 newScale = {
                     x: 0.95 * oldScale.x,
                     y: 0.95 * oldScale.y,

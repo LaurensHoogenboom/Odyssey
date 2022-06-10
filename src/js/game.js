@@ -96,10 +96,13 @@ let thoughtTimer
 let intervalLength = 2000
 
 function addThoughtsRandomlyLoop() {
+    //if connected
     runningTime += intervalLength
 
     setTimeout(() => {
         addThoughtsRandomly()
+
+        // if connected
 
         if (intervalLength > 500) {
             intervalLength = 0.98 * intervalLength
@@ -167,6 +170,8 @@ function addThought(el) {
 }
 
 function addObstacleToElement(el) {
+    // if connected
+
     toggleEmotiveThought(el)
     el.id = `thought-${numberOfThoughts}`
     el.setAttribute('emotive')

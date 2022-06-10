@@ -71,7 +71,8 @@ const handleSunrise = () => {
     setTimeout(() => {
         //Set sensor request interval
         const breathInterval = setInterval(() => {
-            bluetooth.send('BREATH?')
+            if (bluetooth.connected) bluetooth.send('BREATH?')
+            else setTimeout(() => changeSunriseOnBreath('BREATH: ', true), 500)
 
             if (currentChapter != chapters.relieve) {
                 clearInterval(breathInterval)
@@ -81,7 +82,7 @@ const handleSunrise = () => {
     }, 1000)
 }
 
-const changeSunriseOnBreath = (data) => {
+const changeSunriseOnBreath = (data, noData = false) => {
     let label = getLabelFromBtMessage(data)
     let value = getDataFromBtMessage(data)
 
@@ -89,12 +90,14 @@ const changeSunriseOnBreath = (data) => {
     if (label != 'BREATH') return
 
     // Update breath state
-    relieveBreathState.currentBreathPosition = value
+    relieveBreathState.currentBreathPosition = !noData ? value : relieveBreathState.oldBreathValue
 
     // Update sunrise
     if (
-        !relieveBreathState.hasUsedBreath &&
-        relieveBreathState.breathIsDeep
+        (!relieveBreathState.hasUsedBreath &&
+            relieveBreathState.breathIsDeep &&
+            relieveBreathState.currentBreathPosition == relieveBreathState.breathPositions.out) ||
+        noData
     ) {
         currentSunriseIndex++
         let newColor = sunriseColors[currentSunriseIndex]
@@ -114,16 +117,8 @@ const changeSunPosition = (index) => {
     let oldPosition = sunrisePositions[index - 1]
     let newPosition = sunrisePositions[index]
 
-    sun.setAttribute(
-        'animation__position',
-        'from',
-        `${oldPosition.x} ${oldPosition.y} ${oldPosition.z}`
-    )
-    sun.setAttribute(
-        'animation__position',
-        'to',
-        `${newPosition.x} ${newPosition.y} ${newPosition.z}`
-    )
+    sun.setAttribute('animation__position', 'from', `${oldPosition.x} ${oldPosition.y} ${oldPosition.z}`)
+    sun.setAttribute('animation__position', 'to', `${newPosition.x} ${newPosition.y} ${newPosition.z}`)
 
     sun.emit('move')
 }

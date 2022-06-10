@@ -42,4 +42,6 @@ class Progress {
         this.filling.setAttribute('animation__fill', 'dur', duration)
         this.filling.emit('fill')
     }
+
+    // TODO: if lacks user input, show instruction, if received values don't change goto next input step 
 }
