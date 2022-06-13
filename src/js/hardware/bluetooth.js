@@ -30,6 +30,9 @@ class BluetoothController {
 
         // Init eventlisteners
         this.bindEventListeners()
+
+        // Connected
+        this.connected = false;
     }
 
     bindEventListeners() {
@@ -93,6 +96,8 @@ class BluetoothController {
     handleDisconnection(event, self) {
         let device = event.target
 
+        this.connected = false;
+
         self.log(`"${device.name}" bluetooth device disconnected, trying to reconnect...`)
 
         self.connectDeviceAndCacheCharacteristic(device)
@@ -123,6 +128,7 @@ class BluetoothController {
             .then((characteristic) => {
                 this.log('Characteristic found')
 
+                this.connected = true;
                 this.characteristicCache = characteristic
 
                 return this.characteristicCache
@@ -152,6 +158,8 @@ class BluetoothController {
 
     // Disconnect from device
     disconnect() {
+        this.connected = false;
+
         if (this.deviceCache) {
             this.log(`Disconnectting from ${this.deviceCache.name} bluetooth device...`)
 
@@ -231,6 +239,8 @@ class BluetoothController {
     }
 
     writeToCharacterisctic = (characteristic, data) => {
-        characteristic.writeValue(new TextEncoder().encode(data))
+        console.log(this.connected)
+
+        if (this.connected) characteristic.writeValue(new TextEncoder().encode(data))
     }
 }

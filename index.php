@@ -86,15 +86,29 @@
         <a-camera id="player-camera" position="0 1.5 2" look-controls="enabled: false" fov="100">
             <a-entity
                 id="cursor-mobile"
-                cursor="fuse: true; fuseTimeout: 750"
+                cursor="fuse: true; fuseTimeout: 1000"
                 position="0 0 -1"
-                geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
-                material="color: white; shader: flat"
                 scale="0.5 0.5 0.5"
                 raycaster="far: 50; interval: 1000; objects: .clickable"
                 animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 150; from: 0.1 0.1 0.1; to: 0.5 0.5 0.5"
-                animation__fusing="property: scale; startEvents: fusing; easing: easeInCubic; dur: 750; from: 0.5 0.5 0.5; to: 0.1 0.1 0.1"
-            ></a-entity>
+                animation__fusing="property: scale; startEvents: fusing; easing: easeInCubic; dur: 1000; from: 0.5 0.5 0.5; to: 0.1 0.1 0.1"
+                animation__startProgres="property: scale; startEvents: startProgress; easing: linear; dur: 1000; dir: alternate; from: 0.5 0.5 0.5; to: 1.5 1.5 1.5;"
+                animation__stopProgres="property: scale; startEvents: stopProgress; easing: linear; dur: 1000; dir: alternate; from: 1.5 1.5 1.5; to: 0.5 0.5 0.5;"
+            >
+                <a-entity
+                    id="cursor-background"
+                    geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03;"
+                    material="color: white; shader: flat; opacity: 0.5"
+                ></a-entity>
+
+                <a-entity
+                    id="cursor-fill"
+                    rotation="0 180 0"
+                    geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03; thetaLength: 360; thetaStart: 90;"
+                    material="color: white; shader: flat; side: double;"
+                    animation__fill="startEvents: fill; property: geometry.thetaLength; from: 0; to: 360; dur: 500; easing: linear;"
+                ></a-entity>
+            </a-entity>
 
             <!-- Instructions -->
             <a-text

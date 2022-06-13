@@ -1,6 +1,14 @@
 class Confrontation {
     constructor() {
-        //#region Anger Constants
+        //#region General
+        this.obstacleConfrontationCache = []
+        this.fases = Object.freeze({ angry: 'angry', afraid: 'afraid' })
+        this.currentFase = this.fases.angry
+        this.OBSTACLE_DESTROYED_SCALE = 0.5
+
+        //#endregion
+
+        //#region Anger
         this.currentAngerStep = 0
 
         this.ANGER_START_POSITION = {
@@ -26,39 +34,30 @@ class Confrontation {
 
         //#endregion
 
-        //#region Fear Constants
+        //#region Fear
 
-        this.obstacleConfrontationCache = []
-        this.ObstaclePositions = [
+        this.FEAR_OBSTACLE_CONFRONTATION_POSITIONS = [
             // FRONT
             {
                 x: 0,
-                y: 2,
+                y: 3,
                 z: -1,
             },
             // LEFT
             {
                 x: -2,
-                y: 2,
+                y: 3,
                 z: 0.5,
             },
             // RIGHT
             {
                 x: 2,
-                y: 2,
+                y: 3,
                 z: 0.5,
             },
         ]
-        this.OBSTACLE_MAX_SCALE = { x: 1.8, y: 1.8, z: 1.8 }
-        this.OBSTACLE_VOLUMES = [12, 8, 8]
+        this.FEAR_OBSTACLE_MAX_SCALE = { x: 1.8, y: 1.8, z: 1.8 }
 
-        //#endregion
-
-        // Fases
-        this.fases = Object.freeze({ angry: 'angry', afraid: 'afraid' })
-        this.currentFase = this.fases.angry
-
-        // Breath
         this.fearBreathState = new BreathState(
             sensorConfiguration.breathMinPressure,
             sensorConfiguration.breathMaxPressure,
@@ -66,6 +65,8 @@ class Confrontation {
             1000,
             250
         )
+
+        //#endregion
     }
 
     //#region Start
@@ -75,13 +76,13 @@ class Confrontation {
         this.currentFase = fase
         currentChapter = chapters.confrontation
         controls.disable()
-        round++;
+        round++
 
         // Setup obstacle(s)
         this.obstacleConfrontationCache.push(obstacleToConfrontWith)
 
         if (this.currentFase == this.fases.afraid) {
-            for (i = 1; i < this.ObstaclePositions.length; i++) {
+            for (i = 1; i < this.FEAR_OBSTACLE_CONFRONTATION_POSITIONS.length; i++) {
                 this.obstacleConfrontationCache[i] = obstacleToConfrontWith.cloneNode(true)
                 this.addDuplicateObstacle(this.obstacleConfrontationCache[i])
             }
@@ -119,13 +120,13 @@ class Confrontation {
         // Fear position
         if (this.currentFase == this.fases.afraid) {
             this.obstacleConfrontationCache.forEach((obstacle, index) => {
-                let focusedPosition = this.ObstaclePositions[index]
+                let focusedPosition = this.FEAR_OBSTACLE_CONFRONTATION_POSITIONS[index]
 
                 this.adjustObstaclePosition(obstacle, focusedPosition, 2000, 0)
             })
 
             this.obstacleConfrontationCache.forEach((obstacle, index) => {
-                let foccusedScale = this.OBSTACLE_MAX_SCALE
+                let foccusedScale = this.FEAR_OBSTACLE_MAX_SCALE
                 this.adjustObstacleScale(obstacle, foccusedScale, 2000, 0)
             })
         }
@@ -161,25 +162,27 @@ class Confrontation {
                     obstacle.setAttribute('animation__pulse', 'dur', 250)
                     obstacle.emit('pulse')
                 }, 1500)
-            }, 400)
+            }, 500)
 
             setTimeout(() => {
                 this.handleAnger()
-            }, 3000)
+            }, 2000)
         }, 4000)
     }
 
     handleAnger() {
         btDataMessageHandlers.push(this.changeObstacleSizeOnStress.bind(this))
 
-        setInstruction('Knijp zo hard mogelijk.')
-
-        setTimeout(() => {
-            hideInstruction()
-        }, 7500)
+        progress.start(
+            this.ANGER_EXPLODED_SCALE.x,
+            this.OBSTACLE_DESTROYED_SCALE,
+            this.ANGER_EXPLODED_SCALE.x,
+            'Knijp zo hard mogelijk.'
+        )
 
         const configurationInterval = setInterval(() => {
-            bluetooth.send('ANGER?')
+            if (bluetooth.connected) bluetooth.send('ANGER?')
+            else this.changeObstacleSizeOnStress('ANGER: ', undefined, true)
 
             if (this.currentFase != this.fases.angry || currentChapter != chapters.confrontation) {
                 clearInterval(configurationInterval)
@@ -190,7 +193,8 @@ class Confrontation {
 
     changeObstacleSizeOnStress(
         data,
-        stressBallMaxPressure = sensorConfiguration.stressBallMaxPressure
+        stressBallMaxPressure = sensorConfiguration.stressBallMaxPressure,
+        noData = false
     ) {
         let label = getLabelFromBtMessage(data)
         let value = getDataFromBtMessage(data)
@@ -205,34 +209,33 @@ class Confrontation {
             const oldPosition = obstacle.getAttribute('position')
 
             // User is pressing
-            if (value > shrinkThreshold) {
+            if (value > shrinkThreshold || noData) {
                 const from = `${oldScale.x} ${oldScale.y} ${oldScale.z}`
-                const to = `${oldScale.x * 0.7} ${oldScale.y * 0.7} ${oldScale.z * 0.7}`
-                const newPosition = { x: oldPosition.x, y: oldPosition.y * 0.97, z: oldPosition.z }
+                const to = `${oldScale.x * 0.85} ${oldScale.y * 0.85} ${oldScale.z * 0.85}`
+                const newPosition = { x: oldPosition.x, y: oldPosition.y * 0.98, z: oldPosition.z }
 
                 obstacle.setAttribute('animation__pulse', 'from', from)
                 obstacle.setAttribute('animation__pulse', 'to', to)
                 obstacle.emit('pulse')
                 this.adjustObstaclePosition(obstacle, newPosition, 250, 0)
+                progress.set(oldScale.x * 0.9)
             }
 
             // User is releasing
-            if (
-                value < growThreshold &&
-                oldScale.z < this.ANGER_SCALE_STEPS[this.currentAngerStep].z
-            ) {
+            if (value < growThreshold && oldScale.z < this.ANGER_SCALE_STEPS[this.currentAngerStep].z) {
                 const from = `${oldScale.x} ${oldScale.y} ${oldScale.z}`
-                const to = `${oldScale.x * 1.15} ${oldScale.y * 1.15} ${oldScale.z * 1.15}`
-                const newPosition = { x: oldPosition.x, y: oldPosition.y * 1.1, z: oldPosition.z }
+                const to = `${oldScale.x * 1.2} ${oldScale.y * 1.2} ${oldScale.z * 1.2}`
+                const newPosition = { x: oldPosition.x, y: oldPosition.y * 1.02, z: oldPosition.z }
 
                 obstacle.setAttribute('animation__pulse', 'from', from)
                 obstacle.setAttribute('animation__pulse', 'to', to)
                 obstacle.emit('pulse')
                 this.adjustObstaclePosition(obstacle, newPosition, 250, 0)
+                progress.set(oldScale.x * 1.2)
             }
 
             // Toggle step or quit
-            if (oldScale.z <= 0.5) {
+            if (oldScale.z <= this.OBSTACLE_DESTROYED_SCALE) {
                 this.quitAnger()
             } else if (
                 this.currentAngerStep < this.ANGER_SCALE_STEPS.length - 1 &&
@@ -250,6 +253,7 @@ class Confrontation {
         const mainObstacle = this.obstacleConfrontationCache[0]
         this.obstacleConfrontationCache = []
         this.currentAngerStep = 0
+        progress.stop()
 
         // Set position
         const oldPosition = mainObstacle.getAttribute('position')
@@ -264,10 +268,10 @@ class Confrontation {
             setTimeout(() => {
                 environment.changeTheme(environment.Themes.storm, environment.Colors.blueStorm)
                 environment.startRain(environment.Colors.blueRain)
-    
+
                 setTimeout(() => {
                     this.start(mainObstacle, this.currentFase)
-                }, 15000)
+                }, 10000)
             }, 250)
         } else {
             this.switchToNextChapter()
@@ -283,34 +287,31 @@ class Confrontation {
         breathMinPressure = sensorConfiguration.breathMinPressure,
         breathMaxPressure = sensorConfiguration.breathMaxPressure
     ) {
-        this.fearBreathState = new BreathState(
-            breathMinPressure,
-            breathMaxPressure,
-            2000,
-            1000,
-            250
-        )
+        this.fearBreathState = new BreathState(breathMinPressure, breathMaxPressure, 2000, 1000, 500)
         btDataMessageHandlers.push(this.changeObstacleSizeOnBreath.bind(this))
 
-        setInstruction('Haal diep en langzaam adem.')
-        setTimeout(() => {
-            hideInstruction()
-        }, 5000)
+        progress.start(
+            this.FEAR_OBSTACLE_MAX_SCALE.x,
+            this.OBSTACLE_DESTROYED_SCALE,
+            this.FEAR_OBSTACLE_MAX_SCALE.x,
+            'Haal diep en langzaam adem.'
+        )
 
         const configurationInterval = setInterval(() => {
-            bluetooth.send('BREATH?')
+            if (bluetooth.connected) bluetooth.send('BREATH?')
+            else setTimeout(() => this.changeObstacleSizeOnBreath('BREATH: ', true).bind(this), 500)
 
             if (this.currentFase != this.fases.afraid || currentChapter != chapters.confrontation) {
                 clearInterval(configurationInterval)
                 removeBtMessageHandler(this.changeObstacleSizeOnBreath.bind(this))
             }
-        }, 250)
+        }, 500)
 
         const swapObstacles = setInterval(() => {
             if (this.currentFase == this.fases.afraid && currentChapter == chapters.confrontation) {
                 for (i = 0; i < this.obstacleConfrontationCache.length; i++) {
                     this.obstacleConfrontationCache[i].setAttribute('visible', false)
-                    fadeAudioOut(this.obstacleConfrontationCache[i], 4, 250)
+                    fadeAudioOut(this.obstacleConfrontationCache[i], 3, 250)
                 }
 
                 let obstacleToShow =
@@ -326,7 +327,7 @@ class Confrontation {
         }, 1000)
     }
 
-    changeObstacleSizeOnBreath(data) {
+    changeObstacleSizeOnBreath(data, noData = false) {
         let label = getLabelFromBtMessage(data)
         let value = getDataFromBtMessage(data)
         let shouldQuit = false
@@ -335,7 +336,9 @@ class Confrontation {
         if (label != 'BREATH') return
 
         // Update breathstate
-        this.fearBreathState.currentBreathPosition = value
+        this.fearBreathState.currentBreathPosition = !noData
+            ? value
+            : this.fearBreathState.oldBreathValue
 
         // Update size
         this.obstacleConfrontationCache.forEach((obstacle) => {
@@ -344,8 +347,8 @@ class Confrontation {
             let oldPosition = obstacle.getAttribute('position')
             let newPostion = oldPosition
 
-            // User breathing in
-            if (this.fearBreathState.breathIsDeep && !this.fearBreathState.hasUsedBreath) {
+            // User breathing
+            if ((this.fearBreathState.breathIsDeep && !this.fearBreathState.hasUsedBreath) || noData) {
                 newScale = {
                     x: 0.95 * oldScale.x,
                     y: 0.95 * oldScale.y,
@@ -357,7 +360,7 @@ class Confrontation {
 
             // User is holding breath too long
             if (this.fearBreathState.breathStateTime > 10000) {
-                if (newScale.z < this.OBSTACLE_MAX_SCALE.z) {
+                if (newScale.z < this.FEAR_OBSTACLE_MAX_SCALE.z) {
                     newScale = {
                         x: 1.05 * oldScale.x,
                         y: 1.05 * oldScale.y,
@@ -369,8 +372,11 @@ class Confrontation {
             }
 
             // Apply new scale and position
-            this.adjustObstaclePosition(obstacle, newPostion, 250, 0)
-            this.adjustObstacleScale(obstacle, newScale, 250, 0)
+            this.adjustObstaclePosition(obstacle, newPostion, 500, 0)
+            this.adjustObstacleScale(obstacle, newScale, 500, 0)
+
+            // Set progress
+            progress.set(newScale.x)
 
             // Fear destroyed
             if (newScale.z <= 0.5) {
@@ -382,21 +388,21 @@ class Confrontation {
     }
 
     quitFear() {
-        environment.stopRain();
+        environment.stopRain()
 
         this.obstacleConfrontationCache.forEach((obstacle) => {
             removeObject(obstacle)
         })
         this.obstacleConfrontationCache = []
 
+        progress.stop()
         this.currentFase = this.fases.angry
         this.switchToNextChapter()
     }
 
     switchToNextChapter() {
         if (round > 3) {
-            environment.changeTheme(environment.Themes.sunrise)
-            startRelieve();
+            startRelieve()
         } else {
             environment.changeTheme(environment.Themes.normal)
             controls.enable()

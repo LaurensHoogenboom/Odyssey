@@ -217,7 +217,7 @@ class Environment {
     }
 
     startThunder() {
-        fadeAudioIn(this.thunderSound, 8, 500)
+        fadeAudioIn(this.thunderSound, 4, 500)
     }
 
     stopThunder() {
@@ -226,8 +226,6 @@ class Environment {
 
     startRain(color = undefined) {
         if (color) this.changeColor(color);
-
-        console.log(this.rainSound.components.sound)
 
         setTimeout(() => {
             this.scene.setAttribute('rain', '')
