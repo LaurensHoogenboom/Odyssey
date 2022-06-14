@@ -72,7 +72,7 @@ const handleSunrise = () => {
         //Set sensor request interval
         const breathInterval = setInterval(() => {
             if (bluetooth.connected) bluetooth.send('BREATH?')
-            else setTimeout(() => changeSunriseOnBreath('BREATH: ', true), 500)
+            else setTimeout(() => changeSunriseOnBreath('BREATH: ', true), 2000)
 
             if (currentChapter != chapters.relieve) {
                 clearInterval(breathInterval)
