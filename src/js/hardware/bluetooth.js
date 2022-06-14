@@ -239,8 +239,6 @@ class BluetoothController {
     }
 
     writeToCharacterisctic = (characteristic, data) => {
-        console.log(this.connected)
-
         if (this.connected) characteristic.writeValue(new TextEncoder().encode(data))
     }
 }
