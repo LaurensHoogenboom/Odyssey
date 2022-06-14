@@ -12,17 +12,17 @@ class Relieve {
         //#endregion
 
         //#region Sunrise
-        this.sunriseColors = [
+        this.SUNRISE_COLORS = [
             '#202D46',
             '#454644',
             '#907F66',
             '#C89459',
             '#DCC391',
-            '#CFD1C0',
-            '#D7DCDB',
+            '#D3DFCB',
+            '#CAE0DA',
             '#a3d0ed',
         ]
-        this.sunrisePositions = [
+        this.SUNRISE_POSITIONS = [
             { x: 0, y: -3, z: -10 },
             { x: 0, y: -3, z: -10 },
             { x: 0, y: -1.7, z: -10 },
@@ -32,7 +32,7 @@ class Relieve {
             { x: 0, y: 7.6, z: -10 },
             { x: 0, y: 12, z: -10 },
         ]
-        this.sunriseScales = [
+        this.SUNRISE_SCALES = [
             { x: 1, y: 1, z: 1 },
             { x: 1, y: 1, z: 1 },
             { x: 1, y: 1, z: 1 },
@@ -49,24 +49,43 @@ class Relieve {
     start() {
         // General
         currentChapter = chapters.relieve
-        environment.changeTheme(environment.Themes.sunrise)
         this.sun.emit('show')
 
+        // Calming ocean & stop rain
+        environment.changeTheme(environment.THEMES.sunrise)
+        environment.stopRain()
+
         // Start sunrise handling
-        setTimeout(() => {
-            this.handleSunrise()
-        }, 2000)
+        setTimeout(this.handleSunrise.bind(this), 2000)
     }
 
     handleSunrise() {
+        let offlineTimer = 0
         btDataMessageHandlers.push(this.changeSunriseOnBreath.bind(this))
-        progress.start(0, this.sunrisePositions.length, this.currentSunriseIndex, 'Haal diep en langzaam adem.')
+        progress.start(
+            0,
+            this.SUNRISE_POSITIONS.length,
+            this.currentSunriseIndex,
+            'Haal diep en langzaam adem.'
+        )
 
         setTimeout(() => {
             //Set sensor request interval
             const breathInterval = setInterval(() => {
-                if (bluetooth.connected) bluetooth.send('BREATH?')
-                else setTimeout(this.changeSunriseOnBreath.bind(this, 'BREATH: ', true), 2000)
+                console.log(offlineTimer)
+
+                if (bluetooth.connected) {
+                    bluetooth.send('BREATH?')
+                    offlineTimer = 0
+                } else {
+                    offlineTimer += 500
+
+                    if (offlineTimer > 3000) {
+                        const handleOfflineBreath = this.changeSunriseOnBreath.bind(this)
+                        handleOfflineBreath('BREATH: ', true)
+                        offlineTimer = 0
+                    }
+                }
 
                 if (currentChapter != chapters.relieve) {
                     clearInterval(breathInterval)
@@ -92,38 +111,58 @@ class Relieve {
         if (
             (!this.relieveBreathState.hasUsedBreath &&
                 this.relieveBreathState.breathIsDeep &&
-                this.relieveBreathState.currentBreathPosition == this.relieveBreathState.breathPositions.in) ||
+                this.relieveBreathState.currentBreathPosition ==
+                    this.relieveBreathState.breathPositions.in) ||
             noData
         ) {
             this.currentSunriseIndex++
-            let newColor = this.sunriseColors[this.currentSunriseIndex]
+            let newColor = this.SUNRISE_COLORS[this.currentSunriseIndex]
             environment.changeColor(newColor)
             this.changeSunPosition(this.currentSunriseIndex)
             this.changeSunScale(this.currentSunriseIndex)
+            this.changeSunLight(this.currentSunriseIndex)
             progress.set(this.currentSunriseIndex)
         }
 
-        if (this.currentSunriseIndex >= this.sunriseColors.length - 1) {
+        if (this.currentSunriseIndex >= this.SUNRISE_COLORS.length - 1) {
             this.quitRelieve()
         }
     }
 
     changeSunPosition(index, sun = this.sun) {
-        let oldPosition = this.sunrisePositions[index - 1]
-        let newPosition = this.sunrisePositions[index]
-    
-        sun.setAttribute('animation__position', 'from', `${oldPosition.x} ${oldPosition.y} ${oldPosition.z}`)
-        sun.setAttribute('animation__position', 'to', `${newPosition.x} ${newPosition.y} ${newPosition.z}`)
+        let oldPosition = this.SUNRISE_POSITIONS[index - 1]
+        let newPosition = this.SUNRISE_POSITIONS[index]
+
+        sun.setAttribute(
+            'animation__position',
+            'from',
+            `${oldPosition.x} ${oldPosition.y} ${oldPosition.z}`
+        )
+        sun.setAttribute(
+            'animation__position',
+            'to',
+            `${newPosition.x} ${newPosition.y} ${newPosition.z}`
+        )
         sun.emit('move')
     }
 
     changeSunScale(index, sun = this.sun) {
-        let oldScale = this.sunriseScales[index - 1]
-        let newScale = this.sunriseScales[index]
-    
+        let oldScale = this.SUNRISE_SCALES[index - 1]
+        let newScale = this.SUNRISE_SCALES[index]
+
         sun.setAttribute('animation__scale', 'from', `${oldScale.x} ${oldScale.y} ${oldScale.z}`)
         sun.setAttribute('animation__scale', 'to', `${newScale.x} ${newScale.y} ${newScale.z}`)
         sun.emit('grow')
+    }
+
+    changeSunLight(index) {
+        let newLightPosition = environment.DIRECTIONAL_LIGHT_HIDDEN
+        newLightPosition.y = this.SUNRISE_POSITIONS[index].y + 1
+        environment.changeDirectionalLightPosition(newLightPosition)
+
+        let newColorRGB = hexToRgb(this.SUNRISE_COLORS[index > 0 ? index - 1 : index])
+        let newColorString = `rgb(${newColorRGB.r}, ${newColorRGB.g}, ${newColorRGB.b})`
+        environment.changeDirectionalLightColor(newColorString)
     }
 
     quitRelieve() {
@@ -131,20 +170,22 @@ class Relieve {
         this.currentSunriseIndex = 0
         progress.stop()
         gameOver()
-        showStartMenu()
+
+        setTimeout(() => {
+            environment.changeDirectionalLightPosition(environment.DIRECTIONAL_LIGHT_DEFAULT_POSITION)
+            
+            setTimeout(() => {
+                showStartMenu()
+            }, 3000);
+        }, 2000)
     }
 
     startDemo = () => {
         hideAllMenus()
+        environment.changeTheme(environment.THEMES.storm)
+        environment.startRain()
         this.currentSunriseIndex = 0
-        this.start()
+        this.changeSunPosition(1)
+        setTimeout(this.start.bind(this), 2000)
     }
 }
-
-
-
-
-
-
-
-

@@ -7,8 +7,8 @@
 <a-scene
     id="scene"
     fog="type: linear; color: #a3d0ed; near:5; far:20"
-    animation__color="start-events: color; easing: linear; property: fog.color; to: #a3d0ed; dur: 2300"
-    animation__fogDistance="start-events: fogDistance; easing: linear; property: fog.far; to: 7; dur: 2300"
+    animation__color="start-events: color; easing: linear; property: fog.color; to: #a3d0ed; dur: 2000"
+    animation__fogDistance="start-events: fogDistance; easing: linear; property: fog.far; to: 7; dur: 2000"
 >
     <!-- Assets -->
     <a-assets id="assets">
@@ -53,10 +53,10 @@
         material="blending: additive; opacity: 0.4;"
         scale="3 3 3"
         position="0 -3 -10"
-        animation__position="property: position; from: 0 -3 -10; to: 0 3 -10; dur: 2300; easing: linear; start-events: move"
-        animation__scale="property: scale; from: 1 1 1; to: 1 1 1; dur: 2300; easing: linear; start-events: grow"
-        animation__hide="property: material.opacity; from: 0.4; to: 0; dur: 2300; easing: linear; start-events: hide"
-        animation__show="property: material.opacity; from: 0; to: 0.4; dur: 2300; easing: linear; start-events: show"
+        animation__position="property: position; from: 0 -3 -10; to: 0 3 -10; dur: 2000; easing: linear; start-events: move"
+        animation__scale="property: scale; from: 1 1 1; to: 1 1 1; dur: 2000; easing: linear; start-events: grow"
+        animation__hide="property: material.opacity; from: 0.4; to: 0; dur: 2000; easing: linear; start-events: hide"
+        animation__show="property: material.opacity; from: 0; to: 0.4; dur: 2000; easing: linear; start-events: show"
     ></a-entity>
 
     <!-- Lights -->
@@ -67,13 +67,16 @@
           intensity: 0.4;
           color: #D0EAF9;"
         position="5 3 1"
+        id="directional-light"
+        animation__position="startEvents: move; from: 5 3 1; to: 5 3 1; dur: 2000; property: position; easing: linear;"
+        animation__color="startEvents: color; property: light.color; from: rgb(208, 234, 249); to: rgb(208, 234, 249), dur: 2000; easing: linear"
     ></a-entity>
     <a-light
         intensity="0.8"
         type="ambient"
         color="#B4C5EC"
         id="ambient-light"
-        animation__color="start-events: color; easing: linear; property: color; to: #1b3045; dur: 2300"
+        animation__color="start-events: color; easing: linear; property: color; to: #1b3045; dur: 2000;"
     ></a-light>
 
     <!-- Camera -->
@@ -149,8 +152,8 @@
             scale="2 2 2"
             position="0 -2 -3"
             class="intro-emotive"
-            animation__intro="startEvents: intro; property: position; from: 0 2 -20; to: 0 2 -3; dur: 2300; easing: easeOutQuad;"
-            animation__outro="startEvents: outro; property: position; from: 0 2 -3; to: 0 -2 -3; dur: 2300; easing: easeInOutQuad;"
+            animation__intro="startEvents: intro; property: position; from: 0 2 -20; to: 0 2 -3; dur: 2000; easing: easeOutQuad;"
+            animation__outro="startEvents: outro; property: position; from: 0 2 -3; to: 0 -2 -3; dur: 2000; easing: easeInOutQuad;"
             animation__scale="startEvents: outro; property: scale; from: 2 2 2; to: 0 0 0; dur: 3000; easing: easeInOutQuad;"
             animation__pulse="property: scale; from: 2 2 2; to: 2.3 2.3 2.3 2.3; loop: true; dur: 1000; easing: linear; dir: alternate"
             sound="src: #heartbeat; volume: 0; loop: true;"

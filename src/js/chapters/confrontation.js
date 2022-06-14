@@ -93,9 +93,12 @@ class Confrontation {
 
         // Change environment
         if (this.currentFase == this.fases.angry) {
-            environment.changeColor(environment.Colors.blueStorm)
+            environment.changeColor(environment.COLORS.blueStorm)
         } else {
-            environment.changeTheme(environment.Themes.scaryStorm)
+            environment.changeTheme(environment.THEMES.scaryStorm)
+            if (round > 3) {
+                environment.changeDirectionalLightPosition(environment.DIRECTIONAL_LIGHT_HIDDEN)
+            }
         }
 
         // Start Emotion Handling
@@ -154,7 +157,7 @@ class Confrontation {
 
                 this.adjustObstacleScale(obstacle, this.ANGER_EXPLODED_SCALE, 1500)
                 this.adjustObstaclePosition(obstacle, this.ANGER_EXPLODED_POSITION, 1500)
-                environment.changeTheme(environment.Themes.storm, environment.Colors.redStorm)
+                environment.changeTheme(environment.THEMES.storm, environment.COLORS.redStorm)
 
                 setTimeout(() => {
                     obstacle.setAttribute('animation__pulse', 'from', '1.8 1.8 1.8')
@@ -270,8 +273,8 @@ class Confrontation {
 
         if (round > 1) {
             setTimeout(() => {
-                environment.changeTheme(environment.Themes.storm, environment.Colors.blueStorm)
-                environment.startRain(environment.Colors.blueRain)
+                environment.changeTheme(environment.THEMES.storm, environment.COLORS.blueStorm)
+                environment.startRain(environment.COLORS.blueRain)
 
                 setTimeout(() => {
                     this.start(mainObstacle, this.currentFase)
@@ -392,8 +395,6 @@ class Confrontation {
     }
 
     quitFear() {
-        environment.stopRain()
-
         this.obstacleCache.forEach((obstacle) => {
             removeObject(obstacle)
         })
@@ -408,7 +409,8 @@ class Confrontation {
         if (round > 3) {
             relieve.start()
         } else {
-            environment.changeTheme(environment.Themes.normal)
+            environment.stopRain()
+            environment.changeTheme(environment.THEMES.normal)
             controls.enable()
             currentChapter = chapters.running
             runningTime = 0
