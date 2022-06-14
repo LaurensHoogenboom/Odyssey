@@ -302,8 +302,6 @@ class Confrontation {
         )
 
         const configurationInterval = setInterval(() => {
-            console.log(this)
-
             if (bluetooth.connected) bluetooth.send('BREATH?')
             else setTimeout(this.changeObstacleSizeOnBreath.bind(this, 'BREATH: ', true), 1000)
 
@@ -408,7 +406,7 @@ class Confrontation {
 
     switchToNextChapter() {
         if (round > 3) {
-            startRelieve()
+            relieve.start()
         } else {
             environment.changeTheme(environment.Themes.normal)
             controls.enable()

@@ -248,6 +248,7 @@ let bluetooth
 let sensorConfiguration
 let controls
 let confrontation
+let relieve
 let environment
 let playerSphere
 let playerCamera
@@ -274,6 +275,7 @@ const init = () => {
     confrontation = new Confrontation()
     environment = new Environment()
     progress = new Progress()
+    relieve = new Relieve()
 
     // Init stuff
     setupAllMenus()
@@ -288,7 +290,7 @@ const enterGame = () => {
     environment.setupSound()
 }
 
-function startGame() {
+const startGame = () => {
     if (isGameRunning) return
 
     isGameRunning = true
@@ -300,7 +302,7 @@ function startGame() {
     introduction.start(addThoughtsRandomlyLoop)
 }
 
-function gameOver() {
+const gameOver = () => {
     isGameRunning = false
     runningTime = 0
     round = 0
@@ -436,7 +438,7 @@ const shuffle = (a) => {
     return a
 }
 
-function makeid(length) {
+const makeid = (length) => {
     var result = ''
     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
     var charactersLength = characters.length
@@ -446,7 +448,7 @@ function makeid(length) {
     return result
 }
 
-function calculateAverageFromArray(array) {
+const calculateAverageFromArray = (array) => {
     var total = 0
     var count = 0
 
@@ -458,7 +460,7 @@ function calculateAverageFromArray(array) {
     return total / count
 }
 
-function removeObject(obj) {
+const removeObject = (obj) => {
     obj.parentNode.removeChild(obj)
 }
 
