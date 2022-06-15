@@ -70,7 +70,7 @@ class Confrontation {
         //#endregion
     }
 
-    //#region Start
+    //#region General
 
     start(obstacleToConfrontWith, fase = this.fases.angry) {
         // Global stuff
@@ -129,6 +129,20 @@ class Confrontation {
                 let foccusedScale = this.FEAR_OBSTACLE_MAX_SCALE
                 this.adjustObstacleScale(obstacle, foccusedScale, 2000, 0)
             })
+        }
+    }
+
+    switchToNextChapter() {
+        if (round > 3) {
+            relieve.start()
+        } else {
+            environment.stopRain()
+            environment.changeTheme(environment.THEMES.normal)
+            controls.enable()
+            currentChapter = chapters.running
+            runningTime = runningTime / 2
+            intervalLength = intervalLength * 2
+            addThoughtsRandomlyLoop()
         }
     }
 
@@ -400,20 +414,6 @@ class Confrontation {
         progress.stop()
         this.currentFase = this.fases.angry
         this.switchToNextChapter()
-    }
-
-    switchToNextChapter() {
-        if (round > 3) {
-            relieve.start()
-        } else {
-            environment.stopRain()
-            environment.changeTheme(environment.THEMES.normal)
-            controls.enable()
-            currentChapter = chapters.running
-            runningTime = 0
-            intervalLength = 2000
-            addThoughtsRandomlyLoop()
-        }
     }
 
     //#endregion

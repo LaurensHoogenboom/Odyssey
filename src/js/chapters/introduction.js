@@ -70,9 +70,14 @@ class Introduction {
                     addThoughtTo(1)
                     addThoughtTo(2)
                     setTimeout(() => {
+                        addThoughtTo(0)
+                        addThoughtTo(1)
+                        addThoughtTo(2)
+
                         setTimeout(() => {
                             this.thoughtsHavePassed = true
                             this.show()
+                            numberOfThoughts = 0
                         }, 4000)
                     }, 1000)
                 }, 7000)

@@ -192,7 +192,7 @@ const muteAllThoughts = () => {
     const thoughtList = document.querySelectorAll('.thought')
 
     thoughtList.forEach((thought) => {
-        fadeAudioOut(thought, 0, 500)
+        if (thought.hasAttribute('emotive')) fadeAudioOut(thought, 0, 500)
     })
 }
 
