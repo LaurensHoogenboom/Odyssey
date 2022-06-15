@@ -56,7 +56,7 @@ class Relieve {
             { x: 1.7, y: 2.3, z: -4.2 },
             { x: -0.2, y: 3, z: -4.1 },
             { x: -0.1, y: 4.9, z: -9.5 },
-            { x: 0, y: 5.1, z: -14.9 },
+            { x: 0, y: 8, z: -17 },
         ])
         this.SEAGULL_ROTATIONS = Object.freeze([
             { x: -20, y: -122, z: 15.1 },
@@ -191,15 +191,17 @@ class Relieve {
     //#region Seagull
 
     changeSeagull(index) {
-        if (index > 2) {
-            this.showSeagull();
+        console.log(index - 2)
 
-            const oldPosition = this.SEAGULL_POSITIONS[index - 4]
-            const newPosition = this.SEAGULL_POSITIONS[index - 3]
+        if (index > 1) {
+            this.showSeagull()
+
+            const oldPosition = this.SEAGULL_POSITIONS[index - 3]
+            const newPosition = this.SEAGULL_POSITIONS[index - 2]
             this.changeSeagullPosition(oldPosition, newPosition)
 
-            const oldRotation = this.SEAGULL_ROTATIONS[index - 4]
-            const newRotation = this.SEAGULL_ROTATIONS[index - 3]
+            const oldRotation = this.SEAGULL_ROTATIONS[index - 3]
+            const newRotation = this.SEAGULL_ROTATIONS[index - 2]
             this.changeSeagullRotation(oldRotation, newRotation)
         } else this.hideSeagull()
     }
@@ -233,11 +235,12 @@ class Relieve {
         gameOver()
 
         setTimeout(() => {
-            environment.changeDirectionalLightPosition(environment.DIRECTIONAL_LIGHT_DEFAULT_POSITION)
+            this.hideSeagull()
 
+            environment.changeDirectionalLightPosition(environment.DIRECTIONAL_LIGHT_DEFAULT_POSITION)
             setTimeout(() => {
                 showStartMenu()
-            }, 3000)
+            }, 2500)
         }, 2000)
     }
 
@@ -247,6 +250,7 @@ class Relieve {
         environment.startRain()
         this.currentSunriseIndex = 0
         this.changeSunPosition(this.SUNRISE_POSITIONS[0], this.SUNRISE_POSITIONS[1])
+        this.changeSeagullPosition(this.SEAGULL_POSITIONS[0], this.SEAGULL_POSITIONS[0])
         setTimeout(this.start.bind(this), 2000)
     }
 }

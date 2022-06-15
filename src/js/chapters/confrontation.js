@@ -96,9 +96,6 @@ class Confrontation {
             environment.changeColor(environment.COLORS.blueStorm)
         } else {
             environment.changeTheme(environment.THEMES.scaryStorm)
-            if (round > 3) {
-                environment.changeDirectionalLightPosition(environment.DIRECTIONAL_LIGHT_HIDDEN)
-            }
         }
 
         // Start Emotion Handling

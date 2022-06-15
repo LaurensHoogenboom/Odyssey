@@ -53,6 +53,7 @@
         scale="1 1 1"
         position="-4.7 2.6 2.6"
         rotation="0 -90 0"
+        visible="false"
         animation-mixer="clip: ArmatureAction.006"
         animation__position="startEvents: position; property: position; from: -4.7 2.6 2.6; to: 0 0 0; dur: 2000; easing: linear;"
         animation__rotation="startEvents: rotation; property: rotation; from: -20 -122 15.1; to: 0 0 0; dur: 2000; easing: linear;"
