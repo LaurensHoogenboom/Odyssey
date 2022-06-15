@@ -131,7 +131,7 @@
             <!-- Instructions -->
             <a-text
                 id="instruction"
-                value="Draai je hoofd naar links en rechts om de speler te bewegen, en de obstakels te ontwijken!"
+                value=" "
                 mixin="copy"
                 position="0 1 -5"
                 side="double"
@@ -202,6 +202,7 @@
                 data-thought-position-index="1"
                 animation__position="property: position; from: 0 0.6 -7; to: 0 0.6 2; dur: 5000; easing: linear;"
                 animation__pulse="property: scale; from: 0.2 0.2 0.2; to: 0.3 0.3 0.3; loop: true; dur: 500; easing: linear; dir: alternate; startEvents: pulse"
+                animation__hide="property: position; to: 1 1 1; dur: 2000; easing: linear; startEvents: hide;"
             >
                 <a-entity class="neutral-cloud" gltf-model="#neutral_cloud"></a-entity>
                 <a-entity class="emotive-cloud" gltf-model="#emotive_cloud" visible="false"></a-entity>
@@ -216,6 +217,7 @@
                 data-thought-position-index="0"
                 animation__position="property: position; from: -0.5 0.6 -7; to: -0.5 0.6 2; dur: 5000; easing: linear;"
                 animation__pulse="property: scale; from: 0.2 0.2 0.2; to: 0.3 0.3 0.3; loop: true; dur: 500; easing: linear; dir: alternate; startEvents: pulse"
+                animation__hide="property: position; to: 1 1 1; dur: 2000; easing: linear; startEvents: hide;"
             >
                 <a-entity class="neutral-cloud" gltf-model="#neutral_cloud"></a-entity>
                 <a-entity class="emotive-cloud" gltf-model="#emotive_cloud" visible="false"></a-entity>
@@ -229,6 +231,7 @@
                 data-thought-position-index="2"
                 animation__position="property: position; from: 0.5 0.6 -7; to: 0.5 0.6 2; dur: 5000; easing: linear;"
                 animation__pulse="property: scale; from: 0.2 0.2 0.2; to: 0.3 0.3 0.3; loop: true; dur: 500; easing: linear; dir: alternate; startEvents: pulse"
+                animation__hide="property: position; to: 1 1 1; dur: 2000; easing: linear; startEvents: hide;"
             >
                 <a-entity class="neutral-cloud" gltf-model="#neutral_cloud"></a-entity>
                 <a-entity class="emotive-cloud" gltf-model="#emotive_cloud" visible="false"></a-entity>
@@ -249,13 +252,14 @@
 
                     <a-entity id="start-copy" position="0 1 0">
                         <a-text
-                            value="Draai je hoofd naar links en rechts om de speler te bewegen, en de obstakels te ontwijken!"
+                            value="Kijk naar start om te beginnen."
                             mixin="copy"
+                            position="0 -0.3 0"
                         ></a-text>
-                        <a-text value="Start" position="0 0.9 0" mixin="heading"></a-text>
+                        <a-text value="Start" position="0 0.4 0" mixin="heading"></a-text>
                         <a-box
                             id="start-button"
-                            position="0 0.8 -0.05"
+                            position="0 0.3 -0.05"
                             width="1.5"
                             height="0.6"
                             depth="0.1"

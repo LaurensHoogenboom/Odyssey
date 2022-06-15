@@ -4,6 +4,8 @@ class Progress {
         this.filling = document.getElementById('cursor-fill')
         this.min = 0
         this.max = 0
+        this.progressTimer = 0
+        this.progressTimerInterval
     }
 
     start(min, max, current, instruction) {
@@ -14,18 +16,32 @@ class Progress {
 
         setTimeout(() => {
             this.filling.setAttribute('visible', true)
-            setInstruction(instruction ? instruction : ' ')
+            if (instruction) this.showInstruction(instruction)
 
-            setTimeout(() => {
-                hideInstruction()
-            }, 5000)
+            this.progressTimerInterval = setInterval(() => {
+                this.progressTimer += 500
+    
+                if (this.progressTimer > 15000) {
+                    this.showInstruction(instruction)
+                }
+            }, 500);
         }, 1000)
+    }
+
+    showInstruction(instruction) {
+        setInstruction(instruction)
+        this.progressTimer = 0
+
+        setTimeout(() => {
+            hideInstruction()
+        }, 5000)
     }
 
     stop() {
         hideInstruction()
+        clearInterval(this.progressTimerInterval)
         this.set(this.max)
-
+        
         setTimeout(() => {
             this.filling.setAttribute('visible', true)
             this.cursor.emit('stopProgress')
@@ -41,7 +57,7 @@ class Progress {
         this.filling.setAttribute('animation__fill', 'from', from)
         this.filling.setAttribute('animation__fill', 'dur', duration)
         this.filling.emit('fill')
-    }
 
-    // TODO: if lacks user input, show instruction, if received values don't change goto next input step 
+        this.progressTimer = 0
+    }
 }

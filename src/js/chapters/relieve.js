@@ -191,8 +191,6 @@ class Relieve {
     //#region Seagull
 
     changeSeagull(index) {
-        console.log(index - 2)
-
         if (index > 1) {
             this.showSeagull()
 

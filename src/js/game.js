@@ -211,24 +211,38 @@ const setupCollision = () => {
                 position = thought.getAttribute('position')
                 thought_position_index = thought.getAttribute('data-thought-position-index')
                 thought_id = thought.getAttribute('id')
+                rightChapter =
+                    currentChapter == chapters.running || currentChapter == chapters.introduction
 
-                if (position.z > POSITION_Z_OUT_OF_SIGHT) {
-                    removeObject(thought)
-                }
+                if (position.z > POSITION_Z_OUT_OF_SIGHT) removeObject(thought)
 
-                if (!isGameRunning || currentChapter != chapters.running) return
+                if (!isGameRunning || !rightChapter) return
 
                 if (
                     POSITION_Z_LINE_START < position.z &&
                     position.z < POSITION_Z_LINE_END &&
-                    thought_position_index == controls.player_position_index &&
-                    thought.hasAttribute('emotive')
+                    thought_position_index == controls.player_position_index
                 ) {
-                    confrontation.start(thought)
+                    if (thought.hasAttribute('emotive')) {
+                        confrontation.start(thought)
+                    } else if (!thought.hasAttribute('hidden')) {
+                        hideThought(thought)
+                    }
                 }
             })
         },
     })
+}
+
+const hideThought = (thought) => {
+    thought.setAttribute('hidden')
+    let oldPosition = thought.getAttribute('position')
+    let newPosition = structuredClone(oldPosition)
+    newPosition.y = -1
+
+    thought.setAttribute('animation__hide', 'from', vect3ToString(oldPosition))
+    thought.setAttribute('animation__hide', 'to', vect3ToString(newPosition))
+    thought.emit('hide')
 }
 
 //#endregion
