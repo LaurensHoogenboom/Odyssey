@@ -221,14 +221,28 @@ const setupCollision = () => {
                 if (
                     POSITION_Z_LINE_START < position.z &&
                     position.z < POSITION_Z_LINE_END &&
-                    thought_position_index == controls.player_position_index &&
-                    thought.hasAttribute('emotive')
+                    thought_position_index == controls.player_position_index
                 ) {
-                    confrontation.start(thought)
+                    if (thought.hasAttribute('emotive')) {
+                        confrontation.start(thought)
+                    } else if (!thought.hasAttribute('hidden')) {
+                        hideThought(thought)
+                    }
                 }
             })
         },
     })
+}
+
+const hideThought = (thought) => {
+    thought.setAttribute('hidden')
+    let oldPosition = thought.getAttribute('position')
+    let newPosition = structuredClone(oldPosition)
+    newPosition.y = -1
+
+    thought.setAttribute('animation__hide', 'from', vect3ToString(oldPosition))
+    thought.setAttribute('animation__hide', 'to', vect3ToString(newPosition))
+    thought.emit('hide');
 }
 
 //#endregion

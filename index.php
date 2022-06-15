@@ -202,6 +202,7 @@
                 data-thought-position-index="1"
                 animation__position="property: position; from: 0 0.6 -7; to: 0 0.6 2; dur: 5000; easing: linear;"
                 animation__pulse="property: scale; from: 0.2 0.2 0.2; to: 0.3 0.3 0.3; loop: true; dur: 500; easing: linear; dir: alternate; startEvents: pulse"
+                animation__hide="property: position; to: 1 1 1; dur: 2000; easing: linear; startEvents: hide;"
             >
                 <a-entity class="neutral-cloud" gltf-model="#neutral_cloud"></a-entity>
                 <a-entity class="emotive-cloud" gltf-model="#emotive_cloud" visible="false"></a-entity>
@@ -216,6 +217,7 @@
                 data-thought-position-index="0"
                 animation__position="property: position; from: -0.5 0.6 -7; to: -0.5 0.6 2; dur: 5000; easing: linear;"
                 animation__pulse="property: scale; from: 0.2 0.2 0.2; to: 0.3 0.3 0.3; loop: true; dur: 500; easing: linear; dir: alternate; startEvents: pulse"
+                animation__hide="property: position; to: 1 1 1; dur: 2000; easing: linear; startEvents: hide;"
             >
                 <a-entity class="neutral-cloud" gltf-model="#neutral_cloud"></a-entity>
                 <a-entity class="emotive-cloud" gltf-model="#emotive_cloud" visible="false"></a-entity>
@@ -229,6 +231,7 @@
                 data-thought-position-index="2"
                 animation__position="property: position; from: 0.5 0.6 -7; to: 0.5 0.6 2; dur: 5000; easing: linear;"
                 animation__pulse="property: scale; from: 0.2 0.2 0.2; to: 0.3 0.3 0.3; loop: true; dur: 500; easing: linear; dir: alternate; startEvents: pulse"
+                animation__hide="property: position; to: 1 1 1; dur: 2000; easing: linear; startEvents: hide;"
             >
                 <a-entity class="neutral-cloud" gltf-model="#neutral_cloud"></a-entity>
                 <a-entity class="emotive-cloud" gltf-model="#emotive_cloud" visible="false"></a-entity>
