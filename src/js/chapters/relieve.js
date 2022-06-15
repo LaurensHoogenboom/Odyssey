@@ -219,11 +219,21 @@ class Relieve {
     }
 
     showSeagull() {
-        this.seagull.setAttribute('visible', true)
+        const isVisible = this.seagull.getAttribute('visible')
+
+        if (!isVisible) {
+            this.seagull.setAttribute('visible', true)
+            this.seagull.components.sound.playSound()
+        }
     }
 
     hideSeagull() {
-        this.seagull.setAttribute('visible', false)
+        const isVisible = this.seagull.getAttribute('visible')
+
+        if (isVisible) {
+            this.seagull.setAttribute('visible', false)
+            this.seagull.components.sound.stopSound()
+        }
     }
 
     //#endregion

@@ -33,6 +33,7 @@
         <audio id="rain" src="/src/sound/rain.wav" preload="auto"></audio>
         <audio id="heartbeat" src="/src/sound/heartbeat.wav" preload="auto"></audio>
         <audio id="explosion" src="/src/sound/explosion.wav" preload="auto"></audio>
+        <audio id="gull" src="/src/sound/gull.wav" preload="auto"></audio>
 
         <!-- Models -->
         <a-asset-item id="neutral_cloud" src="/src/3d/neutral_cloud_lower_poly.gltf"></a-asset-item>
@@ -57,6 +58,7 @@
         animation-mixer="clip: ArmatureAction.006"
         animation__position="startEvents: position; property: position; from: -4.7 2.6 2.6; to: 0 0 0; dur: 2000; easing: linear;"
         animation__rotation="startEvents: rotation; property: rotation; from: -20 -122 15.1; to: 0 0 0; dur: 2000; easing: linear;"
+        sound="src: #gull; loop: true; volume:2"
     ></a-entity>
 
     <!-- Sun -->

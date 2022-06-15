@@ -28,8 +28,8 @@ class Confrontation {
         }
         this.ANGER_SCALE_STEPS = [
             { x: 1.3, y: 1.3, z: 1.3 },
-            { x: 0.9, y: 0.9, z: 0.9 },
-            { x: 0.6, y: 0.6, z: 0.6 },
+            { x: 1.0, y: 1.0, z: 1.0 },
+            { x: 0.7, y: 0.7, z: 0.7 },
         ]
 
         //#endregion
