@@ -322,7 +322,7 @@ const bindToggleVRModeEventSettings = () => {
         cameraContainer.setAttribute('position', {
             x: 0,
             y: 0,
-            z: 3,
+            z: 3.5,
         })
     })
 

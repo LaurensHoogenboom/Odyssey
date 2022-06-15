@@ -110,8 +110,8 @@
                 raycaster="far: 50; interval: 1000; objects: .clickable"
                 animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 150; from: 0.1 0.1 0.1; to: 0.5 0.5 0.5"
                 animation__fusing="property: scale; startEvents: fusing; easing: easeInCubic; dur: 1000; from: 0.5 0.5 0.5; to: 0.1 0.1 0.1"
-                animation__startProgres="property: scale; startEvents: startProgress; easing: linear; dur: 1000; dir: alternate; from: 0.5 0.5 0.5; to: 1.5 1.5 1.5;"
-                animation__stopProgres="property: scale; startEvents: stopProgress; easing: linear; dur: 1000; dir: alternate; from: 1.5 1.5 1.5; to: 0.5 0.5 0.5;"
+                animation__startProgres="property: scale; startEvents: startProgress; easing: linear; dur: 1000; dir: alternate; from: 0.5 0.5 0.5; to: 1.0 1.0 1.0;"
+                animation__stopProgres="property: scale; startEvents: stopProgress; easing: linear; dur: 1000; dir: alternate; from: 1.0 1.0 1.0; to: 0.5 0.5 0.5;"
             >
                 <a-entity
                     id="cursor-background"
