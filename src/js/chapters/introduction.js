@@ -64,11 +64,20 @@ class Introduction {
                 setInstruction('Gedachten komen langs je heen...')
 
                 setTimeout(() => {
-                    this.thoughtsHavePassed = true
-                    this.show()
-                }, 10000)
+                    setInstruction('De meesten verdwijnen als je ze tegenkomt...')
+
+                    addThoughtTo(0)
+                    addThoughtTo(1)
+                    addThoughtTo(2)
+                    setTimeout(() => {
+                        setTimeout(() => {
+                            this.thoughtsHavePassed = true
+                            this.show()
+                        }, 4000)
+                    }, 1000)
+                }, 7000)
             } else if (!this.hasEvokedEmotions) {
-                setInstruction('Sommigen veroorzaken specifieke emoties...')
+                setInstruction('Anderen veroorzaken bepaalde emoties...')
 
                 setTimeout(() => {
                     setInstruction(' ')
@@ -87,17 +96,21 @@ class Introduction {
                             this.show()
                         }, 3000)
                     }, 8000)
-                }, 1500)
+                }, 3000)
             } else if (!this.hasEscaped) {
-                setInstruction('In veel gevallen kun je de confrontatie ontlopen...')
+                setInstruction('Deze kun je meestal ontwijken...')
 
                 setTimeout(() => {
                     setInstruction('Maar soms heb je geen keus.')
 
                     setTimeout(() => {
-                        setInstruction(' ')
-                        this.hasEscaped = true
-                        this.show()
+                        setInstruction('Succes!')
+
+                        setTimeout(() => {
+                            setInstruction(' ')
+                            this.hasEscaped = true
+                            this.show()
+                        }, 4000)
                     }, 4000)
                 }, 4000)
             } else {

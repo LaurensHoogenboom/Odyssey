@@ -252,13 +252,14 @@
 
                     <a-entity id="start-copy" position="0 1 0">
                         <a-text
-                            value="Draai je hoofd naar links en rechts om de speler te bewegen, en de obstakels te ontwijken!"
+                            value="Kijk naar start om te beginnen."
                             mixin="copy"
+                            position="0 -0.3 0"
                         ></a-text>
-                        <a-text value="Start" position="0 0.9 0" mixin="heading"></a-text>
+                        <a-text value="Start" position="0 0.4 0" mixin="heading"></a-text>
                         <a-box
                             id="start-button"
-                            position="0 0.8 -0.05"
+                            position="0 0.3 -0.05"
                             width="1.5"
                             height="0.6"
                             depth="0.1"

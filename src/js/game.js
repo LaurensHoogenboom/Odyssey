@@ -211,12 +211,12 @@ const setupCollision = () => {
                 position = thought.getAttribute('position')
                 thought_position_index = thought.getAttribute('data-thought-position-index')
                 thought_id = thought.getAttribute('id')
+                rightChapter =
+                    currentChapter == chapters.running || currentChapter == chapters.introduction
 
-                if (position.z > POSITION_Z_OUT_OF_SIGHT) {
-                    removeObject(thought)
-                }
+                if (position.z > POSITION_Z_OUT_OF_SIGHT) removeObject(thought)
 
-                if (!isGameRunning || currentChapter != chapters.running) return
+                if (!isGameRunning || !rightChapter) return
 
                 if (
                     POSITION_Z_LINE_START < position.z &&
@@ -242,7 +242,7 @@ const hideThought = (thought) => {
 
     thought.setAttribute('animation__hide', 'from', vect3ToString(oldPosition))
     thought.setAttribute('animation__hide', 'to', vect3ToString(newPosition))
-    thought.emit('hide');
+    thought.emit('hide')
 }
 
 //#endregion
