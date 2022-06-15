@@ -37,6 +37,7 @@
         <!-- Models -->
         <a-asset-item id="neutral_cloud" src="/src/3d/neutral_cloud_lower_poly.gltf"></a-asset-item>
         <a-asset-item id="emotive_cloud" src="/src/3d/neutral_cloud_lower_poly_emotive.gltf"></a-asset-item>
+        <a-asset-item id="seagull_model" src="/src/3d/seagull/seagull.gltf"></a-asset-item>
     </a-assets>
 
     <!-- Global Sound -->
@@ -45,6 +46,17 @@
 
     <!-- Sky -->
     <a-sky id="sky" color="#a3d0ed"> </a-sky>
+
+    <a-entity
+        id="seagull"
+        gltf-model="#seagull_model"
+        scale="1 1 1"
+        position="-4.7 2.6 2.6"
+        rotation="0 -90 0"
+        animation-mixer="clip: ArmatureAction.006"
+        animation__position="startEvents: position; property: position; from: -4.7 2.6 2.6; to: 0 0 0; dur: 2000; easing: linear;"
+        animation__rotation="startEvents: rotation; property: rotation; from: -20 -122 15.1; to: 0 0 0; dur: 2000; easing: linear;"
+    ></a-entity>
 
     <!-- Sun -->
     <a-entity

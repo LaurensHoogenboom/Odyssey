@@ -181,7 +181,7 @@ class Environment {
     }
 
     changeDirectionalLightPosition(position = this.DIRECTIONAL_LIGHT_DEFAULT_POSITION, duration = 2000) {
-        const to = `${position.x} ${position.y} ${position.z}`
+        const to = vect3ToString(position)
         const from = this.directionalLight.getAttribute('position')
 
         this.directionalLight.setAttribute('animation__position', 'from', from)
@@ -221,14 +221,10 @@ class Environment {
 
         const shake = () => {
             const oldPosition = cycle == 0 ? null : steps[cycle - 1].position
-            const oldPositionString = oldPosition
-                ? `${oldPosition.x} ${oldPosition.y} ${oldPosition.z}`
-                : null
             const newPosition = steps[cycle].position
-            const newPositionString = `${newPosition.x} ${newPosition.y} ${newPosition.z}`
 
-            this.cameraContainer.setAttribute('animation__shake', 'from', oldPositionString)
-            this.cameraContainer.setAttribute('animation__shake', 'to', newPositionString)
+            this.cameraContainer.setAttribute('animation__shake', 'from', vect3ToString(oldPosition))
+            this.cameraContainer.setAttribute('animation__shake', 'to', vect3ToString(newPosition))
             this.cameraContainer.setAttribute('animation__shake', 'dur', steps[cycle].duration)
             this.cameraContainer.emit('shake')
 

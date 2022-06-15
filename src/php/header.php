@@ -11,6 +11,7 @@
         <!-- Low Poly Version 0.0.2 -->
         <script src="/src/js/components/low-poly.js"></script>
         <script src="/src/js/components/ocean.js"></script>
+        <script src="/src/js/components/animation-mixer.js"></script>
         <script src="/src/js/components/animation-timeline.js"></script>
         <script src="/src/js/components/rain.js"></script>
         <script src="/src/js/hardware/bluetooth.js"></script>

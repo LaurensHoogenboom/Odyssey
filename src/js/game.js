@@ -474,6 +474,10 @@ const scale = (inputY, yRange, xRange) => {
     return outputX
 }
 
+const vect3ToString = (vector) => {
+    return vector ? `${vector.x} ${vector.y} ${vector.z}` : null
+}
+
 const hexToRgb = (hex) => {
     const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i
     hex = hex.replace(shorthandRegex, (m, r, g, b) => {
