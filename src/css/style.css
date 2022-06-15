@@ -66,6 +66,19 @@ label.button {
     cursor: pointer;
 }
 
+label.button.square {
+    padding: 8px 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 46px;
+    width: 46px;
+}
+
+label.button img {
+    height: 25px
+}
+
 @media (hover: hover) {
     label.button:hover {
         border-color: #a3d0ed;
@@ -80,6 +93,13 @@ label.button.hidden {
     label.button {
         margin-top: 20px;
     }
+}
+
+#disable-bluetooth {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    margin-top: 0;
 }
 
 /*ui container*/

@@ -9,6 +9,10 @@
             <label id="connect" class="button depth-border">Verbinden</label>
             <label id="disconnect" class="button depth-border hidden">Verbinding verbreken</label>
 
+            <label onclick="skipBluetoothSetup()" class="button depth-border square" id="disable-bluetooth">
+                <img src="/src/images/disabledbluetooth.png" alt="disable bluetooth">
+            </label>
+
             <div class="bluetooth-interface hidden">
                 <div id="terminal">
                     <div>Device connection...</div>
