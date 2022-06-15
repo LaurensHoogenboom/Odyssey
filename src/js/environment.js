@@ -1,23 +1,14 @@
 class Environment {
     constructor() {
         // Constants
-        this.Themes = Object.freeze({
+        this.THEMES = Object.freeze({
             normal: 'normal',
             dark: 'night',
             storm: 'storm',
             scaryStorm: 'scaryStorm',
             sunrise: 'sunrise',
         })
-        this.Events = Object.freeze({
-            lightning: 'lightning',
-            earthquake: 'earthquake',
-            fog: 'fog',
-        })
-        this.FieldOfViews = Object.freeze({
-            normal: 80,
-            narrow: 60,
-        })
-        this.Colors = Object.freeze({
+        this.COLORS = Object.freeze({
             blueDay: '#a3d0ed',
             blueNight: '#202D46',
             blueStorm: '#1b3045',
@@ -25,19 +16,24 @@ class Environment {
             redStorm: '#401F11',
             greenStorm: '#25291C',
         })
-        this.FogDistances = Object.freeze({
+        this.FOG_DISTANCES = Object.freeze({
             normal: 20,
             fog: 7,
+            blind: 0,
         })
-        this.Oceans = Object.freeze({
+        this.OCEANS = Object.freeze({
             normal: 'normal',
             wild: 'wild',
             scary: 'scary',
         })
+        this.DIRECTIONAL_LIGHT_DEFAULT_POSITION = { x: 5, y: 3, z: 1 }
+        this.DIRECTIONAL_LIGHT_HIDDEN = { x: 0, y: -5, z: -10 }
+        this.DIRECTIONAL_LIGHT_DEFAULT_COLOR = `rgb(208, 234, 249)`
 
         // Scene
         this.scene = document.getElementById('scene')
         this.ambientLight = document.getElementById('ambient-light')
+        this.directionalLight = document.getElementById('directional-light')
 
         // Sound
         this.thunderSound = document.getElementById('thunder-sound')
@@ -62,21 +58,25 @@ class Environment {
     }
 
     changeTheme(theme, color) {
-        if (theme == this.Themes.normal) {
+        if (theme == this.THEMES.normal) {
             // Color
-            let sceneColor = color ? color : this.Colors.blueDay
+            let sceneColor = color ? color : this.COLORS.blueDay
             this.changeColor(sceneColor)
-            this.changeFog(this.FogDistances.normal)
+            this.changeFog(this.FOG_DISTANCES.normal)
 
             // Water
-            this.changeOceans(this.Oceans.normal)
+            this.changeOceans(this.OCEANS.normal)
+
+            // Light
+            this.changeDirectionalLightPosition(this.DIRECTIONAL_LIGHT_DEFAULT_POSITION)
+            this.changeDirectionalLightColor(this.DIRECTIONAL_LIGHT_DEFAULT_COLOR)
         }
 
-        if (theme == this.Themes.storm) {
+        if (theme == this.THEMES.storm) {
             // Color
-            let sceneColor = color ? color : this.Colors.blueStorm
+            let sceneColor = color ? color : this.COLORS.blueStorm
             this.changeColor(sceneColor)
-            this.changeFog(this.FogDistances.normal)
+            this.changeFog(this.FOG_DISTANCES.normal)
 
             // Water
             this.oceanWild.emit('show')
@@ -84,27 +84,39 @@ class Environment {
             this.oceanNormal.emit('hide')
 
             // Water
-            this.changeOceans(this.Oceans.wild)
+            this.changeOceans(this.OCEANS.wild)
+
+            // Ambient light
+            this.changeDirectionalLightPosition(this.DIRECTIONAL_LIGHT_DEFAULT_POSITION)
+            this.changeDirectionalLightColor(this.DIRECTIONAL_LIGHT_DEFAULT_COLOR)
         }
 
-        if (theme == this.Themes.scaryStorm) {
+        if (theme == this.THEMES.scaryStorm) {
             // Color
-            let sceneColor = color ? color : this.Colors.greenStorm
+            let sceneColor = color ? color : this.COLORS.greenStorm
             this.changeColor(sceneColor)
-            this.changeFog(this.FogDistances.fog)
+            this.changeFog(this.FOG_DISTANCES.fog)
 
             // Water
-            this.changeOceans(this.Oceans.scary)
+            this.changeOceans(this.OCEANS.scary)
+
+            // Light
+            this.changeDirectionalLightPosition(this.DIRECTIONAL_LIGHT_DEFAULT_POSITION)
+            this.changeDirectionalLightColor(this.DIRECTIONAL_LIGHT_DEFAULT_COLOR)
         }
 
-        if (theme == this.Themes.sunrise) {
+        if (theme == this.THEMES.sunrise) {
             // Color
-            let sceneColor = color ? color : this.Colors.blueNight
+            let sceneColor = color ? color : this.COLORS.blueNight
             this.changeColor(sceneColor)
-            this.changeFog(this.FogDistances.normal)
+            this.changeFog(this.FOG_DISTANCES.normal)
 
             // Water
-            this.changeOceans(this.Oceans.normal)
+            this.changeOceans(this.OCEANS.normal)
+
+            // Light
+            this.changeDirectionalLightPosition(this.DIRECTIONAL_LIGHT_HIDDEN)
+            this.changeDirectionalLightColor(this.DIRECTIONAL_LIGHT_DEFAULT_COLOR)
         }
     }
 
@@ -153,13 +165,13 @@ class Environment {
 
         // Show current
         switch (type) {
-            case this.Oceans.normal:
+            case this.OCEANS.normal:
                 this.oceanNormal.emit('show')
                 break
-            case this.Oceans.wild:
+            case this.OCEANS.wild:
                 this.oceanWild.emit('show')
                 break
-            case this.Oceans.scary:
+            case this.OCEANS.scary:
                 this.oceanScary.emit('show')
                 break
             default:
@@ -168,9 +180,25 @@ class Environment {
         }
     }
 
-    changeFieldOfView() {}
+    changeDirectionalLightPosition(position = this.DIRECTIONAL_LIGHT_DEFAULT_POSITION, duration = 2000) {
+        const to = vect3ToString(position)
+        const from = this.directionalLight.getAttribute('position')
 
-    changeAmbientLightPosition() {}
+        this.directionalLight.setAttribute('animation__position', 'from', from)
+        this.directionalLight.setAttribute('animation__position', 'to', to)
+        this.directionalLight.setAttribute('animation__position', 'dur', duration)
+        this.directionalLight.emit('move')
+    }
+
+    changeDirectionalLightColor(color, duration = 2000) {
+        const to = color ? color : this.DIRECTIONAL_LIGHT_DEFAULT_COLOR
+        const from = this.directionalLight.getAttribute('light').color
+
+        this.directionalLight.setAttribute('animation__color', 'from', from)
+        this.directionalLight.setAttribute('animation__color', 'to', to)
+        this.directionalLight.setAttribute('animation__color', 'dur', duration)
+        this.directionalLight.emit('color')
+    }
 
     earthquake() {
         disableLookControls()
@@ -193,14 +221,10 @@ class Environment {
 
         const shake = () => {
             const oldPosition = cycle == 0 ? null : steps[cycle - 1].position
-            const oldPositionString = oldPosition
-                ? `${oldPosition.x} ${oldPosition.y} ${oldPosition.z}`
-                : null
             const newPosition = steps[cycle].position
-            const newPositionString = `${newPosition.x} ${newPosition.y} ${newPosition.z}`
 
-            this.cameraContainer.setAttribute('animation__shake', 'from', oldPositionString)
-            this.cameraContainer.setAttribute('animation__shake', 'to', newPositionString)
+            this.cameraContainer.setAttribute('animation__shake', 'from', vect3ToString(oldPosition))
+            this.cameraContainer.setAttribute('animation__shake', 'to', vect3ToString(newPosition))
             this.cameraContainer.setAttribute('animation__shake', 'dur', steps[cycle].duration)
             this.cameraContainer.emit('shake')
 
@@ -225,12 +249,15 @@ class Environment {
     }
 
     startRain(color = undefined) {
-        if (color) this.changeColor(color);
+        if (color) this.changeColor(color)
 
-        setTimeout(() => {
-            this.scene.setAttribute('rain', '')
-            fadeAudioIn(this.rainSound, 0.75, 500)
-        }, color ? 1000 : 0)
+        setTimeout(
+            () => {
+                this.scene.setAttribute('rain', '')
+                fadeAudioIn(this.rainSound, 0.75, 500)
+            },
+            color ? 1000 : 0
+        )
     }
 
     stopRain(color = undefined) {
@@ -238,7 +265,7 @@ class Environment {
         fadeAudioOut(this.rainSound, 0, 500)
 
         setTimeout(() => {
-            if (color) this.changeColor(color);
+            if (color) this.changeColor(color)
         }, 1000)
     }
 }

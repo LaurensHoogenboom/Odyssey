@@ -248,6 +248,7 @@ let bluetooth
 let sensorConfiguration
 let controls
 let confrontation
+let relieve
 let environment
 let playerSphere
 let playerCamera
@@ -274,6 +275,7 @@ const init = () => {
     confrontation = new Confrontation()
     environment = new Environment()
     progress = new Progress()
+    relieve = new Relieve()
 
     // Init stuff
     setupAllMenus()
@@ -288,7 +290,7 @@ const enterGame = () => {
     environment.setupSound()
 }
 
-function startGame() {
+const startGame = () => {
     if (isGameRunning) return
 
     isGameRunning = true
@@ -300,7 +302,7 @@ function startGame() {
     introduction.start(addThoughtsRandomlyLoop)
 }
 
-function gameOver() {
+const gameOver = () => {
     isGameRunning = false
     runningTime = 0
     round = 0
@@ -320,7 +322,7 @@ const bindToggleVRModeEventSettings = () => {
         cameraContainer.setAttribute('position', {
             x: 0,
             y: 0,
-            z: 3,
+            z: 3.5,
         })
     })
 
@@ -436,7 +438,7 @@ const shuffle = (a) => {
     return a
 }
 
-function makeid(length) {
+const makeid = (length) => {
     var result = ''
     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
     var charactersLength = characters.length
@@ -446,7 +448,7 @@ function makeid(length) {
     return result
 }
 
-function calculateAverageFromArray(array) {
+const calculateAverageFromArray = (array) => {
     var total = 0
     var count = 0
 
@@ -458,7 +460,7 @@ function calculateAverageFromArray(array) {
     return total / count
 }
 
-function removeObject(obj) {
+const removeObject = (obj) => {
     obj.parentNode.removeChild(obj)
 }
 
@@ -470,6 +472,30 @@ const scale = (inputY, yRange, xRange) => {
     const outputX = percent * (xMax - xMin) + xMin
 
     return outputX
+}
+
+const vect3ToString = (vector) => {
+    return vector ? `${vector.x} ${vector.y} ${vector.z}` : null
+}
+
+const hexToRgb = (hex) => {
+    const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i
+    hex = hex.replace(shorthandRegex, (m, r, g, b) => {
+        return r + r + g + g + b + b
+    })
+
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
+    return result
+        ? {
+              r: parseInt(result[1], 16),
+              g: parseInt(result[2], 16),
+              b: parseInt(result[3], 16),
+          }
+        : null
+}
+
+const rgbToHex = (r, g, b) => {
+    return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)
 }
 
 //#endregion

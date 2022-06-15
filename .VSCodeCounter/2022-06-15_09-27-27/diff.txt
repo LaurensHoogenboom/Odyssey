@@ -1,0 +1,46 @@
+Date : 2022-06-15 09:27:27
+Directory : c:\xampp\htdocs
+Total : 13 files,  708 codes, 0 comments, 87 blanks, all 795 lines
+
+Languages
++--------------------+------------+------------+------------+------------+------------+
+| language           | files      | code       | comment    | blank      | total      |
++--------------------+------------+------------+------------+------------+------------+
+| JavaScript         |         10 |        678 |          0 |         82 |        760 |
+| PHP                |          2 |         24 |          0 |          4 |         28 |
+| JSON with Comments |          1 |          6 |          0 |          1 |          7 |
++--------------------+------------+------------+------------+------------+------------+
+
+Directories
++--------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                             | files      | code       | comment    | blank      | total      |
++--------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                |         13 |        708 |          0 |         87 |        795 |
+| src                                              |         11 |        680 |          0 |         82 |        762 |
+| src\js                                           |         10 |        678 |          0 |         82 |        760 |
+| src\js\chapters                                  |          4 |        122 |        -27 |         14 |        109 |
+| src\js\components                                |          1 |        254 |          0 |          1 |        255 |
+| src\js\hardware                                  |          1 |          4 |          1 |          3 |          8 |
+| src\js\models                                    |          1 |          3 |          0 |          1 |          4 |
+| src\php                                          |          1 |          2 |          0 |          0 |          2 |
++--------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++--------------------------------------------------+--------------------+------------+------------+------------+------------+
+| filename                                         | language           | code       | comment    | blank      | total      |
++--------------------------------------------------+--------------------+------------+------------+------------+------------+
+| c:\xampp\htdocs\index.php                        | PHP                |         22 |          0 |          4 |         26 |
+| c:\xampp\htdocs\jsconfig.json                    | JSON with Comments |          6 |          0 |          1 |          7 |
+| c:\xampp\htdocs\src\js\chapters\confrontation.js | JavaScript         |         62 |        -10 |          4 |         56 |
+| c:\xampp\htdocs\src\js\chapters\environment.js   | JavaScript         |        -57 |        -18 |        -16 |        -91 |
+| c:\xampp\htdocs\src\js\chapters\introduction.js  | JavaScript         |         61 |          4 |         14 |         79 |
+| c:\xampp\htdocs\src\js\chapters\relieve.js       | JavaScript         |         56 |         -3 |         12 |         65 |
+| c:\xampp\htdocs\src\js\components\rain.js        | JavaScript         |        254 |          0 |          1 |        255 |
+| c:\xampp\htdocs\src\js\environment.js            | JavaScript         |        205 |         25 |         46 |        276 |
+| c:\xampp\htdocs\src\js\game.js                   | JavaScript         |         52 |          0 |          8 |         60 |
+| c:\xampp\htdocs\src\js\hardware\bluetooth.js     | JavaScript         |          4 |          1 |          3 |          8 |
+| c:\xampp\htdocs\src\js\models\breathState.js     | JavaScript         |          3 |          0 |          1 |          4 |
+| c:\xampp\htdocs\src\js\progress.js               | JavaScript         |         38 |          1 |          9 |         48 |
+| c:\xampp\htdocs\src\php\header.php               | PHP                |          2 |          0 |          0 |          2 |
+| Total                                            |                    |        708 |          0 |         87 |        795 |
++--------------------------------------------------+--------------------+------------+------------+------------+------------+

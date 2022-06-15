@@ -72,13 +72,13 @@ class Introduction {
 
                 setTimeout(() => {
                     setInstruction(' ')
-                    environment.changeTheme(environment.Themes.storm)
+                    environment.changeTheme(environment.THEMES.storm)
                     this.emotiveThought.components.sound.playSound()
                     fadeAudioIn(this.emotiveThought, 1.5, 500)
                     this.emotiveThought.emit('intro')
 
                     setTimeout(() => {
-                        environment.changeTheme(environment.Themes.normal)
+                        environment.changeTheme(environment.THEMES.normal)
                         this.emotiveThought.emit('outro')
                         fadeAudioOut(this.emotiveThought, 0, 500)
 

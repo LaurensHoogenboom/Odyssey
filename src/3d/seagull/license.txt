@@ -1,0 +1,11 @@
+Model Information:
+* title:	Seagull
+* source:	https://sketchfab.com/3d-models/seagull-dc42ffc81c86480e9e7f7752fa134174
+* author:	Dayvable (https://sketchfab.com/Dayvable)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Seagull" (https://sketchfab.com/3d-models/seagull-dc42ffc81c86480e9e7f7752fa134174) by Dayvable (https://sketchfab.com/Dayvable) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

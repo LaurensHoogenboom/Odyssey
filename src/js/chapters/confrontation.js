@@ -28,8 +28,8 @@ class Confrontation {
         }
         this.ANGER_SCALE_STEPS = [
             { x: 1.3, y: 1.3, z: 1.3 },
-            { x: 0.9, y: 0.9, z: 0.9 },
-            { x: 0.6, y: 0.6, z: 0.6 },
+            { x: 1.0, y: 1.0, z: 1.0 },
+            { x: 0.7, y: 0.7, z: 0.7 },
         ]
 
         //#endregion
@@ -93,9 +93,9 @@ class Confrontation {
 
         // Change environment
         if (this.currentFase == this.fases.angry) {
-            environment.changeColor(environment.Colors.blueStorm)
+            environment.changeColor(environment.COLORS.blueStorm)
         } else {
-            environment.changeTheme(environment.Themes.scaryStorm)
+            environment.changeTheme(environment.THEMES.scaryStorm)
         }
 
         // Start Emotion Handling
@@ -154,7 +154,7 @@ class Confrontation {
 
                 this.adjustObstacleScale(obstacle, this.ANGER_EXPLODED_SCALE, 1500)
                 this.adjustObstaclePosition(obstacle, this.ANGER_EXPLODED_POSITION, 1500)
-                environment.changeTheme(environment.Themes.storm, environment.Colors.redStorm)
+                environment.changeTheme(environment.THEMES.storm, environment.COLORS.redStorm)
 
                 setTimeout(() => {
                     obstacle.setAttribute('animation__pulse', 'from', '1.8 1.8 1.8')
@@ -270,8 +270,8 @@ class Confrontation {
 
         if (round > 1) {
             setTimeout(() => {
-                environment.changeTheme(environment.Themes.storm, environment.Colors.blueStorm)
-                environment.startRain(environment.Colors.blueRain)
+                environment.changeTheme(environment.THEMES.storm, environment.COLORS.blueStorm)
+                environment.startRain(environment.COLORS.blueRain)
 
                 setTimeout(() => {
                     this.start(mainObstacle, this.currentFase)
@@ -302,8 +302,6 @@ class Confrontation {
         )
 
         const configurationInterval = setInterval(() => {
-            console.log(this)
-
             if (bluetooth.connected) bluetooth.send('BREATH?')
             else setTimeout(this.changeObstacleSizeOnBreath.bind(this, 'BREATH: ', true), 1000)
 
@@ -394,8 +392,6 @@ class Confrontation {
     }
 
     quitFear() {
-        environment.stopRain()
-
         this.obstacleCache.forEach((obstacle) => {
             removeObject(obstacle)
         })
@@ -408,9 +404,10 @@ class Confrontation {
 
     switchToNextChapter() {
         if (round > 3) {
-            startRelieve()
+            relieve.start()
         } else {
-            environment.changeTheme(environment.Themes.normal)
+            environment.stopRain()
+            environment.changeTheme(environment.THEMES.normal)
             controls.enable()
             currentChapter = chapters.running
             runningTime = 0
