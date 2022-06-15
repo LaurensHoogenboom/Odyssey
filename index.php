@@ -131,7 +131,7 @@
             <!-- Instructions -->
             <a-text
                 id="instruction"
-                value="Draai je hoofd naar links en rechts om de speler te bewegen, en de obstakels te ontwijken!"
+                value=" "
                 mixin="copy"
                 position="0 1 -5"
                 side="double"

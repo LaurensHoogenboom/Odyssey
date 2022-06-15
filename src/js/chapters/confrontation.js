@@ -83,7 +83,7 @@ class Confrontation {
         this.obstacleCache.push(obstacleToConfrontWith)
 
         if (this.currentFase == this.fases.afraid) {
-            for (i = 1; i < this.FEAR_OBSTACLE_CONFRONTATION_POSITIONS.length; i++) {
+            for (let i = 1; i < this.FEAR_OBSTACLE_CONFRONTATION_POSITIONS.length; i++) {
                 this.obstacleCache[i] = obstacleToConfrontWith.cloneNode(true)
                 this.addDuplicateObstacle(this.obstacleCache[i])
             }
@@ -313,7 +313,7 @@ class Confrontation {
 
         const swapObstacles = setInterval(() => {
             if (this.currentFase == this.fases.afraid && currentChapter == chapters.confrontation) {
-                for (i = 0; i < this.obstacleCache.length; i++) {
+                for (let i = 0; i < this.obstacleCache.length; i++) {
                     this.obstacleCache[i].setAttribute('visible', false)
                     fadeAudioOut(this.obstacleCache[i], 3, 250)
                 }
