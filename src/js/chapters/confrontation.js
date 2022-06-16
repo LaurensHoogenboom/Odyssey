@@ -140,8 +140,8 @@ class Confrontation {
             environment.changeTheme(environment.THEMES.normal)
             controls.enable()
             currentChapter = chapters.running
-            runningTime = runningTime / 2
-            intervalLength = intervalLength * 2
+            runningTime = runningTime * 0.8
+            intervalLength = intervalLength * 1.2
             addThoughtsRandomlyLoop()
         }
     }
@@ -302,6 +302,12 @@ class Confrontation {
         createCloudPart(position, scale, '#FFC798')
     }
 
+    resetCloudModel(obstacle) {
+        const previousModel = obstacle.querySelector('.emotive-cloud')
+        removeObject(previousModel)
+        toggleEmotiveThought(obstacle)
+    }
+
     quitAnger() {
         // Set fase
         this.currentFase = this.fases.afraid
@@ -330,6 +336,7 @@ class Confrontation {
                 environment.startRain(environment.COLORS.blueRain)
 
                 setTimeout(() => {
+                    this.resetCloudModel(mainObstacle)
                     this.start(mainObstacle, this.currentFase)
                 }, 10000)
             }, 250)

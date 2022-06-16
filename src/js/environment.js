@@ -18,8 +18,7 @@ class Environment {
         })
         this.FOG_DISTANCES = Object.freeze({
             normal: 20,
-            fog: 7,
-            blind: 0,
+            fog: 10,
         })
         this.OCEANS = Object.freeze({
             normal: 'normal',

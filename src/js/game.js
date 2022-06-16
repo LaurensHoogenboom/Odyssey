@@ -163,12 +163,12 @@ function addThought(el) {
             break
     }
 
+    el.id = `thought-${numberOfThoughts}`
     thoughtContainer.appendChild(el)
 }
 
 function addObstacleToElement(el) {
     toggleEmotiveThought(el)
-    el.id = `thought-${numberOfThoughts}`
     el.setAttribute('emotive')
     el.setAttribute('sound', {
         src: `#heartbeat`,
@@ -181,11 +181,13 @@ function addObstacleToElement(el) {
 }
 
 const toggleEmotiveThought = (obstacle) => {
-    let emotiveCloud = obstacle.querySelector('.emotive-cloud')
-    let neutralCloud = obstacle.querySelector('.neutral-cloud')
+    const neutralCloud = obstacle.querySelector('.neutral-cloud')
+    if (neutralCloud) removeObject(neutralCloud)
 
-    emotiveCloud.setAttribute('visible', true)
-    neutralCloud.setAttribute('visible', false)
+    const oldModel = document.createElement('a-entity')
+    oldModel.setAttribute('gltf-model', '#emotive_cloud')
+    oldModel.setAttribute('class', 'emotive-cloud')
+    obstacle.appendChild(oldModel)
 }
 
 const muteAllThoughts = () => {

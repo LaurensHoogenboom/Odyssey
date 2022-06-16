@@ -38,9 +38,18 @@
         <!-- Models -->
         <a-asset-item id="neutral_cloud" src="/src/3d/neutral_cloud_lower_poly.gltf"></a-asset-item>
         <a-asset-item id="emotive_cloud" src="/src/3d/neutral_cloud_lower_poly_emotive.gltf"></a-asset-item>
-        <a-asset-item id="broken_cloud_1" src="/src/3d/neutral_cloud_lower_poly_emotive_broken1.gltf"></a-asset-item>
-        <a-asset-item id="broken_cloud_2" src="/src/3d/neutral_cloud_lower_poly_emotive_broken2.gltf"></a-asset-item>
-        <a-asset-item id="broken_cloud_3" src="/src/3d/neutral_cloud_lower_poly_emotive_broken3.gltf"></a-asset-item>
+        <a-asset-item
+            id="broken_cloud_1"
+            src="/src/3d/neutral_cloud_lower_poly_emotive_broken1.gltf"
+        ></a-asset-item>
+        <a-asset-item
+            id="broken_cloud_2"
+            src="/src/3d/neutral_cloud_lower_poly_emotive_broken2.gltf"
+        ></a-asset-item>
+        <a-asset-item
+            id="broken_cloud_3"
+            src="/src/3d/neutral_cloud_lower_poly_emotive_broken3.gltf"
+        ></a-asset-item>
         <a-asset-item id="seagull_model" src="/src/3d/seagull/seagull.gltf"></a-asset-item>
     </a-assets>
 
@@ -110,8 +119,9 @@
                 cursor="fuse: true; fuseTimeout: 1000"
                 position="0 0 -1"
                 scale="0.5 0.5 0.5"
-                raycaster="far: 50; interval: 1000; objects: .clickable"
+                raycaster="far: 50; objects: .clickable"
                 animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 150; from: 0.1 0.1 0.1; to: 0.5 0.5 0.5"
+                animation__mouseleave="property: scale; startEvents: mouseleave; easing: easeInCubic; dur: 500; to: 0.5 0.5 0.5"
                 animation__fusing="property: scale; startEvents: fusing; easing: easeInCubic; dur: 1000; from: 0.5 0.5 0.5; to: 0.1 0.1 0.1"
                 animation__startProgres="property: scale; startEvents: startProgress; easing: linear; dur: 1000; dir: alternate; from: 0.5 0.5 0.5; to: 1.0 1.0 1.0;"
                 animation__stopProgres="property: scale; startEvents: stopProgress; easing: linear; dur: 1000; dir: alternate; from: 1.0 1.0 1.0; to: 0.5 0.5 0.5;"
@@ -209,7 +219,6 @@
                 animation__hide="property: position; to: 1 1 1; dur: 2000; easing: linear; startEvents: hide;"
             >
                 <a-entity class="neutral-cloud" gltf-model="#neutral_cloud"></a-entity>
-                <a-entity class="emotive-cloud" gltf-model="#emotive_cloud" visible="false"></a-entity>
             </a-entity>
 
             <a-entity
@@ -224,7 +233,6 @@
                 animation__hide="property: position; to: 1 1 1; dur: 2000; easing: linear; startEvents: hide;"
             >
                 <a-entity class="neutral-cloud" gltf-model="#neutral_cloud"></a-entity>
-                <a-entity class="emotive-cloud" gltf-model="#emotive_cloud" visible="false"></a-entity>
             </a-entity>
             <a-entity
                 id="template-thought-right"
@@ -238,7 +246,6 @@
                 animation__hide="property: position; to: 1 1 1; dur: 2000; easing: linear; startEvents: hide;"
             >
                 <a-entity class="neutral-cloud" gltf-model="#neutral_cloud"></a-entity>
-                <a-entity class="emotive-cloud" gltf-model="#emotive_cloud" visible="false"></a-entity>
             </a-entity>
 
             <!-- Menus -->
@@ -277,8 +284,8 @@
             <a-entity id="player" player>
                 <a-sphere
                     id="player-sphere"
-                    radius="0.05"
-                    animation__radius="property: radius; from: 0.05; to: 0.055; loop: true; dir: alternate; dur: 1500;"
+                    radius="0.07"
+                    animation__radius="property: radius; from: 0.07; to: 0.075; loop: true; dir: alternate; dur: 1500;"
                     animation__position="property: position; from: 0 0.5 0.6; to: 0 0.525 0.6; loop: true; dir: alternate; dur: 15000; easing: easeInOutQuad;"
                 >
                     <a-light type="point" intensity="0.35" color="#FF440C"></a-light>
