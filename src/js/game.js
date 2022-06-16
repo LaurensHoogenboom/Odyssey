@@ -196,6 +196,18 @@ const muteAllThoughts = () => {
     })
 }
 
+const createCloudPart = (position, scale, color = 'white') => {
+    const cloudPart = document.createElement('a-sphere')
+    cloudPart.setAttribute('position', vect3ToString(position))
+    cloudPart.setAttribute('scale', vect3ToString(scale))
+    cloudPart.setAttribute('material', `color: ${color}; flatShading: true;`)
+    cloudPart.setAttribute('segments-height', 6)
+    cloudPart.setAttribute('segments-width', 6)
+    cloudPart.setAttribute('dynamic-body', 'shape: sphere; sphereRadius: 0.4;')
+    cloudPart.setAttribute('class', 'cloud-part')
+    document.getElementById('scene').appendChild(cloudPart)
+}
+
 //#endregion
 
 //#region Collision
