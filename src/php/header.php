@@ -46,7 +46,7 @@
         <meta name="application-name" content="Odyssey" />
         <meta name="msapplication-TileColor" content="#2d89ef" />
         <meta name="msapplication-config" content="/src/images/favicons/browserconfig.xml" />
-        <meta name="theme-color" content="#a3d0ed" />
+        <meta name="theme-color" content="#ffffff" />
 
         <link rel="stylesheet" href="/src/css/style.css" />
     </head>

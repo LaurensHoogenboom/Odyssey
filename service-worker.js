@@ -1,71 +1,53 @@
-const PRECACHE = 'odyssey-cache-v1.0'
-const RUNTIME = 'runtime'
-const PRECAHCE_URLS = [
-    '/index.html',
-    '/service-worker.js',
-    '/site.webmanifest',
-    '/src/css/style.css',
-    '/src/font/exo-2.woff',
-    '/src/font/Exo2Bold.fnt',
-    '/src/font/Exo2Bold.png',
-    '/src/js/hardware/bluetooth.js',
-    '/src/js/hardware/sensorConfiguration.js',
-    '/src/js/game.js',
-    '/src/js/ui.js',
-    '/src/js/low-poly.js',
-    '/src/js/components/ocean.js',
-    '/src/js/aframe.js',
-]
+// This is the service worker with the combined offline experience (Offline page + Offline copy of pages)
 
-self.addEventListener('install', function (event) {
-    event.waitUntil(
-        caches.open(PRECACHE).then((cache) => {
-            return cache.addAll(PRECAHCE_URLS)
-        })
-    )
-})
+const CACHE = "pwabuilder-offline-page";
 
-self.addEventListener('activate', (event) => {
-    const currentCaches = [PRECACHE, RUNTIME]
-    event.waitUntil(
-        caches
-            .keys()
-            .then((cacheNames) => {
-                return cacheNames.filter(
-                    (cacheName) => !currentCaches.includes(cacheName)
-                )
-            })
-            .then((cachesToDelete) => {
-                return Promise.all(
-                    cachesToDelete.map((cacheToDelete) => {
-                        return caches.delete(cacheToDelete)
-                    })
-                )
-            })
-            .then(() => self.clients.claim())
-    )
-})
+importScripts('https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js');
+
+const offlineFallbackPage = "/offline.html";
+
+self.addEventListener("message", (event) => {
+  if (event.data && event.data.type === "SKIP_WAITING") {
+    self.skipWaiting();
+  }
+});
+
+self.addEventListener('install', async (event) => {
+  event.waitUntil(
+    caches.open(CACHE)
+      .then((cache) => cache.add(offlineFallbackPage))
+  );
+});
+
+if (workbox.navigationPreload.isSupported()) {
+  workbox.navigationPreload.enable();
+}
+
+workbox.routing.registerRoute(
+  new RegExp('/*'),
+  new workbox.strategies.StaleWhileRevalidate({
+    cacheName: CACHE
+  })
+);
 
 self.addEventListener('fetch', (event) => {
-    // Skip cross-origin requests, like those for Google Analytics.
-    if (event.request.url.startsWith(self.location.origin)) {
-        event.respondWith(
-            caches.match(event.request).then((cachedResponse) => {
-                if (cachedResponse) {
-                    return cachedResponse
-                }
+  if (event.request.mode === 'navigate') {
+    event.respondWith((async () => {
+      try {
+        const preloadResp = await event.preloadResponse;
 
-                return caches.open(RUNTIME).then((cache) => {
-                    return fetch(event.request).then((response) => {
-                        // Put a copy of the response in the runtime cache.
-                        return cache
-                            .put(event.request, response.clone())
-                            .then(() => {
-                                return response
-                            })
-                    })
-                })
-            })
-        )
-    }
-})
+        if (preloadResp) {
+          return preloadResp;
+        }
+
+        const networkResp = await fetch(event.request);
+        return networkResp;
+      } catch (error) {
+
+        const cache = await caches.open(CACHE);
+        const cachedResp = await cache.match(offlineFallbackPage);
+        return cachedResp;
+      }
+    })());
+  }
+});

@@ -1,0 +1,34 @@
+"filename", "language", "JavaScript", "JSON", "JSON with Comments", "PHP", "Markdown", "CSS", "XML", "C++", "comment", "blank", "total"
+"c:\xampp\htdocs\.prettierrc", "JSON", 0, 16, 0, 0, 0, 0, 0, 0, 5, 0, 21
+"c:\xampp\htdocs\README.md", "Markdown", 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 2
+"c:\xampp\htdocs\arduino\runner\runner.ino", "C++", 0, 0, 0, 0, 0, 0, 0, 61, 5, 22, 88
+"c:\xampp\htdocs\index.php", "PHP", 0, 0, 0, 277, 0, 0, 0, 0, 0, 28, 305
+"c:\xampp\htdocs\jsconfig.json", "JSON with Comments", 0, 0, 6, 0, 0, 0, 0, 0, 0, 1, 7
+"c:\xampp\htdocs\service-worker.js", "JavaScript", 66, 0, 0, 0, 0, 0, 0, 0, 1, 9, 76
+"c:\xampp\htdocs\site.webmanifest", "JSON", 0, 22, 0, 0, 0, 0, 0, 0, 0, 1, 23
+"c:\xampp\htdocs\src\css\style.css", "CSS", 0, 0, 0, 0, 0, 150, 0, 0, 5, 31, 186
+"c:\xampp\htdocs\src\images\favicons\browserconfig.xml", "XML", 0, 0, 0, 0, 0, 0, 9, 0, 0, 1, 10
+"c:\xampp\htdocs\src\images\favicons\safari-pinned-tab.svg", "XML", 0, 0, 0, 0, 0, 0, 50, 0, 0, 1, 51
+"c:\xampp\htdocs\src\images\favicons\site.webmanifest", "JSON", 0, 19, 0, 0, 0, 0, 0, 0, 0, 1, 20
+"c:\xampp\htdocs\src\js\aframe.js", "JavaScript", 493, 0, 0, 0, 0, 0, 0, 0, 343, 255, 1091
+"c:\xampp\htdocs\src\js\chapters\confrontation.js", "JavaScript", 371, 0, 0, 0, 0, 0, 0, 0, 44, 87, 502
+"c:\xampp\htdocs\src\js\chapters\introduction.js", "JavaScript", 162, 0, 0, 0, 0, 0, 0, 0, 5, 30, 197
+"c:\xampp\htdocs\src\js\chapters\relieve.js", "JavaScript", 205, 0, 0, 0, 0, 0, 0, 0, 17, 43, 265
+"c:\xampp\htdocs\src\js\components\animation-mixer.js", "JavaScript", 110, 0, 0, 0, 0, 0, 0, 0, 19, 21, 150
+"c:\xampp\htdocs\src\js\components\animation-timeline.js", "JavaScript", 175, 0, 0, 0, 0, 0, 0, 0, 0, 1, 176
+"c:\xampp\htdocs\src\js\components\low-poly.js", "JavaScript", 213, 0, 0, 0, 0, 0, 0, 0, 0, 1, 214
+"c:\xampp\htdocs\src\js\components\ocean.js", "JavaScript", 76, 0, 0, 0, 0, 0, 0, 0, 14, 16, 106
+"c:\xampp\htdocs\src\js\components\physics.js", "JavaScript", 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"c:\xampp\htdocs\src\js\components\rain.js", "JavaScript", 254, 0, 0, 0, 0, 0, 0, 0, 0, 1, 255
+"c:\xampp\htdocs\src\js\environment.js", "JavaScript", 200, 0, 0, 0, 0, 0, 0, 0, 25, 46, 271
+"c:\xampp\htdocs\src\js\game.js", "JavaScript", 404, 0, 0, 0, 0, 0, 0, 0, 20, 106, 530
+"c:\xampp\htdocs\src\js\hardware\bluetooth.js", "JavaScript", 171, 0, 0, 0, 0, 0, 0, 0, 25, 49, 245
+"c:\xampp\htdocs\src\js\hardware\sensorConfiguration.js", "JavaScript", 144, 0, 0, 0, 0, 0, 0, 0, 6, 38, 188
+"c:\xampp\htdocs\src\js\models\breathState.js", "JavaScript", 71, 0, 0, 0, 0, 0, 0, 0, 5, 15, 91
+"c:\xampp\htdocs\src\js\progress.js", "JavaScript", 52, 0, 0, 0, 0, 0, 0, 0, 0, 12, 64
+"c:\xampp\htdocs\src\js\ui.js", "JavaScript", 157, 0, 0, 0, 0, 0, 0, 0, 12, 36, 205
+"c:\xampp\htdocs\src\php\footer.php", "PHP", 0, 0, 0, 2, 0, 0, 0, 0, 0, 1, 3
+"c:\xampp\htdocs\src\php\header.php", "PHP", 0, 0, 0, 49, 0, 0, 0, 0, 0, 6, 55
+"c:\xampp\htdocs\src\php\scene\ocean.php", "PHP", 0, 0, 0, 142, 0, 0, 0, 0, 0, 8, 150
+"c:\xampp\htdocs\src\php\wearableConfiguration.php", "PHP", 0, 0, 0, 50, 0, 0, 0, 0, 0, 11, 61
+"Total", "-", 3325, 57, 6, 520, 1, 150, 59, 61, 551, 879, 5609

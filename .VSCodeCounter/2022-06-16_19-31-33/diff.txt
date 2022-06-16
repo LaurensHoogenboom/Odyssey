@@ -1,0 +1,52 @@
+Date : 2022-06-16 19:31:33
+Directory : c:\xampp\htdocs
+Total : 16 files,  258 codes, 20 comments, 58 blanks, all 336 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| JavaScript |          9 |        224 |         20 |         49 |        293 |
+| PHP        |          3 |         20 |          0 |          5 |         25 |
+| CSS        |          1 |         17 |          0 |          3 |         20 |
+| XML        |          1 |         12 |          0 |          0 |         12 |
+| JSON       |          2 |        -15 |          0 |          1 |        -14 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++-----------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                      | files      | code       | comment    | blank      | total      |
++-----------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                         |         16 |        258 |         20 |         58 |        336 |
+| src                                                       |         13 |        276 |         21 |         51 |        348 |
+| src\css                                                   |          1 |         17 |          0 |          3 |         20 |
+| src\images                                                |          2 |         31 |          0 |          1 |         32 |
+| src\images\favicons                                       |          2 |         31 |          0 |          1 |         32 |
+| src\js                                                    |          8 |        223 |         21 |         45 |        289 |
+| src\js\chapters                                           |          3 |         75 |          3 |         17 |         95 |
+| src\js\components                                         |          2 |        111 |         19 |         21 |        151 |
+| src\php                                                   |          2 |          5 |          0 |          2 |          7 |
++-----------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-----------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                  | language   | code       | comment    | blank      | total      |
++-----------------------------------------------------------+------------+------------+------------+------------+------------+
+| c:\xampp\htdocs\index.php                                 | PHP        |         15 |          0 |          3 |         18 |
+| c:\xampp\htdocs\service-worker.js                         | JavaScript |          1 |         -1 |          4 |          4 |
+| c:\xampp\htdocs\site.webmanifest                          | JSON       |        -34 |          0 |          0 |        -34 |
+| c:\xampp\htdocs\src\css\style.css                         | CSS        |         17 |          0 |          3 |         20 |
+| c:\xampp\htdocs\src\images\favicons\safari-pinned-tab.svg | XML        |         12 |          0 |          0 |         12 |
+| c:\xampp\htdocs\src\images\favicons\site.webmanifest      | JSON       |         19 |          0 |          1 |         20 |
+| c:\xampp\htdocs\src\js\chapters\confrontation.js          | JavaScript |         34 |          3 |          9 |         46 |
+| c:\xampp\htdocs\src\js\chapters\introduction.js           | JavaScript |         15 |          0 |          3 |         18 |
+| c:\xampp\htdocs\src\js\chapters\relieve.js                | JavaScript |         26 |          0 |          5 |         31 |
+| c:\xampp\htdocs\src\js\components\animation-mixer.js      | JavaScript |        110 |         19 |         21 |        150 |
+| c:\xampp\htdocs\src\js\components\physics.js              | JavaScript |          1 |          0 |          0 |          1 |
+| c:\xampp\htdocs\src\js\environment.js                     | JavaScript |         -5 |          0 |          0 |         -5 |
+| c:\xampp\htdocs\src\js\game.js                            | JavaScript |         28 |          0 |          4 |         32 |
+| c:\xampp\htdocs\src\js\progress.js                        | JavaScript |         14 |         -1 |          3 |         16 |
+| c:\xampp\htdocs\src\php\header.php                        | PHP        |          2 |          0 |          1 |          3 |
+| c:\xampp\htdocs\src\php\wearableConfiguration.php         | PHP        |          3 |          0 |          1 |          4 |
+| Total                                                     |            |        258 |         20 |         58 |        336 |
++-----------------------------------------------------------+------------+------------+------------+------------+------------+
