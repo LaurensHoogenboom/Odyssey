@@ -1,6 +1,6 @@
 {
-    "name": "Odyssey 2",
-    "short_name": "Odyssey 2",
+    "name": "Odyssey",
+    "short_name": "Odyssey",
     "icons": [
         {
             "src": "/src/images/favicons/android-chrome-192x192.png",
@@ -14,9 +14,6 @@
         }
     ],
     "theme_color": "#a3d0ed",
-    "background_color": "#ffffff",
-    "display": "fullscreen",
-    "orientation": "any",
-    "start_url": "/index.html",
-    "scope": "/"
+    "background_color": "#a3d0ed",
+    "display": "standalone"
 }
