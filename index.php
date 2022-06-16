@@ -38,6 +38,9 @@
         <!-- Models -->
         <a-asset-item id="neutral_cloud" src="/src/3d/neutral_cloud_lower_poly.gltf"></a-asset-item>
         <a-asset-item id="emotive_cloud" src="/src/3d/neutral_cloud_lower_poly_emotive.gltf"></a-asset-item>
+        <a-asset-item id="broken_cloud_1" src="/src/3d/neutral_cloud_lower_poly_emotive_broken1.gltf"></a-asset-item>
+        <a-asset-item id="broken_cloud_2" src="/src/3d/neutral_cloud_lower_poly_emotive_broken2.gltf"></a-asset-item>
+        <a-asset-item id="broken_cloud_3" src="/src/3d/neutral_cloud_lower_poly_emotive_broken3.gltf"></a-asset-item>
         <a-asset-item id="seagull_model" src="/src/3d/seagull/seagull.gltf"></a-asset-item>
     </a-assets>
 

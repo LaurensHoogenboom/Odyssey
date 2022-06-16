@@ -198,13 +198,13 @@ class Confrontation {
             const configurationInterval = setInterval(() => {
                 if (bluetooth.connected) bluetooth.send('ANGER?')
                 else this.changeObstacleSizeOnStress('ANGER: ', undefined, true)
-    
+
                 if (this.currentFase != this.fases.angry || currentChapter != chapters.confrontation) {
                     clearInterval(configurationInterval)
                     removeBtMessageHandler(this.changeObstacleSizeOnStress.bind(this))
                 }
             }, 500)
-        }, 2000)        
+        }, 2000)
     }
 
     changeObstacleSizeOnStress(
@@ -234,7 +234,7 @@ class Confrontation {
                 obstacle.setAttribute('animation__pulse', 'to', to)
                 obstacle.emit('pulse')
                 this.adjustObstaclePosition(obstacle, newPosition, 250, 0)
-                progress.set(oldScale.x * 0.7)
+                progress.set(oldScale.x * 0.9)
             }
 
             // User is releasing
@@ -261,7 +261,7 @@ class Confrontation {
                 if (oldScale.z < this.ANGER_SCALE_STEPS[this.currentAngerStep].z) {
                     this.currentAngerStep++
                     environment.earthquake()
-    
+
                     setTimeout(() => {
                         this.breakCloud()
                     }, 400)
@@ -271,21 +271,23 @@ class Confrontation {
     }
 
     breakCloud() {
-        // Future: toggle model
-
-        this.createCloudPart()
-    }
-
-    createCloudPart() {
-        // Get obstacle position and scale
         const obstacle = this.obstacleCache[0]
+
+        // Toggle model
+        const previousModel = obstacle.querySelector('.emotive-cloud')
+        removeObject(previousModel)
+
+        const nextModelName = `#broken_cloud_${this.currentAngerStep}`
+        const nextModel = document.createElement('a-entity')
+        nextModel.setAttribute('gltf-model', nextModelName)
+        nextModel.setAttribute('class', 'emotive-cloud')
+        obstacle.appendChild(nextModel)
+
+        // Remove part
         const obstaclePosition = obstacle.getAttribute('position')
         const obstacleScale = obstacle.getAttribute('scale')
-
-        // Default X positions
         const partPositions = [-0.5, 0.5, 0.3]
 
-        // Get position and scale
         const position = {
             x: partPositions[this.currentAngerStep - 1],
             y: obstaclePosition.y * 2,
@@ -297,16 +299,7 @@ class Confrontation {
             z: obstacleScale.z * 0.3,
         }
 
-        // Create part
-        const cloudPart = document.createElement('a-sphere')
-        cloudPart.setAttribute('position', vect3ToString(position))
-        cloudPart.setAttribute('scale', vect3ToString(scale))
-        cloudPart.setAttribute('material', 'color: white; flatShading: true;')
-        cloudPart.setAttribute('segments-height', 8)
-        cloudPart.setAttribute('segments-width', 8)
-        cloudPart.setAttribute('dynamic-body', 'shape: sphere; sphereRadius: 0.4;')
-        cloudPart.setAttribute('class', 'cloud-part')
-        document.getElementById('scene').appendChild(cloudPart)
+        createCloudPart(position, scale, '#FFC798')
     }
 
     quitAnger() {
