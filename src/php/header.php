@@ -14,6 +14,7 @@
         <script src="/src/js/components/animation-mixer.js"></script>
         <script src="/src/js/components/animation-timeline.js"></script>
         <script src="/src/js/components/rain.js"></script>
+        <script src="/src/js/components/physics.js"></script>
         <script src="/src/js/hardware/bluetooth.js"></script>
         <script src="/src/js/hardware/sensorConfiguration.js"></script>
         <script src="/src/js/models/breathState.js"></script>

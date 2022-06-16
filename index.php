@@ -129,14 +129,7 @@
             </a-entity>
 
             <!-- Instructions -->
-            <a-text
-                id="instruction"
-                value=" "
-                mixin="copy"
-                position="0 1 -5"
-                side="double"
-                visible
-            ></a-text>
+            <a-text id="instruction" value=" " mixin="copy" position="0 1 -5" side="double" visible></a-text>
         </a-camera>
     </a-entity>
 
@@ -176,21 +169,29 @@
     </a-entity>
 
     <!-- Platform -->
-    <lp-cone
-        amplitude="0.05"
-        amplitude-variance="0.05"
-        scale="2 2 2"
-        shadow
-        position="0 -3.5 -1.5"
-        rotation="90 0 0"
-        radius-top="1.9"
-        radius-bottom="1.9"
-        segments-radial="20"
-        segments-height="20"
-        height="20"
-        emissive="#005DED"
-        emissive-intensity="0.1"
-    >
+    <a-entity id="platform-wrapper" position="0 -3.5 -1.5" scale="2 2 2" rotation="90 0 0">
+        <lp-cone
+            amplitude="0.05"
+            amplitude-variance="0.05"
+            shadow
+            radius-top="1.9"
+            radius-bottom="1.9"
+            segments-radial="20"
+            segments-height="20"
+            height="20"
+            emissive="#005DED"
+            emissive-intensity="0.1"
+        >
+        </lp-cone>
+
+        <a-entity
+            position="0 0 -1"
+            geometry="primitive: cylinder; height: 20; radius: 2.2; segmentsHeight: 20; segmentsRadial: 20"
+            static-body="shape: cylinder;"
+            material="opacity: 0; transparent: true;"
+            visible="false"
+        ></a-entity>
+
         <a-entity id="thought-container" position="0 0 -1.5" rotation="-90 0 0">
             <!-- Thoughts -->
             <a-entity
@@ -281,7 +282,7 @@
                 </a-sphere>
             </a-entity>
         </a-entity>
-    </lp-cone>
+    </a-entity>
 </a-scene>
 
 <script>
