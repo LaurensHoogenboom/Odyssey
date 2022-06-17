@@ -316,6 +316,7 @@ const enterGame = () => {
     hideBluetoothMenu()
     showStartMenu()
     environment.setupSound()
+    introduction.setupSound()
 }
 
 const startGame = () => {
@@ -337,7 +338,6 @@ const gameOver = () => {
     intervalLength = 2000
     currentChapter = chapters.introduction
     controls.enable()
-    introduction.reset()
     muteAllThoughts()
 }
 

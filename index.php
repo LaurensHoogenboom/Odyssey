@@ -158,14 +158,14 @@
             scale="2 2 2"
             position="-3 2 -23"
             class="intro-thought"
-            animation__position="startEvents: intro; property: position; from: -3 2 -23; to: -3 2 2; dur: 10000; loop: easing: linear;"
+            animation__position="startEvents: intro; property: position; from: -3 2 -23; to: -3 2 8; dur: 10000; loop: easing: linear;"
         ></a-entity>
         <a-entity
             gltf-model="#neutral_cloud"
             scale="2 2 2"
             position="-3 2 -18"
             class="intro-thought"
-            animation__position="startEvents: intro; property: position; from: 3 2 -20; to: 3 2 5; dur: 10000; easing: linear;"
+            animation__position="startEvents: intro; property: position; from: 3 2 -20; to: 3 2 10; dur: 10000; easing: linear;"
         ></a-entity>
 
         <a-entity
@@ -176,7 +176,7 @@
             animation__intro="startEvents: intro; property: position; from: 0 2 -20; to: 0 2 -3; dur: 2000; easing: easeOutQuad;"
             animation__outro="startEvents: outro; property: position; from: 0 2 -3; to: 0 -2 -3; dur: 2000; easing: easeInOutQuad;"
             animation__scale="startEvents: outro; property: scale; from: 2 2 2; to: 0 0 0; dur: 3000; easing: easeInOutQuad;"
-            animation__pulse="property: scale; from: 2 2 2; to: 2.3 2.3 2.3 2.3; loop: true; dur: 1000; easing: linear; dir: alternate"
+            animation__pulse="startEvents: pulse; property: scale; from: 2 2 2; to: 2.3 2.3 2.3 2.3; loop: true; dur: 1000; easing: linear; dir: alternate"
             sound="src: #heartbeat; volume: 0; loop: true;"
         ></a-entity>
     </a-entity>
@@ -285,6 +285,7 @@
                 <a-sphere
                     id="player-sphere"
                     radius="0.07"
+                    shadow
                     animation__radius="property: radius; from: 0.07; to: 0.075; loop: true; dir: alternate; dur: 1500;"
                     animation__position="property: position; from: 0 0.5 0.6; to: 0 0.525 0.6; loop: true; dir: alternate; dur: 15000; easing: easeInOutQuad;"
                 >

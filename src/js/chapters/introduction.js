@@ -28,14 +28,13 @@ class Introduction {
     }
 
     start() {
-        if (currentChapter != chapters.introduction) {
-            this.hasPointedUser = true
-            this.hasLookedRight = true
-            this.hasLookedLeft = true
-            return
-        }
-
+        if (currentChapter != chapters.introduction) return
+        this.reset()
         this.show()
+    }
+
+    setupSound() {
+        this.emotiveThought.components.sound.playSound()
     }
 
     show() {
@@ -87,9 +86,9 @@ class Introduction {
                 setTimeout(() => {
                     setInstruction(' ')
                     environment.changeTheme(environment.THEMES.storm)
-                    this.emotiveThought.components.sound.playSound()
                     fadeAudioIn(this.emotiveThought, 1.5, 500)
                     this.emotiveThought.emit('intro')
+                    this.emotiveThought.emit('pulse')
 
                     setTimeout(() => {
                         environment.changeTheme(environment.THEMES.normal)
@@ -164,9 +163,14 @@ class Introduction {
         controls.disable()
 
         for (let thought of this.introThoughts) {
+            const position = thought.getAttribute('animation__position').from
+            thought.setAttribute('position', position);
             thought.setAttribute('visible', true)
         }
 
+        const emotiveThoughtPosition = this.emotiveThought.getAttribute('animation__intro').from
+        this.emotiveThought.setAttribute('position', emotiveThoughtPosition)
+        this.emotiveThought.setAttribute('scale', '2 2 2')
         this.emotiveThought.setAttribute('visible', true)
     }
 
